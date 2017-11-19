@@ -1,26 +1,54 @@
 #include <cstdlib>
 #include <iostream>
-#include <SDL2/SDL_version.h>
 #include "engine.h"
+#include <exception>
 
-std::ostream& operator<<(std::ostream& out, const SDL_version& v) {
-  out << static_cast<int>(v.major) << '.';
-  out << static_cast<int>(v.minor) << '.';
-  out << static_cast<int>(v.patch);
-  return out;
-}
+class Play
+{
+    public:
+        void Run()
+        {
+            try
+            {
+                lumenausf::Engine * Engine = new lumenausf::Engine();
+                Engine->Init();
+                Engine->EngineEvent += Delegate(this, &Play::EventGetted);
+                Engine->ReadEvent();
+                Engine->Finish();
+            }catch(std::exception ex)
+            {
+                std::cerr << ex.what();
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        void EventGetted(lumenausf::EventItem item)
+        {
+            if(item.typeEvent == lumenausf::TYPE_EVENT::KEYDOWN)
+            {
+                switch (item.keyCode) {
+                    case lumenausf::KEY_CODE::DOWN:
+                        std::clog << "DOWN" << std::endl;
+                    break;
+                    case lumenausf::KEY_CODE::RIGHT:
+                        std::clog << "RIGHT" << std::endl;
+                    break;
+                    case lumenausf::KEY_CODE::UP:
+                        std::clog << "UP" << std::endl;
+                    break;
+                    case lumenausf::KEY_CODE::LEFT:
+                        std::clog << "LEFT" << std::endl;
+                    break;
+                    default:
+                    break;
+                }
+            }
+        }
+};
 
 int main()
 {
-//  SDL_version compiled = {0, 0, 0};
-//  SDL_version linked = {0, 0, 0};
-
-//  SDL_VERSION(&compiled);
-//  SDL_GetVersion(&linked);
-
-//  std::cout << "compiled: " << compiled << '\n';
-//  std::cout << "linked: " << linked << std::endl;
-//  std::clog << "I`m okay lumenausf" << std::endl;
-//  return 0;
-    lumenausf::Engine::Init();
+    Play game = Play();
+    game.Run();
+    return EXIT_SUCCESS;
 }

@@ -2,3 +2,7 @@
 CMakeLists\.txt\.user
 
 build/
+
+delegate\(old\)\.h
+
+event\(old\)\.h
