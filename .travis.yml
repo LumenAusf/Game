@@ -8,7 +8,7 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test     # newer toolchain
   - sudo apt-add-repository --yes ppa:zoogie/sdl2-snapshots       # libsdl2
-  - sudo add-apt-repository ppa:george-edison55/cmake-3.x
+  - sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x
   - export PATH=~/usr/bin:$PATH
 
   - echo $CXX
