@@ -2,4 +2,4 @@
 in future mini-engine and game
 
 [![Build Status](https://travis-ci.org/LumenAusf/Game.svg?branch=Dev)](https://travis-ci.org/LumenAusf/Game)
-Don't work becose i'm tired. Travis don't have normal version CMake. On Your PC (Right for Ubuntu) everything will work.
+Does not work, because Travis does not have a display. On your PC (true for Ubuntu) everything will work.
