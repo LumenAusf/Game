@@ -8,7 +8,7 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test     # newer toolchain
   - sudo apt-add-repository --yes ppa:zoogie/sdl2-snapshots       # libsdl2
-  - sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x
+  - sudo add-apt-repository --yes ppa:george-edison55-precise-backports
   - export PATH=~/usr/bin:$PATH
 
   - echo $CXX
@@ -20,7 +20,7 @@ install:
   - export CXX_FLAGS="${CXX_FLAGS} -fsanitize=${ASAN} -fno-omit-frame-pointer"
   - sudo apt-get update -qq
   - sudo apt-get remove cmake
-  - sudo apt-get install -q -y libsdl2-dev libsdl2-image-dev g++-5 cmake
+  - sudo apt-get install -q -y libsdl2-dev libsdl2-image-dev g++-5 cmake cmake-data
 
 script:
   - mkdir build
