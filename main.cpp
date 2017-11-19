@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <SDL2/SDL_version.h>
+#include "engine.h"
 
 std::ostream& operator<<(std::ostream& out, const SDL_version& v) {
   out << static_cast<int>(v.major) << '.';
@@ -11,14 +12,15 @@ std::ostream& operator<<(std::ostream& out, const SDL_version& v) {
 
 int main()
 {
-    SDL_version compiled = {0, 0, 0};
-    SDL_version linked = {0, 0, 0};
+//  SDL_version compiled = {0, 0, 0};
+//  SDL_version linked = {0, 0, 0};
 
-    SDL_VERSION(&compiled);
-    SDL_GetVersion(&linked);
+//  SDL_VERSION(&compiled);
+//  SDL_GetVersion(&linked);
 
-    std::cout << "compiled: " << compiled << '\n';
-    std::cout << "linked: " << linked << std::endl;
-    std::clog << "I`m okay lumenausf" << std::endl;
-    return 0;
+//  std::cout << "compiled: " << compiled << '\n';
+//  std::cout << "linked: " << linked << std::endl;
+//  std::clog << "I`m okay lumenausf" << std::endl;
+//  return 0;
+    lumenausf::Engine::Init();
 }
