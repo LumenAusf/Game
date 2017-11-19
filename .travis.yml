@@ -22,7 +22,7 @@ install:
 
 script:
   - mkdir build
-  - cd build
+  - cd build/
   - cmake ..
   - make
   - ./GameIsOn

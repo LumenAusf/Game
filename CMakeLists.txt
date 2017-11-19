@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 3.9)
 project(GameIsOn)
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/../)
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
-add_executable(${PROJECT_NAME} "main.cpp" "engine.cpp")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror")
+
+add_executable(${PROJECT_NAME} main.cpp engine.cpp)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
 find_library(SDL2_LIB libSDL2.so)
-target_link_libraries(${PROJECT_NAME}
-    -lSDL2)
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+target_link_libraries(${PROJECT_NAME} -lSDL2)
+
