@@ -6,3 +6,15 @@ build/
 delegate\(old\)\.h
 
 event\(old\)\.h
+
+GameIsOn
+
+CMakeCache\.txt
+
+CMakeFiles/3\.9\.6/
+
+CMakeFiles/
+
+cmake_install\.cmake
+
+Makefile
