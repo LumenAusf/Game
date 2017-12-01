@@ -1,7 +1,7 @@
-#include "engine.h"
 #include <SDL2/SDL.h> // Библиотека SDL 2
 #include <iostream>
 #include <cstdio>
+#include "engine.h"
 
 lumenausf::Engine::Engine()
 {
@@ -40,7 +40,7 @@ void lumenausf::Engine::Init(bool versionCritical, int width, int height, std::s
         std::clog << "SUCCES in Init : Init SDL" << std::endl;
     }
 
-    window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+    auto window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if(window == nullptr)
     {
@@ -69,50 +69,47 @@ bool lumenausf::Engine::CheckVersion()
 
 void lumenausf::Engine::ReadEvent()
 {
+    EventItem * event = new EventItem();
+    SDL_Event eventSDL; // события SDL
 
-    running = true;
-    while(running)
+    while(SDL_PollEvent(&eventSDL))
     {
-        EventItem * event = new EventItem();
-        SDL_Event eventSDL; // события SDL
-
-        while(SDL_PollEvent(&eventSDL))
+        switch(eventSDL.type)
         {
-            switch(eventSDL.type)
-            {
-                case SDL_QUIT:
-                    running = false;
-                break;
+            case SDL_QUIT:
+                event->typeEvent = TYPE_EVENT::QUIT;
+                EngineEvent(event);
+            break;
 
-                case SDL_KEYDOWN:
-                    event->typeEvent = TYPE_EVENT::KEYDOWN;
-                    switch(eventSDL.key.keysym.sym)
-                    {
-                        case SDLK_ESCAPE:
-                            running = false;
-                        break;
-                        case SDLK_RETURN:
-                            EngineEvent(new EventItem);
-                        break;
-                        case SDLK_UP:
-                            event->keyCode = KEY_CODE::UP;
-                            EngineEvent(event);
-                        break;
-                        case SDLK_LEFT:
-                            event->keyCode = KEY_CODE::LEFT;
-                            EngineEvent(event);
-                        break;
-                        case SDLK_DOWN:
-                            event->keyCode = KEY_CODE::DOWN;
-                            EngineEvent(event);
-                        break;
-                        case SDLK_RIGHT:
-                            event->keyCode = KEY_CODE::RIGHT;
-                            EngineEvent(event);
-                        break;
-                    }
-                break;
-            }
+            case SDL_KEYDOWN:
+                event->typeEvent = TYPE_EVENT::KEYDOWN;
+                switch(eventSDL.key.keysym.sym)
+                {
+                    case SDLK_ESCAPE:
+                        event->keyCode = KEY_CODE::ESCAPE;
+                        EngineEvent(event);
+                    break;
+                    case SDLK_RETURN:
+                        EngineEvent(new EventItem);
+                    break;
+                    case SDLK_UP:
+                        event->keyCode = KEY_CODE::UP;
+                        EngineEvent(event);
+                    break;
+                    case SDLK_LEFT:
+                        event->keyCode = KEY_CODE::LEFT;
+                        EngineEvent(event);
+                    break;
+                    case SDLK_DOWN:
+                        event->keyCode = KEY_CODE::DOWN;
+                        EngineEvent(event);
+                    break;
+                    case SDLK_RIGHT:
+                        event->keyCode = KEY_CODE::RIGHT;
+                        EngineEvent(event);
+                    break;
+                }
+            break;
         }
     }
 }

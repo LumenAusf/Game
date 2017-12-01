@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
-#include "engine.h"
 #include <exception>
+#include "engine.h"
 
 class Play
 {
@@ -10,12 +10,16 @@ class Play
         {
             try
             {
+                running = true;
+
                 lumenausf::Engine * Engine = new lumenausf::Engine();
                 Engine->Init();
                 Engine->EngineEvent += Delegate(this, &Play::EventGetted);
-                Engine->ReadEvent();
+                while (running)
+                    Engine->ReadEvent();
                 Engine->Finish();
-            }catch(std::exception ex)
+            }
+            catch(std::exception ex)
             {
                 std::cerr << ex.what();
                 exit(EXIT_FAILURE);
@@ -27,6 +31,9 @@ class Play
             if(item.typeEvent == lumenausf::TYPE_EVENT::KEYDOWN)
             {
                 switch (item.keyCode) {
+                    case lumenausf::KEY_CODE::ESCAPE:
+                        running = false;
+                    break;
                     case lumenausf::KEY_CODE::DOWN:
                         std::clog << "DOWN" << std::endl;
                     break;
@@ -44,6 +51,8 @@ class Play
                 }
             }
         }
+    private:
+        bool running;
 };
 
 int main()
