@@ -1,14 +1,21 @@
-#ifndef EVENTITEM_H
-#define EVENTITEM_H
+#ifndef ENGINE_H
+#define ENGINE_H
 
+//#include <SDL2/SDL.h>
+#include <string>
 #include <iostream>
+#include "DelegateAndEvent/event.h"
+//#include "DelegateAndEvent/eventitem.h"
 
 namespace lumenausf
 {
     enum TYPE_EVENT
     {
-        //Keyboard
         TYPENONE,
+
+        QUIT,
+
+        //Keyboard
         KEYDOWN,
         KEYUP,
         TEXTEDITING,
@@ -25,10 +32,12 @@ namespace lumenausf
     enum KEY_CODE
     {
         KEYNONE,
+
         RIGHT,
         LEFT,
         DOWN,
         UP,
+        ESCAPE,
     };
 
     class EventItem
@@ -43,5 +52,19 @@ namespace lumenausf
             TYPE_EVENT typeEvent = TYPENONE;
             KEY_CODE keyCode = KEYNONE;
     };
+
+    class Engine
+    {
+        public:
+            Engine();
+            ~Engine();
+            void Init(bool versionCritical = false, int width = 640, int height = 480, std::string windowName = "Engine");
+            void ReadEvent();
+            void Finish();
+
+            Event EngineEvent = Event();
+        private:
+            bool CheckVersion();
+    };
 }
-#endif // EVENTITEM_H
+#endif // ENGINE_H
