@@ -18,3 +18,9 @@ CMakeFiles/
 cmake_install\.cmake
 
 Makefile
+
+\.vscode/
+
+Game\(Build\)/game
+
+Game\(Build\)/libengine\.so
