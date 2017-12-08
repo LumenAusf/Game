@@ -3,8 +3,38 @@
 #include <SDL2/SDL_opengl_glext.h>
 #include <cstdio>
 #include <iostream>
+#include <string_view>
+#include <vector>
 
 #include "engine.h"
+
+static PFNGLCREATESHADERPROC glCreateShader = nullptr;
+static PFNGLSHADERSOURCEARBPROC glShaderSource = nullptr;
+static PFNGLCOMPILESHADERARBPROC glCompileShader = nullptr;
+static PFNGLGETSHADERIVPROC glGetShaderiv = nullptr;
+static PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = nullptr;
+static PFNGLDELETESHADERPROC glDeleteShader = nullptr;
+static PFNGLCREATEPROGRAMPROC glCreateProgram = nullptr;
+static PFNGLATTACHSHADERPROC glAttachShader = nullptr;
+static PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation = nullptr;
+static PFNGLLINKPROGRAMPROC glLinkProgram = nullptr;
+static PFNGLGETPROGRAMIVPROC glGetProgramiv = nullptr;
+static PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = nullptr;
+static PFNGLDELETEPROGRAMPROC glDeleteProgram = nullptr;
+static PFNGLUSEPROGRAMPROC glUseProgram = nullptr;
+static PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer = nullptr;
+static PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray = nullptr;
+
+template <typename T>
+static void load_gl_func (const char* func_name, T& result)
+{
+    void* gl_pointer = SDL_GL_GetProcAddress (func_name);
+    if (nullptr == gl_pointer)
+    {
+        throw std::runtime_error (std::string ("can't load GL function") + func_name);
+    }
+    result = reinterpret_cast<T> (gl_pointer);
+}
 
 std::istream& operator>> (std::istream& is, LumenAusf::vertex& v)
 {
@@ -30,6 +60,7 @@ namespace LumenAusf
         ~EngineCore ();
 
         void Init (bool versionCritical, int width, int height, std::string windowName);
+        bool InitGl ();
         bool CheckVersion ();
         void ReadEvent (Engine* engine);
         void Finish ();
@@ -106,6 +137,127 @@ namespace LumenAusf
             std::clog << "SUCCES in Init : Create Window" << std::endl;
         }
         /*SDL_GLContext glcontext =*/SDL_GL_CreateContext (window);
+
+        if (!InitGl ())
+            exit (EXIT_FAILURE);
+    }
+
+    bool EngineCore::InitGl ()
+    {
+        try
+        {
+            load_gl_func ("glCreateShader", glCreateShader);
+            load_gl_func ("glShaderSource", glShaderSource);
+            load_gl_func ("glCompileShader", glCompileShader);
+            load_gl_func ("glGetShaderiv", glGetShaderiv);
+            load_gl_func ("glGetShaderInfoLog", glGetShaderInfoLog);
+            load_gl_func ("glDeleteShader", glDeleteShader);
+            load_gl_func ("glCreateProgram", glCreateProgram);
+            load_gl_func ("glAttachShader", glAttachShader);
+            load_gl_func ("glBindAttribLocation", glBindAttribLocation);
+            load_gl_func ("glLinkProgram", glLinkProgram);
+            load_gl_func ("glGetProgramiv", glGetProgramiv);
+            load_gl_func ("glGetProgramInfoLog", glGetProgramInfoLog);
+            load_gl_func ("glDeleteProgram", glDeleteProgram);
+            load_gl_func ("glUseProgram", glUseProgram);
+            load_gl_func ("glVertexAttribPointer", glVertexAttribPointer);
+            load_gl_func ("glEnableVertexAttribArray", glEnableVertexAttribArray);
+        }
+        catch (std::exception& ex)
+        {
+            std::cerr << ex.what ();
+            return false;
+        }
+
+        GLuint vert_shader = glCreateShader (GL_VERTEX_SHADER);
+        std::string_view vertex_shader_src = R"(
+       attribute vec2 a_position;
+       void main()
+       {
+           gl_Position = vec4(a_position, 0.0, 1.0);
+       }
+       )";
+        const char* source = vertex_shader_src.data ();
+        glShaderSource (vert_shader, 1, &source, nullptr);
+
+        glCompileShader (vert_shader);
+
+        GLint compiled_status = 0;
+        glGetShaderiv (vert_shader, GL_COMPILE_STATUS, &compiled_status);
+        if (compiled_status == 0)
+        {
+            GLint info_len = 0;
+            glGetShaderiv (vert_shader, GL_INFO_LOG_LENGTH, &info_len);
+            std::vector<char> info_chars (info_len);
+            glGetShaderInfoLog (vert_shader, info_len, NULL, info_chars.data ());
+            glDeleteShader (vert_shader);
+
+            std::string shader_type_name = "vertex";
+            std::cerr << "Error compiling shader(vertex)\n" << vertex_shader_src << "\n" << info_chars.data ();
+            return false;
+        }
+
+        // create fragment shader
+
+        GLuint fragment_shader = glCreateShader (GL_FRAGMENT_SHADER);
+        std::string_view fragment_shader_src = R"(
+       void main()
+       {
+           gl_FragColor = vec4(1.0, 0.5, 1.0, 1.0);
+       }
+       )";
+        source = fragment_shader_src.data ();
+        glShaderSource (fragment_shader, 1, &source, nullptr);
+
+        glCompileShader (fragment_shader);
+
+        compiled_status = 0;
+        glGetShaderiv (fragment_shader, GL_COMPILE_STATUS, &compiled_status);
+        if (compiled_status == 0)
+        {
+            GLint info_len = 0;
+            glGetShaderiv (fragment_shader, GL_INFO_LOG_LENGTH, &info_len);
+            std::vector<char> info_chars (info_len);
+            glGetShaderInfoLog (fragment_shader, info_len, NULL, info_chars.data ());
+            glDeleteShader (fragment_shader);
+
+            std::cerr << "Error compiling shader(fragment)\n" << vertex_shader_src << "\n" << info_chars.data ();
+            return false;
+        }
+
+        // now create program and attach vertex and fragment shaders
+
+        GLuint program_id_ = glCreateProgram ();
+        if (0 == program_id_)
+        {
+            std::cerr << "failed to create gl program";
+            return false;
+        }
+
+        glAttachShader (program_id_, vert_shader);
+        glAttachShader (program_id_, fragment_shader);
+
+        // bind attribute location
+        glBindAttribLocation (program_id_, 0, "a_position");
+        // link program after binding attribute locations
+        glLinkProgram (program_id_);
+        // Check the link status
+        GLint linked_status = 0;
+        glGetProgramiv (program_id_, GL_LINK_STATUS, &linked_status);
+        if (linked_status == 0)
+        {
+            GLint infoLen = 0;
+            glGetProgramiv (program_id_, GL_INFO_LOG_LENGTH, &infoLen);
+            std::vector<char> infoLog (infoLen);
+            glGetProgramInfoLog (program_id_, infoLen, NULL, infoLog.data ());
+            std::cerr << "Error linking program:\n" << infoLog.data ();
+            glDeleteProgram (program_id_);
+            return false;
+        }
+
+        // turn on rendering with just created shader program
+        glUseProgram (program_id_);
+        return true;
     }
 
     bool EngineCore::CheckVersion ()
@@ -179,19 +331,9 @@ namespace LumenAusf
         {
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glLoadIdentity ();
-
-            auto r = ((float)std::rand ()) / RAND_MAX;
-            auto g = ((float)std::rand ()) / RAND_MAX;
-            auto b = ((float)std::rand ()) / RAND_MAX;
-
-            glColor3f (r, g, b);
-
-            glBegin (GL_TRIANGLES);                   // Начинаем рисовать треугольник
-            glVertex3f (t.v[0].x, t.v[0].y, 0.0f);    // Top
-            glVertex3f (t.v[1].x, t.v[1].y, 0.0f);    // Bottom Left
-            glVertex3f (t.v[2].x, t.v[2].y, 0.0f);    // Bottom Right
-            glEnd ();
+            glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (vertex), &t.v[0]);
+            glEnableVertexAttribArray (0);
+            glDrawArrays (GL_TRIANGLES, 0, 3);
 
             glFlush ();
             SDL_GL_SwapWindow (window);
