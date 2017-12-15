@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "event.h"
 
@@ -131,25 +132,39 @@ namespace LumenAusf
         virtual std::uint32_t get_height () const = 0;
     };
 
-    //    struct vertex
-    //    {
-    //        float x;
-    //        float y;
+    class transformT
+    {
+       public:
+        mat2x3 scale;
+        mat2x3 rotation;
+        mat2x3 position;
+        mat2x3 aspect;
 
-    //        float tx = 0.f;
-    //        float ty = 0.f;
-    //    };
+        mat2x3 GetMatrix () { return scale * rotation * position * aspect; }
+    };
 
-    //    struct triangle
-    //    {
-    //        triangle ()
-    //        {
-    //            v[0] = vertex ();
-    //            v[1] = vertex ();
-    //            v[2] = vertex ();
-    //        }
-    //        vertex v[3];
-    //    };
+    enum Arrows
+    {
+        Up,
+        Right,
+        Down,
+        Left
+    };
+    class gameObject
+    {
+       public:
+        Arrows ar;
+        texture* textureValue;
+        transformT transform;
+        std::vector<tri2> triangles;
+        gameObject () {}
+        gameObject (transformT a, std::vector<tri2> b, texture* c)
+        {
+            transform = a;
+            triangles = b;
+            textureValue = c;
+        }
+    };
 
     enum TYPE_EVENT
     {
@@ -215,6 +230,4 @@ namespace LumenAusf
         Event EngineEvent = Event ();
     };
 }
-// std::istream& operator>> (std::istream& is, LumenAusf::vertex&);
-// std::istream& operator>> (std::istream& is, LumenAusf::triangle&);
 #endif    // ENGINE_H

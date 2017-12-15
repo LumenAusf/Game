@@ -590,7 +590,8 @@ namespace LumenAusf
         }
         catch (std::exception& ex)
         {
-            return ex.what ();
+            std::cerr << ex.what ();
+            return false;
         }
 
         shader00 = new shader_gl_es20 (R"(
@@ -968,7 +969,7 @@ namespace LumenAusf
         std::vector<unsigned char> image;
         unsigned long w = 0;
         unsigned long h = 0;
-        int error = decodePNG (image, w, h, &png_file_in_memory[0], png_file_in_memory.size (), false);
+        int error = decodePNG (image, w, h, &png_file_in_memory[0], png_file_in_memory.size ());
 
         // if there's an error, display it
         if (error != 0)
