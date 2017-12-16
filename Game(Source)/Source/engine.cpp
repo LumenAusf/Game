@@ -1,19 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_opengl_glext.h>
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <cstddef>
-#include <exception>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <string_view>
+
 #include <tuple>
-#include <vector>
 
 #include "engine.h"
 #include "picopng.hxx"
@@ -84,98 +73,7 @@ static void load_gl_func (const char* func_name, T& result)
 
 namespace LumenAusf
 {
-    tri0::tri0 () : v{v0 (), v0 (), v0 ()} {}
-
-    tri1::tri1 () : v{v1 (), v1 (), v1 ()} {}
-
-    tri2::tri2 () : v{v2 (), v2 (), v2 ()} {}
-
-    vec2::vec2 () : x (0.f), y (0.f) {}
-    vec2::vec2 (float x_, float y_) : x (x_), y (y_) {}
-
-    vec2 operator+ (const vec2& l, const vec2& r)
-    {
-        vec2 result;
-        result.x = l.x + r.x;
-        result.y = l.y + r.y;
-        return result;
-    }
-
-    mat2x3::mat2x3 () : col0 (1.0f, 0.f), col1 (0.f, 1.f), delta (0.f, 0.f) {}
-
-    mat2x3 mat2x3::identity () { return mat2x3::scale (1.f); }
-
-    mat2x3 mat2x3::scale (float scale)
-    {
-        mat2x3 result;
-        result.col0.x = scale;
-        result.col1.y = scale;
-        return result;
-    }
-
-    mat2x3 mat2x3::rotation (float angle)
-    {
-        mat2x3 result;
-
-        result.col0.x = std::cos (angle);
-        result.col0.y = std::sin (angle);
-
-        result.col1.x = -std::sin (angle);
-        result.col1.y = std::cos (angle);
-
-        return result;
-    }
-
-    mat2x3 mat2x3::move (const vec2& delta)
-    {
-        mat2x3 r = mat2x3::identity ();
-        r.delta = delta;
-        return r;
-    }
-
-    vec2 operator* (const vec2& v, const mat2x3& m)
-    {
-        vec2 result;
-        result.x = v.x * m.col0.x + v.y * m.col0.y + m.delta.x;
-        result.y = v.x * m.col1.x + v.y * m.col1.y + m.delta.y;
-        return result;
-    }
-
-    mat2x3 operator* (const mat2x3& m1, const mat2x3& m2)
-    {
-        mat2x3 r;
-
-        r.col0.x = m1.col0.x * m2.col0.x + m1.col1.x * m2.col0.y;
-        r.col1.x = m1.col0.x * m2.col1.x + m1.col1.x * m2.col1.y;
-        r.col0.y = m1.col0.y * m2.col0.x + m1.col1.y * m2.col0.y;
-        r.col1.y = m1.col0.y * m2.col1.x + m1.col1.y * m2.col1.y;
-
-        r.delta.x = m1.delta.x * m2.col0.x + m1.delta.y * m2.col0.y + m2.delta.x;
-        r.delta.y = m1.delta.x * m2.col1.x + m1.delta.y * m2.col1.y + m2.delta.y;
-
-        return r;
-    }
-
-    color::color (std::uint32_t rgba_) : rgba (rgba_) {}
-
-    color::color (float r, float g, float b, float a)
-    {
-        assert (r <= 1 && r >= 0);
-        assert (g <= 1 && g >= 0);
-        assert (b <= 1 && b >= 0);
-        assert (a <= 1 && a >= 0);
-
-        std::uint32_t r_ = static_cast<std::uint32_t> (r * 255);
-        std::uint32_t g_ = static_cast<std::uint32_t> (g * 255);
-        std::uint32_t b_ = static_cast<std::uint32_t> (b * 255);
-        std::uint32_t a_ = static_cast<std::uint32_t> (a * 255);
-
-        rgba = a_ << 24 | b_ << 16 | g_ << 8 | r_;
-    }
-
-    texture::~texture () {}
-
-    class texture_gl_es20 final : public texture
+    class texture_gl_es20 final : public Texture
     {
        public:
         explicit texture_gl_es20 (std::string_view path);
@@ -242,7 +140,7 @@ namespace LumenAusf
             GL_ERROR_CHECK ();
         }
 
-        void set_uniform (std::string_view uniform_name, const color& c)
+        void set_uniform (std::string_view uniform_name, const Color& c)
         {
             const int location = glGetUniformLocation (program_id, uniform_name.data ());
             GL_ERROR_CHECK ();
@@ -361,85 +259,6 @@ namespace LumenAusf
         GLuint program_id = 0;
     };
 
-    std::istream& operator>> (std::istream& is, mat2x3& m)
-    {
-        is >> m.col0.x;
-        is >> m.col1.x;
-        is >> m.col0.y;
-        is >> m.col1.y;
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, vec2& v)
-    {
-        is >> v.x;
-        is >> v.y;
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, color& c)
-    {
-        float r = 0.f;
-        float g = 0.f;
-        float b = 0.f;
-        float a = 0.f;
-        is >> r;
-        is >> g;
-        is >> b;
-        is >> a;
-        c = color (r, g, b, a);
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, v0& v)
-    {
-        is >> v.pos.x;
-        is >> v.pos.y;
-
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, v1& v)
-    {
-        is >> v.pos.x;
-        is >> v.pos.y;
-        is >> v.c;
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, v2& v)
-    {
-        is >> v.pos.x;
-        is >> v.pos.y;
-        is >> v.uv;
-        is >> v.c;
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, tri0& t)
-    {
-        is >> t.v[0];
-        is >> t.v[1];
-        is >> t.v[2];
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, tri1& t)
-    {
-        is >> t.v[0];
-        is >> t.v[1];
-        is >> t.v[2];
-        return is;
-    }
-
-    std::istream& operator>> (std::istream& is, tri2& t)
-    {
-        is >> t.v[0];
-        is >> t.v[1];
-        is >> t.v[2];
-        return is;
-    }
-
     class EngineCore
     {
        public:
@@ -451,13 +270,13 @@ namespace LumenAusf
         bool CheckVersion ();
         void ReadEvent (Engine* engine);
         void Finish ();
-        texture* CreateTexture (std::string_view path);
-        void DestroyTexture (texture* t);
+        Texture* CreateTexture (std::string_view path);
+        void DestroyTexture (Texture* t);
         //        bool DrawTriangle (const triangle& t);
-        void DrawTriangle (const tri0& t, const color& c);
+        void DrawTriangle (const tri0& t, const Color& c);
         void DrawTriangle (const tri1& t);
-        void DrawTriangle (const tri2& t, texture* tex);
-        void DrawTriangle (const tri2& t, texture* tex, const mat2x3& m);
+        void DrawTriangle (const tri2& t, Texture* tex);
+        void DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m);
         void Clear ();
         bool LoadTexture (std::string path);
         void SwapBuffers ();
@@ -488,23 +307,21 @@ namespace LumenAusf
 
     void Engine::Finish () { EngineCore::EnCore->Finish (); }
 
-    texture* Engine::CreateTexture (std::string_view path) { return EngineCore::EnCore->CreateTexture (path); }
+    Texture* Engine::CreateTexture (std::string_view path) { return EngineCore::EnCore->CreateTexture (path); }
 
-    void Engine::DestroyTexture (texture* t) { EngineCore::EnCore->DestroyTexture (t); }
+    void Engine::DestroyTexture (Texture* t) { EngineCore::EnCore->DestroyTexture (t); }
 
-    void Engine::DrawTriangle (const tri0& t, const color& c) { EngineCore::EnCore->DrawTriangle (t, c); }
+    void Engine::DrawTriangle (const tri0& t, const Color& c) { EngineCore::EnCore->DrawTriangle (t, c); }
 
     void Engine::DrawTriangle (const tri1& t) { EngineCore::EnCore->DrawTriangle (t); }
 
-    void Engine::DrawTriangle (const tri2& t, texture* tex) { EngineCore::EnCore->DrawTriangle (t, tex); }
+    void Engine::DrawTriangle (const tri2& t, Texture* tex) { EngineCore::EnCore->DrawTriangle (t, tex); }
 
-    void Engine::DrawTriangle (const tri2& t, texture* tex, const mat2x3& m) { EngineCore::EnCore->DrawTriangle (t, tex, m); }
+    void Engine::DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m) { EngineCore::EnCore->DrawTriangle (t, tex, m); }
 
     float Engine::getTimeFromInit () { return EngineCore::EnCore->getTimeFromInit (); }
 
     void Engine::SwapBuffers () { EngineCore::EnCore->SwapBuffers (); }
-
-    //    bool Engine::DrawTriangle (const triangle& t) { return EngineCore::EnCore->DrawTriangle (t); }
 
     void Engine::Clear () { EngineCore::EnCore->Clear (); }
 
@@ -534,7 +351,7 @@ namespace LumenAusf
             std::clog << "SUCCES in CheckVersion" << std::endl;
         }
 
-        if (SDL_Init (SDL_INIT_VIDEO) < 0)
+        if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
         {
             std::cerr << "FAILURE in Init : Unable to init SDL, error: " << SDL_GetError () << std::endl;
             exit (EXIT_FAILURE);
@@ -611,7 +428,7 @@ namespace LumenAusf
                                        {{0, "a_position"}});
 
         shader00->use ();
-        shader00->set_uniform ("u_color", color (1.f, 0.f, 0.f, 1.f));
+        shader00->set_uniform ("u_color", Color (1.f, 0.f, 0.f, 1.f));
 
         shader01 = new shader_gl_es20 (
             R"(
@@ -769,11 +586,11 @@ namespace LumenAusf
 
     void EngineCore::Finish () { this->~EngineCore (); }
 
-    texture* EngineCore::CreateTexture (std::string_view path) { return new texture_gl_es20 (path); }
+    Texture* EngineCore::CreateTexture (std::string_view path) { return new texture_gl_es20 (path); }
 
-    void EngineCore::DestroyTexture (texture* t) { delete t; }
+    void EngineCore::DestroyTexture (Texture* t) { delete t; }
 
-    void EngineCore::DrawTriangle (const tri0& t, const color& c)
+    void EngineCore::DrawTriangle (const tri0& t, const Color& c)
     {
         shader00->use ();
         shader00->set_uniform ("u_color", c);
@@ -808,7 +625,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void EngineCore::DrawTriangle (const tri2& t, texture* tex)
+    void EngineCore::DrawTriangle (const tri2& t, Texture* tex)
     {
         shader02->use ();
         texture_gl_es20* texture = static_cast<texture_gl_es20*> (tex);
@@ -840,7 +657,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void EngineCore::DrawTriangle (const tri2& t, texture* tex, const mat2x3& m)
+    void EngineCore::DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m)
     {
         shader03->use ();
         texture_gl_es20* texture = static_cast<texture_gl_es20*> (tex);
@@ -1000,51 +817,5 @@ namespace LumenAusf
     {
         glDeleteTextures (1, &tex_handl);
         GL_ERROR_CHECK ();
-    }
-
-    float color::get_r () const
-    {
-        std::uint32_t r_ = (rgba & 0x000000FF) >> 0;
-        return r_ / 255.f;
-    }
-    float color::get_g () const
-    {
-        std::uint32_t g_ = (rgba & 0x0000FF00) >> 8;
-        return g_ / 255.f;
-    }
-    float color::get_b () const
-    {
-        std::uint32_t b_ = (rgba & 0x00FF0000) >> 16;
-        return b_ / 255.f;
-    }
-    float color::get_a () const
-    {
-        std::uint32_t a_ = (rgba & 0xFF000000) >> 24;
-        return a_ / 255.f;
-    }
-
-    void color::set_r (const float r)
-    {
-        std::uint32_t r_ = static_cast<std::uint32_t> (r * 255);
-        rgba &= 0xFFFFFF00;
-        rgba |= (r_ << 0);
-    }
-    void color::set_g (const float g)
-    {
-        std::uint32_t g_ = static_cast<std::uint32_t> (g * 255);
-        rgba &= 0xFFFF00FF;
-        rgba |= (g_ << 8);
-    }
-    void color::set_b (const float b)
-    {
-        std::uint32_t b_ = static_cast<std::uint32_t> (b * 255);
-        rgba &= 0xFF00FFFF;
-        rgba |= (b_ << 16);
-    }
-    void color::set_a (const float a)
-    {
-        std::uint32_t a_ = static_cast<std::uint32_t> (a * 255);
-        rgba &= 0x00FFFFFF;
-        rgba |= a_ << 24;
     }
 }

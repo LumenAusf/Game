@@ -19,7 +19,7 @@ target_link_libraries(engine
                )
 
 
-add_executable(game "../Game(Source)/main.cpp")
+add_executable(game "../Game(Source)/main.cpp" "../Game(Source)/src/audio.c")
 target_compile_features(game PUBLIC cxx_std_17)
 
 target_link_libraries(game engine)

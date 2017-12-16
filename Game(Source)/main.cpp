@@ -1,44 +1,31 @@
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <cstdlib>
-#include <fstream>
 #include <iostream>
-#include <memory>
-#include <string_view>
 
 #include "Source/engine.h"
-
-LumenAusf::v0 Lerp (const LumenAusf::v0& vl, const LumenAusf::v0& vr, const float a)
-{
-    LumenAusf::v0 r;
-    r.pos.x = (1.0f - a) * vl.pos.x + a * vr.pos.x;
-    r.pos.y = (1.0f - a) * vl.pos.y + a * vr.pos.y;
-    return r;
-}
-
-LumenAusf::tri0 Lerp (const LumenAusf::tri0& tl, const LumenAusf::tri0& tr, const float a)
-{
-    LumenAusf::tri0 r;
-    r.v[0] = Lerp (tl.v[0], tr.v[0], a);
-    r.v[1] = Lerp (tl.v[1], tr.v[1], a);
-    r.v[2] = Lerp (tl.v[2], tr.v[2], a);
-    return r;
-}
+#include "src/audio.h"
 
 class Play
 {
    public:
-    int current_shader = 0;
     float speed = 0.03f;
+    int windowHeight = 480;
+    int windowWidth = 640;
+
     void Run ()
     {
         try
         {
             Engine = new LumenAusf::Engine ();
             running = true;
-            Engine->Init ();
+            Engine->Init (false, windowWidth, windowHeight);
+
+            initAudio ();
+            Audio* music = createAudio ("music/Believer.wav", 1, SDL_MIX_MAXVOLUME);
+            playMusicFromMemory (music, SDL_MIX_MAXVOLUME / 10);
+
+            soundUp = createAudio ("sounds/no-1.wav", 0, SDL_MIX_MAXVOLUME);
+            soundLeft = createAudio ("sounds/no-2.wav", 0, SDL_MIX_MAXVOLUME);
+            soundDown = createAudio ("sounds/no-3.wav", 0, SDL_MIX_MAXVOLUME);
+            soundRight = createAudio ("sounds/no-4.wav", 0, SDL_MIX_MAXVOLUME);
 
             if (!LoadTextures ())
                 return;
@@ -81,38 +68,42 @@ class Play
                     case LumenAusf::KEY_CODE::DOWN:
                         std::clog << "DOWN" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -speed));
-                        if (goTank->ar != LumenAusf::Arrows::Down)
+                        if (goTank->arrows != LumenAusf::Arrows::Down)
                         {
-                            goTank->ar = LumenAusf::Arrows::Down;
+                            goTank->arrows = LumenAusf::Arrows::Down;
                             goTank->transform.rotation = LumenAusf::mat2x3::rotation (3.14f);
                         }
+                        playSoundFromMemory (soundDown, SDL_MIX_MAXVOLUME);
                         break;
                     case LumenAusf::KEY_CODE::RIGHT:
                         std::clog << "RIGHT" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (speed, 0.f));
-                        if (goTank->ar != LumenAusf::Arrows::Right)
+                        if (goTank->arrows != LumenAusf::Arrows::Right)
                         {
-                            goTank->ar = LumenAusf::Arrows::Right;
+                            goTank->arrows = LumenAusf::Arrows::Right;
                             goTank->transform.rotation = LumenAusf::mat2x3::rotation (1.57f);
                         }
+                        playSoundFromMemory (soundRight, SDL_MIX_MAXVOLUME);
                         break;
                     case LumenAusf::KEY_CODE::UP:
                         std::clog << "UP" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, speed));
-                        if (goTank->ar != LumenAusf::Arrows::Up)
+                        if (goTank->arrows != LumenAusf::Arrows::Up)
                         {
-                            goTank->ar = LumenAusf::Arrows::Up;
+                            goTank->arrows = LumenAusf::Arrows::Up;
                             goTank->transform.rotation = LumenAusf::mat2x3::rotation (0);
                         }
+                        playSoundFromMemory (soundUp, SDL_MIX_MAXVOLUME);
                         break;
                     case LumenAusf::KEY_CODE::LEFT:
                         std::clog << "LEFT" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (-speed, 0.f));
-                        if (goTank->ar != LumenAusf::Arrows::Left)
+                        if (goTank->arrows != LumenAusf::Arrows::Left)
                         {
-                            goTank->ar = LumenAusf::Arrows::Left;
+                            goTank->arrows = LumenAusf::Arrows::Left;
                             goTank->transform.rotation = LumenAusf::mat2x3::rotation (3.14f + 1.57f);
                         }
+                        playSoundFromMemory (soundLeft, SDL_MIX_MAXVOLUME);
                         break;
                     case LumenAusf::KEY_CODE::SPACE:
 
@@ -133,9 +124,13 @@ class Play
    private:
     bool running;
     LumenAusf::Engine* Engine;
-    LumenAusf::texture* textureGrass;
-    LumenAusf::texture* textureTank;
-    LumenAusf::gameObject* goTank;
+    LumenAusf::Texture* textureGrass;
+    LumenAusf::Texture* textureTank;
+    LumenAusf::GameObject* goTank;
+    Audio* soundUp;       //= createAudio("sounds/door1.wav", 0, SDL_MIX_MAXVOLUME / 2);
+    Audio* soundLeft;     //= createAudio("sounds/door1.wav", 0, SDL_MIX_MAXVOLUME / 2);
+    Audio* soundRight;    //= createAudio("sounds/door1.wav", 0, SDL_MIX_MAXVOLUME / 2);
+    Audio* soundDown;     //= createAudio("sounds/door1.wav", 0, SDL_MIX_MAXVOLUME / 2);
 
     void DrawGrass ()
     {
@@ -167,17 +162,17 @@ class Play
 
         return true;
     }
-    void RenderGameObject (LumenAusf::gameObject* go)
+    void RenderGameObject (LumenAusf::GameObject* go)
     {
         if (go == nullptr || go->triangles.size () == 0)
             return;
 
         for (unsigned long i = 0; i < go->triangles.size (); i++)
         {
-            Engine->DrawTriangle (go->triangles.at (i), go->textureValue, go->transform.GetMatrix ());
+            Engine->DrawTriangle (go->triangles.at (i), go->texture, go->transform.GetMatrix ());
         }
     }
-    LumenAusf::gameObject* LoadGameObject (std::string TrianglesPath, LumenAusf::texture* texture, int TrianglesCount)
+    LumenAusf::GameObject* LoadGameObject (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount)
     {
         std::ifstream fileTriangles (TrianglesPath);
         if (!fileTriangles.is_open ())
@@ -192,13 +187,13 @@ class Play
             triangles.push_back (triangle);
         }
 
-        auto a = new LumenAusf::transformT;
+        auto a = new LumenAusf::Transform;
         a->aspect.col0.x = 1;
         a->aspect.col0.y = 0.f;
         a->aspect.col1.x = 0.f;
         a->aspect.col1.y = 640.f / 480.f;
 
-        auto go = new LumenAusf::gameObject (*a, triangles, texture);
+        auto go = new LumenAusf::GameObject (*a, triangles, texture);
         return go;
     }
 };
