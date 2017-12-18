@@ -1,5 +1,12 @@
+#pragma once
+
 #ifndef ENGINE_H
 #define ENGINE_H
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_opengl_glext.h>
+#include <tuple>
 
 #include "event.h"
 #include "gameobject.h"

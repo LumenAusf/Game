@@ -1,3 +1,4 @@
+#pragma once
 
 #ifndef EVENT_BASE_H
 #define EVENT_BASE_H
