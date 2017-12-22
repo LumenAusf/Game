@@ -1,10 +1,13 @@
-//#include "texturefinal.h"
+#include "texturefinal.h"
 #include "enginecore.h"
 
 namespace LumenAusf
 {
-    texture_gl_es20::texture_gl_es20 (std::string_view path) : file_path (path)
+    texture_gl_es20::texture_gl_es20 (std::string_view path, int countH, int countW) : file_path (path)
     {
+        countOnH = countH;
+        countOnW = countW;
+
         std::vector<unsigned char> png_file_in_memory;
         std::ifstream ifs (path.data (), std::ios_base::binary);
         if (!ifs)
@@ -30,6 +33,16 @@ namespace LumenAusf
         unsigned long w = 0;
         unsigned long h = 0;
         int error = decodePNG (image, w, h, &png_file_in_memory[0], png_file_in_memory.size ());
+
+        std::vector<unsigned char> revertimage;
+        for (ulong i = h - 1; i < h; i--)
+        {
+            for (ulong j = 0; j < w * 4; j++)
+            {
+                revertimage.push_back (image.at (i * w * 4 + j));
+            }
+        }
+        image = revertimage;
 
         // if there's an error, display it
         if (error != 0)

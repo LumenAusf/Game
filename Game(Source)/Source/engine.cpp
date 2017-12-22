@@ -24,7 +24,10 @@ namespace LumenAusf
 
     void Engine::Finish () { EngineCore::EnCore->Finish (); }
 
-    Texture* Engine::CreateTexture (std::string_view path) { return EngineCore::EnCore->CreateTexture (path); }
+    Texture* Engine::CreateTexture (std::string_view path, int hCount, int wCount)
+    {
+        return EngineCore::EnCore->CreateTexture (path, hCount, wCount);
+    }
 
     void Engine::DestroyTexture (Texture* t) { EngineCore::EnCore->DestroyTexture (t); }
 

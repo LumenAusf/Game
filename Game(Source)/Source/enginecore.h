@@ -5,9 +5,9 @@
 
 #include "engine.h"
 #include "picopng.hxx"
-//#include "shader.h"
-//#include "texturefinal.h"
+#include "shader.h"
 #include "texture.h"
+#include "texturefinal.h"
 
 // PFNGLCREATESHADERPROC glCreateShader = nullptr;
 // PFNGLSHADERSOURCEARBPROC glShaderSource = nullptr;
@@ -143,45 +143,48 @@ static void load_gl_func (const char* func_name, T& result)
 
 namespace LumenAusf
 {
-    class texture_gl_es20 final : public Texture
-    {
-       public:
-        explicit texture_gl_es20 (std::string_view path);
-        ~texture_gl_es20 () override;
+    //    class texture_gl_es20 final : public Texture
+    //    {
+    //       public:
+    //        explicit texture_gl_es20 (std::string_view path);
+    //        ~texture_gl_es20 () override;
 
-        void bind () const
-        {
-            glBindTexture (GL_TEXTURE_2D, tex_handl);
-            GL_ERROR_CHECK ();
-        }
+    //        void bind () const
+    //        {
+    //            glBindTexture (GL_TEXTURE_2D, tex_handl);
+    //            GL_ERROR_CHECK ();
+    //        }
 
-        std::uint32_t get_width () const final { return width; }
-        std::uint32_t get_height () const final { return height; }
+    //        std::uint32_t get_width () const final { return width; }
+    //        std::uint32_t get_height () const final { return height; }
 
-       private:
-        std::string file_path;
-        GLuint tex_handl = 0;
-        std::uint32_t width = 0;
-        std::uint32_t height = 0;
-    };
+    //       private:
+    //        std::string file_path;
+    //        GLuint tex_handl = 0;
+    //        std::uint32_t width = 0;
+    //        std::uint32_t height = 0;
+    //    };
 
-    class shader_gl_es20
-    {
-       public:
-        shader_gl_es20 (std::string_view vertex_src, std::string_view fragment_src, const std::vector<std::tuple<GLuint, const GLchar*>>& attributes);
-        void use () const;
-        void set_uniform (std::string_view uniform_name, texture_gl_es20* texture);
-        void set_uniform (std::string_view uniform_name, const Color& c);
-        void set_uniform (std::string_view uniform_name, const mat2x3& m);
+    //    class shader_gl_es20
+    //    {
+    //       public:
+    //        shader_gl_es20 (std::string_view vertex_src, std::string_view fragment_src, const std::vector<std::tuple<GLuint, const GLchar*>>&
+    //        attributes);
+    //        void use () const;
+    //        void set_uniform (std::string_view uniform_name, texture_gl_es20* texture);
+    //        void set_uniform (std::string_view uniform_name, const Color& c);
+    //        void set_uniform (std::string_view uniform_name, const mat2x3& m);
 
-       private:
-        GLuint compile_shader (GLenum shader_type, std::string_view src);
-        GLuint link_shader_program (const std::vector<std::tuple<GLuint, const GLchar*>>& attributes);
+    //       private:
+    //        GLuint compile_shader (GLenum shader_type, std::string_view src);
+    //        GLuint link_shader_program (const std::vector<std::tuple<GLuint, const GLchar*>>& attributes);
 
-        GLuint vert_shader = 0;
-        GLuint frag_shader = 0;
-        GLuint program_id = 0;
-    };
+    //        GLuint vert_shader = 0;
+    //        GLuint frag_shader = 0;
+    //        GLuint program_id = 0;
+    //    };
+
+    class shader_gl_es20;
 
     class EngineCore
     {
@@ -194,7 +197,7 @@ namespace LumenAusf
         bool CheckVersion ();
         void ReadEvent (Engine* engine);
         void Finish ();
-        Texture* CreateTexture (std::string_view path);
+        Texture* CreateTexture (std::string_view path, int hCount = 1, int wCount = 1);
         void DestroyTexture (Texture* t);
         //        bool DrawTriangle (const triangle& t);
         void DrawTriangle (const tri0& t, const Color& c);

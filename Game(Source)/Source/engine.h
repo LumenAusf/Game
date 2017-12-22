@@ -63,7 +63,7 @@ namespace LumenAusf
         void Init (bool versionCritical = false, int width = 640, int height = 480, std::string windowName = "Engine");
         void ReadEvent ();
         void Finish ();
-        Texture* CreateTexture (std::string_view path);
+        Texture* CreateTexture (std::string_view path, int hCount = 1, int wCount = 1);
         void DestroyTexture (Texture* t);
         void DrawTriangle (const tri0& t, const Color& c);
         void DrawTriangle (const tri1& t);

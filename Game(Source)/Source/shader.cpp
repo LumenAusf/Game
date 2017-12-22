@@ -1,26 +1,5 @@
-//#include "shader.h"
-
+#include "shader.h"
 #include "enginecore.h"
-
-// static PFNGLCREATESHADERPROC glCreateShader = nullptr;
-// static PFNGLSHADERSOURCEARBPROC glShaderSource = nullptr;
-// static PFNGLCOMPILESHADERARBPROC glCompileShader = nullptr;
-// static PFNGLGETSHADERIVPROC glGetShaderiv = nullptr;
-// static PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = nullptr;
-// static PFNGLDELETESHADERPROC glDeleteShader = nullptr;
-// static PFNGLCREATEPROGRAMPROC glCreateProgram = nullptr;
-// static PFNGLATTACHSHADERPROC glAttachShader = nullptr;
-// static PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation = nullptr;
-// static PFNGLLINKPROGRAMPROC glLinkProgram = nullptr;
-// static PFNGLGETPROGRAMIVPROC glGetProgramiv = nullptr;
-// static PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = nullptr;
-// static PFNGLDELETEPROGRAMPROC glDeleteProgram = nullptr;
-// static PFNGLUSEPROGRAMPROC glUseProgram = nullptr;
-// static PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = nullptr;
-// static PFNGLUNIFORM1IPROC glUniform1i = nullptr;
-// static PFNGLACTIVETEXTUREPROC glActiveTexture_ = nullptr;
-// static PFNGLUNIFORM4FVPROC glUniform4fv = nullptr;
-// static PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv = nullptr;
 
 namespace LumenAusf
 {
@@ -102,13 +81,6 @@ namespace LumenAusf
 
     GLuint shader_gl_es20::compile_shader (GLenum shader_type, std::string_view src)
     {
-        //        load_gl_func ("glCreateShader", glCreateShader);
-        //        load_gl_func ("glShaderSource", glShaderSource);
-        //        load_gl_func ("glCompileShader", glCompileShader);
-        //        load_gl_func ("glGetShaderiv", glGetShaderiv);
-        //        load_gl_func ("glGetShaderInfoLog", glGetShaderInfoLog);
-        //        load_gl_func ("glDeleteShader", glDeleteShader);
-
         GLuint shader_id = Glfunc::Get ()->glCreateShader (shader_type);
         GL_ERROR_CHECK ();
         std::string_view vertex_shader_src = src;

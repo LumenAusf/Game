@@ -31,7 +31,7 @@ class Play
             if (!LoadTextures ())
                 return;
 
-            goTank = LoadGameObject ("configurations/TankData.txt", textureTank, 2);
+            goTank = LoadGameObject ("configurations/TankData.txt", textureTank, 2 /*, true, 1, 8, 84*/);
             goTank->transform.scale = LumenAusf::mat2x3::scale (0.5f);
 
             Engine->EngineEvent += Delegate (this, &Play::EventGetted);
@@ -69,6 +69,7 @@ class Play
                     case LumenAusf::KEY_CODE::DOWN:
                         std::clog << "DOWN" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -speed));
+                        goTank->Next ();
                         if (goTank->arrows != LumenAusf::Arrows::Down)
                         {
                             goTank->arrows = LumenAusf::Arrows::Down;
@@ -79,6 +80,7 @@ class Play
                     case LumenAusf::KEY_CODE::RIGHT:
                         std::clog << "RIGHT" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (speed, 0.f));
+                        goTank->Next ();
                         if (goTank->arrows != LumenAusf::Arrows::Right)
                         {
                             goTank->arrows = LumenAusf::Arrows::Right;
@@ -89,6 +91,7 @@ class Play
                     case LumenAusf::KEY_CODE::UP:
                         std::clog << "UP" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, speed));
+                        goTank->Next ();
                         if (goTank->arrows != LumenAusf::Arrows::Up)
                         {
                             goTank->arrows = LumenAusf::Arrows::Up;
@@ -99,6 +102,7 @@ class Play
                     case LumenAusf::KEY_CODE::LEFT:
                         std::clog << "LEFT" << std::endl;
                         goTank->transform.position = goTank->transform.position * LumenAusf::mat2x3::move (LumenAusf::vec2 (-speed, 0.f));
+                        goTank->Next ();
                         if (goTank->arrows != LumenAusf::Arrows::Left)
                         {
                             goTank->arrows = LumenAusf::Arrows::Left;
@@ -154,7 +158,7 @@ class Play
             return false;
         }
 
-        textureTank = Engine->CreateTexture ("textures/tank.png");
+        textureTank = Engine->CreateTexture ("textures/TankAtlas.png");
         if (nullptr == textureTank)
         {
             std::cerr << "Can`t Load Texture TANK" << std::endl;
@@ -163,7 +167,7 @@ class Play
 
         return true;
     }
-    void RenderGameObject (LumenAusf::GameObject* go)
+    void RenderGameObject (LumenAusf::GameObject* go /*, bool needNext = true*/)
     {
         if (go == nullptr || go->triangles.size () == 0)
             return;
@@ -194,7 +198,8 @@ class Play
         a->aspect.col1.x = 0.f;
         a->aspect.col1.y = 640.f / 480.f;
 
-        auto go = new LumenAusf::GameObject (*a, triangles, texture);
+        auto go = new LumenAusf::GameObject (*a, triangles);
+        go->SetAtlas (texture, LumenAusf::vec2 (8, 4), LumenAusf::vec2 (1, 8));
         return go;
     }
 };

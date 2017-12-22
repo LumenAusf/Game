@@ -77,7 +77,7 @@ namespace LumenAusf
 
     void EngineCore::Finish () { this->~EngineCore (); }
 
-    Texture* EngineCore::CreateTexture (std::string_view path) { return new texture_gl_es20 (path); }
+    Texture* EngineCore::CreateTexture (std::string_view path, int hCount, int wCount) { return new texture_gl_es20 (path, hCount, wCount); }
 
     void EngineCore::DestroyTexture (Texture* t) { t->~Texture (); }
 
