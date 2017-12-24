@@ -65,4 +65,6 @@ namespace LumenAusf
         result.y = v.x * m.col1.x + v.y * m.col1.y + m.delta.y;
         return result;
     }
+
+    mat2x3 operator*= (mat2x3& m1, const mat2x3& m2) { return m1 = m1 * m2; }
 }

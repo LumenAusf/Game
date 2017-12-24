@@ -34,6 +34,9 @@ namespace LumenAusf
         unsigned long h = 0;
         int error = decodePNG (image, w, h, &png_file_in_memory[0], png_file_in_memory.size ());
 
+        width = static_cast<uint32_t> (w);
+        height = static_cast<uint32_t> (h);
+
         std::vector<unsigned char> revertimage;
         for (ulong i = h - 1; i < h; i--)
         {

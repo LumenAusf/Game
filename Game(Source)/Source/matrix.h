@@ -26,6 +26,8 @@ namespace LumenAusf
 
     mat2x3 operator* (const mat2x3& m1, const mat2x3& m2);
 
+    mat2x3 operator*= (mat2x3& m1, const mat2x3& m2);
+
     std::istream& operator>> (std::istream& is, mat2x3& m);
 
     vec2 operator* (const vec2& v, const mat2x3& m);

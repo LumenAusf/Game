@@ -27,8 +27,7 @@
 #define SIMPLE_AUDIO_
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 #include <SDL2/SDL.h>
@@ -41,8 +40,8 @@ typedef struct sound
 {
     uint32_t length;
     uint32_t lengthTrue;
-    uint8_t * bufferTrue;
-    uint8_t * buffer;
+    uint8_t* bufferTrue;
+    uint8_t* buffer;
     uint8_t loop;
     uint8_t fade;
     uint8_t free;
@@ -50,7 +49,7 @@ typedef struct sound
 
     SDL_AudioSpec audio;
 
-    struct sound * next;
+    struct sound* next;
 } Audio;
 
 /*
@@ -63,7 +62,7 @@ typedef struct sound
  * @return returns a new Audio or NULL on failure, you must call freeAudio() on return Audio
  *
  */
-Audio * createAudio(const char * filename, uint8_t loop, int volume);
+Audio* createAudio (const char* filename, uint8_t loop, int volume);
 
 /*
  * Frees as many chained Audios as given
@@ -71,7 +70,7 @@ Audio * createAudio(const char * filename, uint8_t loop, int volume);
  * @param audio     Chain of sounds to free
  *
  */
-void freeAudio(Audio * audio);
+void freeAudio (Audio* audio);
 
 /*
  * Play a wave file currently must be S16LE format 2 channel stereo
@@ -80,7 +79,7 @@ void freeAudio(Audio * audio);
  * @param volume        Volume 0 - 128. SDL_MIX_MAXVOLUME constant for max volume
  *
  */
-void playSound(const char * filename, int volume);
+void playSound (const char* filename, int volume);
 
 /*
  * Plays a new music, only 1 at a time plays
@@ -89,7 +88,7 @@ void playSound(const char * filename, int volume);
  * @param volume        Volume read playSound for moree
  *
  */
-void playMusic(const char * filename, int volume);
+void playMusic (const char* filename, int volume);
 
 /*
  * Plays a sound from a createAudio object (clones), only 1 at a time plays
@@ -99,7 +98,7 @@ void playMusic(const char * filename, int volume);
  * @param volume        Volume read playSound for moree
  *
  */
-void playSoundFromMemory(Audio * audio, int volume);
+void playSoundFromMemory (Audio* audio, int volume);
 
 /*
  * Plays a music from a createAudio object (clones), only 1 at a time plays
@@ -109,32 +108,32 @@ void playSoundFromMemory(Audio * audio, int volume);
  * @param volume        Volume read playSound for moree
  *
  */
-void playMusicFromMemory(Audio * audio, int volume);
+void playMusicFromMemory (Audio* audio, int volume);
 
 /*
  * Free all audio related variables
  * Note, this needs to be run even if initAudio fails, because it frees the global audio device
  *
  */
-void endAudio(void);
+void endAudio (void);
 
 /*
  * Initialize Audio Variable
  *
  */
-void initAudio(void);
+void initAudio (void);
 
 /*
  * Pause audio from playing
  *
  */
-void pauseAudio(void);
+void pauseAudio (void);
 
 /*
  * Unpause audio from playing
  *
  */
-void unpauseAudio(void);
+void unpauseAudio (void);
 
 #ifdef __cplusplus
 }
