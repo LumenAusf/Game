@@ -158,7 +158,7 @@ Tank* Play::InitTank (int AtlasStart, int AtlasEnd)
 
 void Play::RenderGameObject (LumenAusf::GameObject* go)
 {
-    if (go == nullptr || go->meshrendere.triangles.size () == 0)
+    if (go == nullptr || go->GetComponent(LumenAusf::MeshRenderer *) triangles.size () == 0)
         return;
 
     for (unsigned long i = 0; i < go->triangles.size (); i++)

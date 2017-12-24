@@ -90,15 +90,20 @@
 //}
 
 // void LumenAusf::GameObject::SetPosition (LumenAusf::vec2 position) { transform.position = mat2x3::identity () * mat2x3::move (position); }
+template < class T, class U > 
+bool is(U u) {  
+   return dynamic_cast< T >(u) != nullptr;  
+}  
 
 namespace LumenAusf
 {
+    
     LAComponent* GameObject::AddComponent (LAComponent* component)
     {
         bool Finded = false;
         for (size_t i = 0; i < components.size (); i++)
         {
-            if (components.at (i) == component)
+            if ( is<std::type_info(components.at (i))>(component))
             {
                 Finded = true;
                 break;
