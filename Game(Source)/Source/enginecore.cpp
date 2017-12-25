@@ -292,10 +292,10 @@ namespace LumenAusf
         }
         /*SDL_GLContext glcontext =*/SDL_GL_CreateContext (window);
 
-        if (!InitGl ())
+        if (!InitGl (width, height))
             exit (EXIT_FAILURE);
     }
-    bool EngineCore::InitGl ()
+    bool EngineCore::InitGl (int width, int height)
     {
         try
         {
@@ -433,7 +433,7 @@ namespace LumenAusf
         glClearColor (0.f, 0.0, 0.f, 0.0f);
         GL_ERROR_CHECK ();
 
-        glViewport (0, 0, 640, 480);
+        glViewport (0, 0, width, height);
         GL_ERROR_CHECK ();
         return true;
     }

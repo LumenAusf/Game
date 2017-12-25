@@ -4,13 +4,16 @@
 #define TANK_H
 
 #include "Source/gameobject.h"
+#include "Source/meshrenderer.h"
 #include "missile.h"
 #include "src/audio.h"
 
-class Tank : public LumenAusf::GameObject
+class Tank
 {
    public:
-    Tank (LumenAusf::Transform a, std::vector<LumenAusf::tri2> b) : GameObject (a, b) {}
+    LumenAusf::GameObject* go;
+    Tank (LumenAusf::Transform a) { go = new LumenAusf::GameObject (nullptr);
+                                  go->transform->aspect = a.aspect;}
     void Start ();
     void Fire ();
     void Rotate (Arrows dir);

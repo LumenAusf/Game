@@ -1,5 +1,4 @@
 #include "shader.h"
-#include "enginecore.h"
 
 namespace LumenAusf
 {

@@ -3,8 +3,11 @@
 #ifndef TEXTUREFINAL_H
 #define TEXTUREFINAL_H
 
+#include <iostream>
+#include <assert.h>
 #include "enginecore.h"
 #include "texture.h"
+
 
 #define GL_ERROR_CHECK()                                                          \
     {                                                                             \

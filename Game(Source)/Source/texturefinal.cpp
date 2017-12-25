@@ -1,5 +1,4 @@
 #include "texturefinal.h"
-#include "enginecore.h"
 
 namespace LumenAusf
 {
