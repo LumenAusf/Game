@@ -1,4 +1,4 @@
-#include "atlas.h"
+#include "meshrenderer.h"
 
 namespace LumenAusf
 {
@@ -6,9 +6,6 @@ namespace LumenAusf
 
     void Atlas::SetAtlas (LumenAusf::Texture* texture, LumenAusf::vec2 elementCountXY, LumenAusf::vec2 UsefromTo)
     {
-        float offsetX = 1.5f;
-        float offsetY = 0;
-
         this->texture = texture;
         this->elementCountXY = elementCountXY;
         this->usefromTo = UsefromTo;
@@ -21,15 +18,15 @@ namespace LumenAusf
                 mesh->triangles.at (i).v[j].uv.x = mesh->trianglesOriginals.at (i).v[j].uv.x * 1 / this->elementCountXY.x;
                 mesh->triangles.at (i).v[j].uv.x +=
                     (1 / this->elementCountXY.x) * (static_cast<int> (this->usefromTo.x) % static_cast<int> (this->elementCountXY.x));
-                if (offsetX > 0.001f)
-                    mesh->triangles.at (i).v[j].uv.x += offsetX / texture->get_width ();
+                if (mesh->offsetX > 0.001f)
+                    mesh->triangles.at (i).v[j].uv.x += mesh->offsetX / texture->get_width ();
 
                 mesh->triangles.at (i).v[j].uv.y = mesh->trianglesOriginals.at (i).v[j].uv.y * 1 / this->elementCountXY.y;
                 mesh->triangles.at (i).v[j].uv.y +=
                     (this->elementCountXY.y - 1 - (static_cast<int> (this->usefromTo.x) / static_cast<int> (this->elementCountXY.x))) /
                     this->elementCountXY.y;
-                if (offsetY > 0.001f)
-                    mesh->triangles.at (i).v[j].uv.y += offsetY / texture->get_height ();
+                if (mesh->offsetY > 0.001f)
+                    mesh->triangles.at (i).v[j].uv.y += mesh->offsetY / texture->get_height ();
             }
         }
     }

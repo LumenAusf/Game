@@ -3,37 +3,14 @@
 #ifndef ENGINECORE_H
 #define ENGINECORE_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_opengl_glext.h>
+#include <fstream>
 #include "engine.h"
 #include "picopng.hxx"
 #include "shader.h"
-#include "texture.h"
-#include "texturefinal.h"
 
-// PFNGLCREATESHADERPROC glCreateShader = nullptr;
-// PFNGLSHADERSOURCEARBPROC glShaderSource = nullptr;
-// PFNGLCOMPILESHADERARBPROC glCompileShader = nullptr;
-// PFNGLGETSHADERIVPROC glGetShaderiv = nullptr;
-// PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = nullptr;
-// PFNGLDELETESHADERPROC glDeleteShader = nullptr;
-// PFNGLCREATEPROGRAMPROC glCreateProgram = nullptr;
-// PFNGLATTACHSHADERPROC glAttachShader = nullptr;
-// PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation = nullptr;
-// PFNGLLINKPROGRAMPROC glLinkProgram = nullptr;
-// PFNGLGETPROGRAMIVPROC glGetProgramiv = nullptr;
-// PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = nullptr;
-// PFNGLDELETEPROGRAMPROC glDeleteProgram = nullptr;
-// PFNGLUSEPROGRAMPROC glUseProgram = nullptr;
-// PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = nullptr;
-// PFNGLUNIFORM1IPROC glUniform1i = nullptr;
-// PFNGLACTIVETEXTUREPROC glActiveTexture_ = nullptr;
-// PFNGLUNIFORM4FVPROC
-//    glUniform4fv
-//        = nullptr;
-//        PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv = nullptr;
-
-//        PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer = nullptr;
-//        PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray = nullptr;
-//        PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray = nullptr;
 namespace LumenAusf
 {
     class Glfunc
@@ -74,30 +51,6 @@ namespace LumenAusf
                 static Glfunc* ptr;
     };
 }
-
-// extern PFNGLCREATESHADERPROC glCreateShader;
-// extern PFNGLSHADERSOURCEARBPROC glShaderSource;
-// extern PFNGLCOMPILESHADERARBPROC glCompileShader;
-// extern PFNGLGETSHADERIVPROC glGetShaderiv;
-// extern PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
-// extern PFNGLDELETESHADERPROC glDeleteShader;
-// extern PFNGLCREATEPROGRAMPROC glCreateProgram;
-// extern PFNGLATTACHSHADERPROC glAttachShader;
-// extern PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
-// extern PFNGLLINKPROGRAMPROC glLinkProgram;
-// extern PFNGLGETPROGRAMIVPROC glGetProgramiv;
-// extern PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
-// extern PFNGLDELETEPROGRAMPROC glDeleteProgram;
-// extern PFNGLUSEPROGRAMPROC glUseProgram;
-// extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
-// extern PFNGLUNIFORM1IPROC glUniform1i;
-// extern PFNGLACTIVETEXTUREPROC GlActiveTexture_;
-// extern PFNGLACTIVETEXTUREPROC glActiveTexture_{std::get({if (GlActiveTexture_ == nullptr) return load_gl_func});
-// extern PFNGLUNIFORM4FVPROC glUniform4fv;
-// extern PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
-// extern PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
-// extern PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
-// extern PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
 
 #define GL_ERROR_CHECK()                                                          \
     {                                                                             \
@@ -193,7 +146,7 @@ namespace LumenAusf
         ~EngineCore ();
 
         void Init (bool versionCritical, int width, int height, std::string windowName);
-        bool InitGl ();
+        bool InitGl (int width, int height);
         bool CheckVersion ();
         void ReadEvent (Engine* engine);
         void Finish ();

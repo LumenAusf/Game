@@ -3,8 +3,10 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "enginecore.h"
+#include <vector>
 #include "texturefinal.h"
+#include "matrix.h"
+#include "color.h"
 
 namespace LumenAusf
 {
