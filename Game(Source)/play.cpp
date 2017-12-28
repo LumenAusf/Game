@@ -160,16 +160,17 @@ void Play::RenderGameObject (LumenAusf::GameObject* go)
 {
     if (go == nullptr)
         return;
-    auto b = go->GetComponent (new LumenAusf::MeshRenderer ());
+    //    auto bo = std::is_base_of<LumenAusf::Component, LumenAusf::MeshRenderer>::value;
+    auto b = go->GetComponent<LumenAusf::MeshRenderer> (); /*(new LumenAusf::MeshRenderer ());*/
     if (b == nullptr)
         return;
-    auto a = static_cast<LumenAusf::MeshRenderer*> (b);
-    if (a->triangles.size () == 0)
+    //    auto a = static_cast<LumenAusf::MeshRenderer*> (b);
+    if (b->triangles.size () == 0)
         return;
 
-    for (unsigned long i = 0; i < a->triangles.size (); i++)
+    for (unsigned long i = 0; i < b->triangles.size (); i++)
     {
-        Engine->DrawTriangle (a->triangles.at (i), a->texture, go->transform->GetGlobalMatrix ());
+        Engine->DrawTriangle (b->triangles.at (i), b->texture, go->transform->GetGlobalMatrix ());
     }
 }
 
@@ -222,8 +223,19 @@ Tank* Play::CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, 
 
     auto go = new Tank (*a);
 
-    auto b = new LumenAusf::MeshRenderer (LumenAusf::TypeOfMesh::Dynamic, triangles, texture);
+    auto c = go->go->AddComponent<LumenAusf::Collider> ();
+
+    auto b = go->go->AddComponent<LumenAusf::MeshRenderer> ();
+    b->meshType = LumenAusf::TypeOfMesh::Dynamic;
+    b->triangles = b->trianglesOriginals = triangles;
+    b->texture = texture;
+    b->atlas = new LumenAusf::Atlas (b);
+
+    //    auto c = new LumenAusf::Collider ();
+    //    go->go->AddComponent (c);
+
+    //    auto b = new LumenAusf::MeshRenderer (LumenAusf::TypeOfMesh::Dynamic, triangles, texture);
     b->SetAtlas (LumenAusf::vec2 (8, 4), LumenAusf::vec2 (AtlasStart, AtlasEnd));
-    go->go->AddComponent (b);
+    //    go->go->AddComponent (b);
     return go;
 }

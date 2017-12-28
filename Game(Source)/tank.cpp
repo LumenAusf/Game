@@ -13,11 +13,10 @@ void Tank::Rotate (Arrows dir)
 
 void Tank::Move ()
 {
-    auto a = go->GetComponent(new LumenAusf::MeshRenderer());
-    if(a == nullptr) return;
-    auto b = static_cast<LumenAusf::MeshRenderer *>(a);
-    if(b == nullptr) return;
-    b->atlas->Next ();
+    auto a = go->GetComponent<LumenAusf::MeshRenderer> ();
+    if (a == nullptr)
+        return;
+    a->atlas->Next ();
     playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 2);
     switch (Direction)
     {

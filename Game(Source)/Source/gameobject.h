@@ -44,7 +44,7 @@ namespace LumenAusf
     class Component
     {
        public:
-        void Awake () {}
+        void virtual Awake () {}
         void Start () {}
         void Update () {}
         void onEnable () {}
@@ -75,32 +75,61 @@ namespace LumenAusf
                 parent->children.push_back (transform);
         }
 
-        Component* AddComponent (Component* component);
-        Component* GetOrAddComponent (Component* component);
-        Component* GetComponent (Component* component);
-        void RemoveComponent (Component* component);
+        template <typename T>
+        typename std::enable_if<std::is_base_of<Component, T>::value, T*>::type AddComponent ()
+        {
+            bool Finded = false;
+            for (size_t i = 0; i < components.size (); i++)
+            {
+                if (dynamic_cast<T*> (components.at (i)) != nullptr)
+                {
+                    Finded = true;
+                    break;
+                }
+            }
+            if (Finded)
+            {
+                throw new std::exception ();
+            }
+            auto a = new T ();
+            components.push_back (a);
+            return a;
+        }
 
-        //        //        Arrows arrows;
-        //        Texture* texture = nullptr;
-        ////        Transform transform;
-        //        std::vector<tri2> triangles;
-        //        std::vector<tri2> trianglesOriginals;
-        //        vec2 elementCountXY, usefromTo;
-        //        bool isAtlas;
-        //        int startId, finishId;
-        //        int sizeAtlasItem;
-        //        int currentAtlasItem;
-        //        GameObject () {}
-        //        GameObject (Transform * a, std::vector<tri2> b)
-        //        {
-        //            transform = a;
-        //            triangles = b;
-        //            trianglesOriginals = b;
-        //        }
-        //        void SetAtlas (Texture* texture, vec2 elementCountXY, vec2 UsefromTo);
-        //        void SetTexture (Texture* texture);
-        //        void Next ();
-        //        void SetPosition (vec2 position);
+        template <typename T>
+        typename std::enable_if<std::is_base_of<Component, T>::value, T*>::type GetOrAddComponent ()
+        {
+            auto temp = GetComponent<T> ();
+            return temp == nullptr ? AddComponent<T> () : temp;
+        }
+
+        template <typename T>
+        typename std::enable_if<std::is_base_of<Component, T>::value, T*>::type GetComponent ()
+        {
+            T* temp = nullptr;
+
+            for (unsigned int i = 0; i < components.size (); i++)
+            {
+                temp = dynamic_cast<T*> (components.at (i));
+                if (temp != nullptr)
+                    break;
+            }
+
+            return temp;
+        }
+
+        template <typename T>
+        typename std::enable_if<std::is_base_of<Component, T>::value, void>::type RemoveComponent ()
+        {
+            for (size_t i = 0; i < components.size (); i++)
+            {
+                if (dynamic_cast<T*> (components.at (i)) != nullptr)
+                {
+                    components.erase (components.cbegin () + static_cast<long> (i));
+                    break;
+                }
+            }
+        }
 
        private:
     };

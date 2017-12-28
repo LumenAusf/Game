@@ -3,6 +3,7 @@
 #ifndef TANK_H
 #define TANK_H
 
+#include "Source/collider.h"
 #include "Source/gameobject.h"
 #include "Source/meshrenderer.h"
 #include "missile.h"
@@ -12,8 +13,11 @@ class Tank
 {
    public:
     LumenAusf::GameObject* go;
-    Tank (LumenAusf::Transform a) { go = new LumenAusf::GameObject (nullptr);
-                                  go->transform->aspect = a.aspect;}
+    Tank (LumenAusf::Transform a)
+    {
+        go = new LumenAusf::GameObject (nullptr);
+        go->transform->aspect = a.aspect;
+    }
     void Start ();
     void Fire ();
     void Rotate (Arrows dir);
