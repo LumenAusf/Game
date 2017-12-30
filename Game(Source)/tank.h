@@ -12,11 +12,14 @@
 class Tank
 {
    public:
+    static int num;
     LumenAusf::GameObject* go;
     Tank (LumenAusf::mat2x3 a)
     {
         go = new LumenAusf::GameObject (nullptr);
         go->transform->setAspect (a);
+        go->name = "Tank " + std::to_string (num);
+        num++;
     }
     void Start ();
     void Fire ();

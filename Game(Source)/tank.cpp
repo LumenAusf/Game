@@ -1,5 +1,7 @@
 #include "tank.h"
 
+int Tank::num = 0;
+
 void Tank::Start () { playSoundFromMemory (SoundStartEngine, SDL_MIX_MAXVOLUME / 2); }
 
 void Tank::Rotate (Arrows dir)

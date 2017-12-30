@@ -42,7 +42,7 @@ namespace LumenAusf
                 {
                     if (objects[b]->GetComponent<Collider> () != nullptr)
                         if (Collider::IsColided (objects[a], objects[b]))
-                            std::cerr << "COLLIDED" << std::endl;
+                            std::cerr << objects[a]->name << " ::: " << objects[b]->name << std::endl;
                 }
         }
     }

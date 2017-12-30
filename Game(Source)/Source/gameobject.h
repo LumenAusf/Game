@@ -93,21 +93,23 @@ namespace LumenAusf
         Transform* transform;
         std::vector<Component*> components;
         bool enabled;
-        std::string name;
+        std::string name = "GameObject";
 
-        GameObject ()
+        GameObject (std::string name = "")
         {
             transform = new Transform ();
             transform->parent = nullptr;
             objects.push_back (this);
+            this->name = name != "" ? name : this->name;
         }
-        GameObject (Transform* parent)
+        GameObject (Transform* parent, std::string name = "")
         {
             transform = new Transform ();
             transform->parent = parent;
             if (parent != nullptr)
                 parent->children.push_back (transform);
             objects.push_back (this);
+            this->name = name != "" ? name : this->name;
         }
         ~GameObject ()
         {
