@@ -30,10 +30,11 @@ class Play
 
     void DrawGrass ();
     bool LoadTextures ();
-    Tank* InitTank (int AtlasStart, int AtlasEnd);
+    Tank* InitTank (int AtlasStart, int AtlasEnd, float offsetX = 0.f, float offsetY = 0.f);
     void RenderGameObject (LumenAusf::GameObject* go /*, bool needNext = true*/);
     LumenAusf::GameObject* LoadGameObject (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount);
-    Tank* CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd);
+    Tank*
+    CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX, float offsetY);
 };
 
 #endif    // PLAY_H

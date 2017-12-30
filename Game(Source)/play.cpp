@@ -10,34 +10,30 @@ void Play::Run ()
     Audio* music = createAudio ("music/Believer.wav", 1, SDL_MIX_MAXVOLUME);
     playSoundFromMemory (music, SDL_MIX_MAXVOLUME / 3);
 
-    //        auto b = createAudio ("sounds/EngineStart.wav", 0, SDL_MIX_MAXVOLUME / 2);
-    //        auto c = createAudio ("sounds/EngineAwake.wav", 1, SDL_MIX_MAXVOLUME / 2);
-    //        auto d = createAudio ("sounds/EngineRun.wav", 0, SDL_MIX_MAXVOLUME / 2);
-    //        auto e = createAudio ("sounds/TankFire.wav", 0, SDL_MIX_MAXVOLUME);
-
     if (!LoadTextures ())
         return;
 
     goTank = InitTank (1, 8);
     goTank->go->transform->SetPosition (LumenAusf::vec2 (0.f, -0.5f));
 
-    //    goTank2 = InitTank (9, 16);
-    //    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
-
-    //        goTank = CreateTank ("configurations/TankData.txt", AtlasTank, 2 /*, true, 1, 8, 84*/);
-    //        goTank->transform.scale = LumenAusf::mat2x3::scale (0.5f);
-    //        goTank->SetSounds (b, c, d, e);
-    //        goTank->setSpeed (speed);
+    goTank2 = InitTank (9, 16, 1.5f);
+    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
 
     Engine->EngineEvent += Delegate (this, &Play::EventGetted);
+
+    LumenAusf::GameObject::AwakeAll ();
+    LumenAusf::GameObject::StartAll ();
+
     while (running)
     {
+        LumenAusf::GameObject::UpdateAll ();
+        LumenAusf::GameObject::FixedUpdateAll ();
         Engine->ReadEvent ();
 
         DrawGrass ();
 
         RenderGameObject (goTank->go);
-        //        RenderGameObject (goTank2->go);
+        RenderGameObject (goTank2->go);
 
         Engine->SwapBuffers ();
     }
@@ -62,8 +58,8 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     goTank->Rotate (Arrows::Down);
                     goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Up);
-                    //                    goTank2->Move ();
+                    goTank2->Rotate (Arrows::Up);
+                    goTank2->Move ();
                     break;
 
                 case LumenAusf::KEY_CODE::RIGHT:
@@ -71,8 +67,8 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     goTank->Rotate (Arrows::Right);
                     goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Right);
-                    //                    goTank2->Move ();
+                    goTank2->Rotate (Arrows::Right);
+                    goTank2->Move ();
                     break;
 
                 case LumenAusf::KEY_CODE::UP:
@@ -80,8 +76,8 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     goTank->Rotate (Arrows::Up);
                     goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Down);
-                    //                    goTank2->Move ();
+                    goTank2->Rotate (Arrows::Down);
+                    goTank2->Move ();
                     break;
 
                 case LumenAusf::KEY_CODE::LEFT:
@@ -89,8 +85,8 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     goTank->Rotate (Arrows::Left);
                     goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Left);
-                    //                    goTank2->Move ();
+                    goTank2->Rotate (Arrows::Left);
+                    goTank2->Move ();
                     break;
 
                 case LumenAusf::KEY_CODE::SPACE:
@@ -141,15 +137,15 @@ bool Play::LoadTextures ()
     return true;
 }
 
-Tank* Play::InitTank (int AtlasStart, int AtlasEnd)
+Tank* Play::InitTank (int AtlasStart, int AtlasEnd, float offsetX, float offsetY)
 {
     auto b = createAudio ("sounds/EngineStart.wav", 0, SDL_MIX_MAXVOLUME / 2);
     auto c = createAudio ("sounds/EngineAwake.wav", 1, SDL_MIX_MAXVOLUME / 2);
     auto d = createAudio ("sounds/EngineRun.wav", 0, SDL_MIX_MAXVOLUME / 2);
     auto e = createAudio ("sounds/TankFire.wav", 0, SDL_MIX_MAXVOLUME);
 
-    auto go = CreateTank ("configurations/TankData.txt", AtlasTank, 2, AtlasStart, AtlasEnd);
-    go->go->transform->globalScale = LumenAusf::mat2x3::scale (0.5f);
+    auto go = CreateTank ("configurations/TankData.txt", AtlasTank, 2, AtlasStart, AtlasEnd, offsetX, offsetY);
+    go->go->transform->setLocalScale (LumenAusf::mat2x3::scale (0.5f));
     go->SetSounds (b, c, d, e);
     go->setSpeed (speed);
 
@@ -160,11 +156,11 @@ void Play::RenderGameObject (LumenAusf::GameObject* go)
 {
     if (go == nullptr)
         return;
-    //    auto bo = std::is_base_of<LumenAusf::Component, LumenAusf::MeshRenderer>::value;
-    auto b = go->GetComponent<LumenAusf::MeshRenderer> (); /*(new LumenAusf::MeshRenderer ());*/
+
+    auto b = go->GetComponent<LumenAusf::MeshRenderer> ();
     if (b == nullptr)
         return;
-    //    auto a = static_cast<LumenAusf::MeshRenderer*> (b);
+
     if (b->triangles.size () == 0)
         return;
 
@@ -174,33 +170,8 @@ void Play::RenderGameObject (LumenAusf::GameObject* go)
     }
 }
 
-// LumenAusf::GameObject* Play::LoadGameObject (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount)
-//{
-//    std::ifstream fileTriangles (TrianglesPath);
-//    if (!fileTriangles.is_open ())
-//        return nullptr;
-
-//    std::vector<LumenAusf::tri2> triangles;
-
-//    for (auto i = 0; i < TrianglesCount; i++)
-//    {
-//        LumenAusf::tri2 triangle;
-//        fileTriangles >> triangle;
-//        triangles.push_back (triangle);
-//    }
-
-//    auto a = new LumenAusf::Transform;
-//    a->aspect.col0.x = 1;
-//    a->aspect.col0.y = 0.f;
-//    a->aspect.col1.x = 0.f;
-//    a->aspect.col1.y = 640.f / 480.f;
-
-//    auto go = new LumenAusf::GameObject (*a, triangles);
-//    go->SetAtlas (texture, LumenAusf::vec2 (8, 4), LumenAusf::vec2 (1, 8));
-//    return go;
-//}
-
-Tank* Play::CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd)
+Tank* Play::CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX,
+                        float offsetY)
 {
     std::ifstream fileTriangles (TrianglesPath);
     if (!fileTriangles.is_open ())
@@ -215,27 +186,25 @@ Tank* Play::CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, 
         triangles.push_back (triangle);
     }
 
-    auto a = new LumenAusf::Transform;
-    a->aspect.col0.x = 1;
-    a->aspect.col0.y = 0.f;
-    a->aspect.col1.x = 0.f;
-    a->aspect.col1.y = static_cast<float> (windowWidth) / windowHeight;
+    auto a = new LumenAusf::mat2x3 ();
+    a->col0.x = 1;
+    a->col0.y = 0.f;
+    a->col1.x = 0.f;
+    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
 
     auto go = new Tank (*a);
 
-    auto c = go->go->AddComponent<LumenAusf::Collider> ();
+    // for test
+    go->go->AddComponent<LumenAusf::Collider> ();
 
     auto b = go->go->AddComponent<LumenAusf::MeshRenderer> ();
+    b->offsetX = offsetX;
+    b->offsetY = offsetY;
     b->meshType = LumenAusf::TypeOfMesh::Dynamic;
     b->triangles = b->trianglesOriginals = triangles;
     b->texture = texture;
     b->atlas = new LumenAusf::Atlas (b);
 
-    //    auto c = new LumenAusf::Collider ();
-    //    go->go->AddComponent (c);
-
-    //    auto b = new LumenAusf::MeshRenderer (LumenAusf::TypeOfMesh::Dynamic, triangles, texture);
     b->SetAtlas (LumenAusf::vec2 (8, 4), LumenAusf::vec2 (AtlasStart, AtlasEnd));
-    //    go->go->AddComponent (b);
     return go;
 }

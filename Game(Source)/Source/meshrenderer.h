@@ -38,29 +38,22 @@ namespace LumenAusf
        public:
         TypeOfMesh meshType = TypeOfMesh::Static;
         Atlas* atlas = nullptr;
-        virtual ~MeshRenderer();
+        virtual ~MeshRenderer ();
         Texture* texture = nullptr;
         std::vector<tri2> triangles;
         std::vector<tri2> trianglesOriginals;
         float offsetX = 0.f;
         float offsetY = 0.f;
 
-        MeshRenderer(){}
-        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture);
-        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture, float offsetx, float offsety);
+        MeshRenderer (GameObject* owner) : Component (owner) {}
+        //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture);
+        //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture, float offsetx, float offsety);
         void SetAtlas (vec2 elementCountXY, vec2 UsefromTo);
         void Awake ();
         void Start ();
         void Update ();
         void onEnable ();
         void onDisable ();
-        bool getEnabled () const;
-        void setEnabled (bool value);
-        GameObject* getGameObject () const;
-        void setGameObject (GameObject* value);
-
-        bool enabled = true;
-        GameObject* gameObject = nullptr;
     };
 }
 

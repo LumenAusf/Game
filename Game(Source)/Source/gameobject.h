@@ -3,6 +3,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include "matrix.h"
@@ -23,6 +24,36 @@ namespace LumenAusf
     class Transform
     {
        public:
+        GameObject* gameObject = nullptr;
+        Transform* parent = nullptr;
+        std::vector<Transform*> children;
+
+        mat2x3 GetGlobalMatrix () { return getGlobalScale () * getGlobalRotation () * getGlobalPosition () * aspect; }
+        mat2x3 GetLocalMatrix () { return getLocalScale () * getLocalRotation () * getLocalPosition () * aspect; }
+        void SetPosition (vec2 pos) { setLocalPosition (mat2x3 () * mat2x3::move (pos)); }
+
+        mat2x3 getLocalScale () const;
+        void setLocalScale (const mat2x3& value);
+
+        mat2x3 getLocalRotation () const;
+        void setLocalRotation (const mat2x3& value);
+
+        mat2x3 getLocalPosition () const;
+        void setLocalPosition (const mat2x3& value);
+
+        mat2x3 getGlobalScale () const;
+        //        void setGlobalScale (const mat2x3& value);
+
+        mat2x3 getGlobalRotation () const;
+        //        void setGlobalRotation (const mat2x3& value);
+
+        mat2x3 getGlobalPosition () const;
+        //        void setGlobalPosition (const mat2x3& value);
+
+        mat2x3 getAspect () const;
+        void setAspect (const mat2x3& value);
+
+       private:
         mat2x3 localScale;
         mat2x3 localRotation;
         mat2x3 localPosition;
@@ -30,32 +61,30 @@ namespace LumenAusf
         mat2x3 globalRotation;
         mat2x3 globalPosition;
         mat2x3 aspect;
-        GameObject* gameObject = nullptr;
-        Transform* parent = nullptr;
-        std::vector<Transform*> children;
-
-        mat2x3 GetGlobalMatrix () { return globalScale * globalRotation * globalPosition * aspect; }
-        mat2x3 GetLocalMatrix () { return localScale * localRotation * localPosition * aspect; }
-        void SetPosition (vec2 pos) { globalPosition = mat2x3 () * mat2x3::move (pos); }
-
-       private:
     };
 
     class Component
     {
        public:
+        Component (GameObject* owner) { gameObject = owner; }
         void virtual Awake () {}
-        void Start () {}
-        void Update () {}
-        void onEnable () {}
-        void onDisable () {}
+        void virtual Start () {}
+        void virtual Update () {}
+        void virtual onEnable () {}
+        void virtual onDisable () {}
+        void virtual onDestroy () {}
 
-        //         bool getEnabled () const ;
-        //         void setEnabled (bool value) ;
-        //         GameObject* getGameObject () const ;
-        //         void setGameObject (GameObject* value) ;
+        bool getEnabled () const { return enabled; }
+        void setEnabled (bool value)
+        {
+            enabled = value;
+            value ? onEnable () : onDisable ();
+        }
+        GameObject* getGameObject () const { return gameObject; }
 
        protected:
+        GameObject* gameObject = nullptr;
+        bool enabled;
     };
 
     class GameObject
@@ -66,13 +95,24 @@ namespace LumenAusf
         bool enabled;
         std::string name;
 
-        GameObject () { transform = new Transform (); }
+        GameObject ()
+        {
+            transform = new Transform ();
+            transform->parent = nullptr;
+            objects.push_back (this);
+        }
         GameObject (Transform* parent)
         {
             transform = new Transform ();
             transform->parent = parent;
             if (parent != nullptr)
                 parent->children.push_back (transform);
+            objects.push_back (this);
+        }
+        ~GameObject ()
+        {
+            auto a = std::find (objects.cbegin (), objects.cend (), this);
+            objects.erase (a);
         }
 
         template <typename T>
@@ -91,7 +131,7 @@ namespace LumenAusf
             {
                 throw new std::exception ();
             }
-            auto a = new T ();
+            auto a = new T (this);
             components.push_back (a);
             return a;
         }
@@ -131,7 +171,13 @@ namespace LumenAusf
             }
         }
 
+        static void UpdateAll ();
+        static void AwakeAll ();
+        static void StartAll ();
+        static void FixedUpdateAll ();
+
        private:
+        static std::vector<GameObject*> objects;
     };
 }
 #endif    // GAMEOBJECT_H

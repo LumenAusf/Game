@@ -13,10 +13,10 @@ class Tank
 {
    public:
     LumenAusf::GameObject* go;
-    Tank (LumenAusf::Transform a)
+    Tank (LumenAusf::mat2x3 a)
     {
         go = new LumenAusf::GameObject (nullptr);
-        go->transform->aspect = a.aspect;
+        go->transform->setAspect (a);
     }
     void Start ();
     void Fire ();
