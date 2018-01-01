@@ -35,7 +35,7 @@ namespace LumenAusf
 
     void GameObject::FixedUpdateAll ()
     {
-        for (auto a = 0; a < objects.size () - 1; a++)
+        for (unsigned int a = 0; a < objects.size () - 1; a++)
         {
             if (objects[a]->GetComponent<Collider> () != nullptr)
                 for (auto b = a + 1; b < objects.size (); b++)

@@ -6,6 +6,7 @@
 #include <tuple>
 
 #include "event.h"
+#include "eventsystem.h"
 #include "gameobject.h"
 #include "meshrenderer.h"
 #include "texture.h"
@@ -74,6 +75,7 @@ namespace LumenAusf
         void Clear ();
 
         Event EngineEvent = Event ();
+        constexpr static const EventSystem EventSys = EventSystem ();
     };
 }
 #endif    // ENGINE_H

@@ -84,7 +84,7 @@ namespace LumenAusf
 
        protected:
         GameObject* gameObject = nullptr;
-        bool enabled;
+        bool enabled = true;
     };
 
     class GameObject
@@ -92,8 +92,9 @@ namespace LumenAusf
        public:
         Transform* transform;
         std::vector<Component*> components;
-        bool enabled;
+        bool enabled = true;
         std::string name = "GameObject";
+        std::string tag = "";
 
         GameObject (std::string name = "")
         {

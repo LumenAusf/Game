@@ -3,19 +3,23 @@
 #ifndef MISSILE_H
 #define MISSILE_H
 
-#include "Source/gameobject.h"
+#include "play.h"
+//#include "Source/gameobject.h"
 #include "src/audio.h"
 
-class Missile : public LumenAusf::GameObject
+class Tank;
+
+class Missile
 {
    public:
-    Missile ();
+    Missile (Tank* owner) { tank = owner; }
     void Start ();
     void Boom ();
 
-    float speed;
+    float speed = 0.5f;
     Audio* SoundFly;
     Audio* SoundBoom;
+    Tank* tank;
 };
 
 #endif    // MISSILE_H

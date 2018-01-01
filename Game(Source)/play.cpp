@@ -7,17 +7,19 @@ void Play::Run ()
     Engine->Init (false, windowWidth, windowHeight);
 
     initAudio ();
-    Audio* music = createAudio ("music/Believer.wav", 1, SDL_MIX_MAXVOLUME);
+    Audio* music = createAudio ("music/Believer.wav", 1, SDL_MIX_MAXVOLUME / 10);
     playSoundFromMemory (music, SDL_MIX_MAXVOLUME / 3);
 
     if (!LoadTextures ())
         return;
 
-    goTank = InitTank (1, 8);
-    goTank->go->transform->SetPosition (LumenAusf::vec2 (0.f, -0.5f));
+    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true);
+    goTank->SetAspect (windowWidth, windowHeight);
 
-    goTank2 = InitTank (9, 16, 1.5f);
-    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
+    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
+    goTank2->SetAspect (windowWidth, windowHeight);
+    //    goTank2 = InitTank (9, 16, 1.5f);
+    //    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
 
     Engine->EngineEvent += Delegate (this, &Play::EventGetted);
 
@@ -53,45 +55,46 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     running = false;
                     break;
 
-                case LumenAusf::KEY_CODE::DOWN:
-                    std::clog << "DOWN" << std::endl;
-                    goTank->Rotate (Arrows::Down);
-                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::DOWN:
+                //                    std::clog << "DOWN" << std::endl;
+                //                    goTank->Rotate (Arrows::Down);
+                //                    goTank->Move ();
 
-                    goTank2->Rotate (Arrows::Up);
-                    goTank2->Move ();
-                    break;
+                //                    goTank2->Rotate (Arrows::Up);
+                //                    goTank2->Move ();
+                //                    break;
 
-                case LumenAusf::KEY_CODE::RIGHT:
-                    std::clog << "RIGHT" << std::endl;
-                    goTank->Rotate (Arrows::Right);
-                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::RIGHT:
+                //                    std::clog << "RIGHT" << std::endl;
+                //                    goTank->Rotate (Arrows::Right);
+                //                    goTank->Move ();
 
-                    goTank2->Rotate (Arrows::Right);
-                    goTank2->Move ();
-                    break;
+                //                    goTank2->Rotate (Arrows::Right);
+                //                    goTank2->Move ();
+                //                    break;
 
-                case LumenAusf::KEY_CODE::UP:
-                    std::clog << "UP" << std::endl;
-                    goTank->Rotate (Arrows::Up);
-                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::UP:
+                //                    std::clog << "UP" << std::endl;
+                //                    goTank->Rotate (Arrows::Up);
+                //                    goTank->Move ();
 
-                    goTank2->Rotate (Arrows::Down);
-                    goTank2->Move ();
-                    break;
+                //                    goTank2->Rotate (Arrows::Down);
+                //                    goTank2->Move ();
+                //                    break;
 
-                case LumenAusf::KEY_CODE::LEFT:
-                    std::clog << "LEFT" << std::endl;
-                    goTank->Rotate (Arrows::Left);
-                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::LEFT:
+                //                    std::clog << "LEFT" << std::endl;
+                //                    goTank->Rotate (Arrows::Left);
+                //                    goTank->Move ();
 
-                    goTank2->Rotate (Arrows::Left);
-                    goTank2->Move ();
-                    break;
+                //                    goTank2->Rotate (Arrows::Left);
+                //                    goTank2->Move ();
+                //                    break;
 
-                case LumenAusf::KEY_CODE::SPACE:
-                    playSound ("sounds/TankFire.wav", SDL_MIX_MAXVOLUME);
-                    break;
+                //                case LumenAusf::KEY_CODE::SPACE:
+                //                    goTank->Fire ();
+                //                    playSound ("sounds/TankFire.wav", SDL_MIX_MAXVOLUME);
+                //                    break;
                 default:
                     break;
             }
@@ -112,10 +115,9 @@ void Play::DrawGrass ()
     LumenAusf::tri2 tr1Grass;
     LumenAusf::tri2 tr2Grass;
     fileGrass >> tr1Grass >> tr2Grass;
-    LumenAusf::mat2x3 aspectlocal;
 
-    Engine->DrawTriangle (tr1Grass, textureGrass, aspectlocal);
-    Engine->DrawTriangle (tr2Grass, textureGrass, aspectlocal);
+    Engine->DrawTriangle (tr1Grass, textureGrass, LumenAusf::mat2x3 ());
+    Engine->DrawTriangle (tr2Grass, textureGrass, LumenAusf::mat2x3 ());
 }
 
 bool Play::LoadTextures ()
@@ -127,7 +129,7 @@ bool Play::LoadTextures ()
         return false;
     }
 
-    AtlasTank = Engine->CreateTexture ("textures/TankAtlas.png");
+    AtlasTank = Engine->CreateTexture ("textures/TankAtlasTest.png");
     if (nullptr == AtlasTank)
     {
         std::cerr << "Can`t Load Atlas Texture TANK" << std::endl;
@@ -135,21 +137,6 @@ bool Play::LoadTextures ()
     }
 
     return true;
-}
-
-Tank* Play::InitTank (int AtlasStart, int AtlasEnd, float offsetX, float offsetY)
-{
-    auto b = createAudio ("sounds/EngineStart.wav", 0, SDL_MIX_MAXVOLUME / 2);
-    auto c = createAudio ("sounds/EngineAwake.wav", 1, SDL_MIX_MAXVOLUME / 2);
-    auto d = createAudio ("sounds/EngineRun.wav", 0, SDL_MIX_MAXVOLUME / 2);
-    auto e = createAudio ("sounds/TankFire.wav", 0, SDL_MIX_MAXVOLUME);
-
-    auto go = CreateTank ("configurations/TankData.txt", AtlasTank, 2, AtlasStart, AtlasEnd, offsetX, offsetY);
-    go->go->transform->setLocalScale (LumenAusf::mat2x3::scale (0.5f));
-    go->SetSounds (b, c, d, e);
-    go->setSpeed (speed);
-
-    return go;
 }
 
 void Play::RenderGameObject (LumenAusf::GameObject* go)
@@ -168,43 +155,4 @@ void Play::RenderGameObject (LumenAusf::GameObject* go)
     {
         Engine->DrawTriangle (b->triangles.at (i), b->texture, go->transform->GetGlobalMatrix ());
     }
-}
-
-Tank* Play::CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX,
-                        float offsetY)
-{
-    std::ifstream fileTriangles (TrianglesPath);
-    if (!fileTriangles.is_open ())
-        return nullptr;
-
-    std::vector<LumenAusf::tri2> triangles;
-
-    for (auto i = 0; i < TrianglesCount; i++)
-    {
-        LumenAusf::tri2 triangle;
-        fileTriangles >> triangle;
-        triangles.push_back (triangle);
-    }
-
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-
-    auto go = new Tank (*a);
-
-    // for test
-    go->go->AddComponent<LumenAusf::Collider> ();
-
-    auto b = go->go->AddComponent<LumenAusf::MeshRenderer> ();
-    b->offsetX = offsetX;
-    b->offsetY = offsetY;
-    b->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    b->triangles = b->trianglesOriginals = triangles;
-    b->texture = texture;
-    b->atlas = new LumenAusf::Atlas (b);
-
-    b->SetAtlas (LumenAusf::vec2 (8, 4), LumenAusf::vec2 (AtlasStart, AtlasEnd));
-    return go;
 }

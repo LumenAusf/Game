@@ -3,43 +3,49 @@
 #ifndef TANK_H
 #define TANK_H
 
-#include "Source/collider.h"
-#include "Source/gameobject.h"
-#include "Source/meshrenderer.h"
-#include "missile.h"
-#include "src/audio.h"
+#include "play.h"
+#include "tankcontroller.h"
+#include "tanknpccontroller.h"
+
+class Missile;
+
+struct TankData
+{
+    int trianglesCount;
+    std::vector<LumenAusf::tri2> triangles;
+    LumenAusf::vec2 pos;
+    int atlasWAll;
+    int atlasHAll;
+    int atlasStart;
+    int atlasEnd;
+    float atlasOffsetX;
+    float atlasOffsetY;
+    float scale;
+    std::string pathSoundStart;
+    std::string pathSoundStay;
+    std::string pathSoundRun;
+    std::string pathSoundFire;
+};
+
+std::istream& operator>> (std::istream& is, TankData& t);
 
 class Tank
 {
    public:
+    Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser);
+    void SetAspect (LumenAusf::mat2x3 aspect);
+    void SetAspect (float width, float height);
+
     static int num;
     LumenAusf::GameObject* go;
-    Tank (LumenAusf::mat2x3 a)
-    {
-        go = new LumenAusf::GameObject (nullptr);
-        go->transform->setAspect (a);
-        go->name = "Tank " + std::to_string (num);
-        num++;
-    }
-    void Start ();
-    void Fire ();
-    void Rotate (Arrows dir);
-    void Move ();
-    float getSpeed () const;
-    void setSpeed (float value);
-    int getMissileCount () const;
-    void setMissileCount (int value);
-    void setMissile (Missile* pref);
-    void SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fire);
+    LumenAusf::MeshRenderer* mr;
+    LumenAusf::Collider* collider;
+    TankController* tc;
+    TankNPCController* tnc;
 
-    float Speed;
-    int MissileCount;
-    Missile* MissilePref;
-    Arrows Direction;
-    Audio* SoundStartEngine;
-    Audio* SoundEngine;
-    Audio* SoundRun;
-    Audio* SoundFire;
+   private:
+    void CreateUserTank (std::string configPath, LumenAusf::Texture* texture);
+    void CreateNPCTank (std::string configPath, LumenAusf::Texture* texture);
 };
 
 #endif    // TANK_H

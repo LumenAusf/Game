@@ -53,24 +53,47 @@ namespace LumenAusf
                         case SDLK_UP:
                             event->keyCode = KEY_CODE::UP;
                             engine->EngineEvent (event);
+                            engine->EventSys.Key_Up = true;
                             break;
                         case SDLK_LEFT:
                             event->keyCode = KEY_CODE::LEFT;
                             engine->EngineEvent (event);
+                            engine->EventSys.Key_Left = true;
                             break;
                         case SDLK_DOWN:
                             event->keyCode = KEY_CODE::DOWN;
                             engine->EngineEvent (event);
+                            engine->EventSys.Key_Down = true;
                             break;
                         case SDLK_RIGHT:
                             event->keyCode = KEY_CODE::RIGHT;
                             engine->EngineEvent (event);
+                            engine->EventSys.Key_Right = true;
                             break;
                         case SDLK_SPACE:
                             event->keyCode = KEY_CODE::SPACE;
                             engine->EngineEvent (event);
+                            engine->EventSys.Key_Space = true;
                     }
                     break;
+                case SDL_KEYUP:
+                    switch (eventSDL.key.keysym.sym)
+                    {
+                        case SDLK_UP:
+                            engine->EventSys.Key_Up = false;
+                            break;
+                        case SDLK_LEFT:
+                            engine->EventSys.Key_Left = false;
+                            break;
+                        case SDLK_DOWN:
+                            engine->EventSys.Key_Down = false;
+                            break;
+                        case SDLK_RIGHT:
+                            engine->EventSys.Key_Right = false;
+                            break;
+                        case SDLK_SPACE:
+                            engine->EventSys.Key_Space = false;
+                    }
             }
         }
     }
