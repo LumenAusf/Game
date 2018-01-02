@@ -3,23 +3,42 @@
 #ifndef MISSILE_H
 #define MISSILE_H
 
+#include "missilecontroller.h"
 #include "play.h"
-//#include "Source/gameobject.h"
 #include "src/audio.h"
 
-class Tank;
+class MissileController;
+
+struct MissileData
+{
+    int trianglesCount;
+    std::vector<LumenAusf::tri2> triangles;
+    int atlasWAll;
+    int atlasHAll;
+    int atlasStart;
+    int atlasEnd;
+    float atlasOffsetX;
+    float atlasOffsetY;
+    float scale;
+    std::string pathSoundRun;
+    std::string pathSoundFire;
+};
+
+std::istream& operator>> (std::istream& is, MissileData& t);
 
 class Missile
 {
    public:
-    Missile (Tank* owner) { tank = owner; }
-    void Start ();
-    void Boom ();
+    Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture);
+    void SetAspect (LumenAusf::mat2x3 aspect);
+    void SetAspect (float width, float height);
 
-    float speed = 0.5f;
-    Audio* SoundFly;
-    Audio* SoundBoom;
-    Tank* tank;
+    float speed = 0.0005f;
+    LumenAusf::GameObject* tank;
+    LumenAusf::GameObject* go;
+    LumenAusf::MeshRenderer* mr;
+    LumenAusf::Collider* collider;
+    MissileController* mc;
 };
 
 #endif    // MISSILE_H

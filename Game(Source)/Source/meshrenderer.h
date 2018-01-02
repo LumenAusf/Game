@@ -49,11 +49,16 @@ namespace LumenAusf
         //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture);
         //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture, float offsetx, float offsety);
         void SetAtlas (vec2 elementCountXY, vec2 UsefromTo);
+        void ResizeUV (vec2 LeftRight, vec2 UpDown);
         void Awake ();
         void Start ();
         void Update ();
         void onEnable ();
         void onDisable ();
+
+        // Component interface
+       public:
+        void Destroy ();
     };
 }
 

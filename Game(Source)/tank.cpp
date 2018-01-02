@@ -60,6 +60,7 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture)
     auto d = createAudio (td.pathSoundRun.c_str (), 0, SDL_MIX_MAXVOLUME / 2);
     auto e = createAudio (td.pathSoundFire.c_str (), 0, SDL_MIX_MAXVOLUME);
     tc->SetSounds (b, c, d, e);
+    tc->SetTextureMissile (texture);
 }
 
 void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)

@@ -34,6 +34,10 @@ class TankNPCController : public LumenAusf::Component
     Audio* SoundEngine;
     Audio* SoundRun;
     Audio* SoundFire;
+
+    // Component interface
+   public:
+    void Destroy ();
 };
 
 #endif    // TANKNPCCONTROLLER_H

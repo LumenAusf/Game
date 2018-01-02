@@ -73,6 +73,7 @@ namespace LumenAusf
         void virtual onEnable () {}
         void virtual onDisable () {}
         void virtual onDestroy () {}
+        void virtual Destroy () {}
 
         bool getEnabled () const { return enabled; }
         void setEnabled (bool value)
@@ -116,6 +117,13 @@ namespace LumenAusf
         {
             auto a = std::find (objects.cbegin (), objects.cend (), this);
             objects.erase (a);
+
+            for (auto b : components)
+            {
+                b->Destroy ();
+            }
+
+            std::cerr << "removed " + name << std::endl;
         }
 
         template <typename T>
@@ -178,8 +186,8 @@ namespace LumenAusf
         static void AwakeAll ();
         static void StartAll ();
         static void FixedUpdateAll ();
+        static void RenderAll ();
 
-       private:
         static std::vector<GameObject*> objects;
     };
 }

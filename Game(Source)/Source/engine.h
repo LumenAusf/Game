@@ -8,6 +8,7 @@
 #include "event.h"
 #include "eventsystem.h"
 #include "gameobject.h"
+#include "matrix.h"
 #include "meshrenderer.h"
 #include "texture.h"
 #include "triangle.h"

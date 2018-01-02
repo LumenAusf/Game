@@ -70,4 +70,6 @@ namespace LumenAusf
     void Collider::onDisable () {}
 
     void Collider::onDestroy () {}
+
+    void Collider::Destroy () { this->~Collider (); }
 }

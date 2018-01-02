@@ -25,6 +25,10 @@ namespace LumenAusf
         void onEnable ();
         void onDisable ();
         void onDestroy ();
+
+        // Component interface
+       public:
+        void Destroy ();
     };
 }
 

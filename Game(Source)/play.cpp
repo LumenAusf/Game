@@ -16,8 +16,19 @@ void Play::Run ()
     goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true);
     goTank->SetAspect (windowWidth, windowHeight);
 
-    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
-    goTank2->SetAspect (windowWidth, windowHeight);
+    //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
+    //    goTank2->SetAspect (windowWidth, windowHeight);
+
+    //    goTank3 = new Tank ("configurations/TankNPCData2.txt", AtlasTank, false);
+    //    goTank3->SetAspect (windowWidth, windowHeight);
+
+    //    goTank4
+    //        = new Tank ("configurations/TankNPCData3.txt", AtlasTank, false);
+    //        goTank4
+    //            ->SetAspect (windowWidth, windowHeight);
+
+    //            goTank5 = new Tank ("configurations/TankNPCData4.txt", AtlasTank, false);
+    //            goTank5->SetAspect (windowWidth, windowHeight);
     //    goTank2 = InitTank (9, 16, 1.5f);
     //    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
 
@@ -34,8 +45,10 @@ void Play::Run ()
 
         DrawGrass ();
 
-        RenderGameObject (goTank->go);
-        RenderGameObject (goTank2->go);
+        RenderAll ();
+
+        //        RenderGameObject (goTank->go);
+        //        RenderGameObject (goTank2->go);
 
         Engine->SwapBuffers ();
     }
@@ -154,5 +167,20 @@ void Play::RenderGameObject (LumenAusf::GameObject* go)
     for (unsigned long i = 0; i < b->triangles.size (); i++)
     {
         Engine->DrawTriangle (b->triangles.at (i), b->texture, go->transform->GetGlobalMatrix ());
+    }
+}
+
+void Play::RenderAll ()
+{
+    for (auto ob : LumenAusf::GameObject::objects)
+    {
+        if (!ob->enabled)
+            continue;
+
+        auto b = ob->GetComponent<LumenAusf::MeshRenderer> ();
+        if (ob == nullptr || !ob->enabled)
+            continue;
+
+        RenderGameObject (ob);
     }
 }

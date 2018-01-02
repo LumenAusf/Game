@@ -8,6 +8,7 @@
 #include "tanknpccontroller.h"
 
 class Missile;
+class TankController;
 
 struct TankData
 {

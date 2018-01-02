@@ -48,7 +48,12 @@ void TankController::onDisable () {}
 
 void TankController::onDestroy () {}
 
-void TankController::Fire () { playSoundFromMemory (SoundFire, SDL_MIX_MAXVOLUME); }
+void TankController::Fire ()
+{
+    playSoundFromMemory (SoundFire, SDL_MIX_MAXVOLUME);
+    std::string config = "configurations/MissileData.txt";
+    new Missile (gameObject, config, textureForMissile);
+}
 
 void TankController::Rotate (Arrows dir)
 {
@@ -90,3 +95,7 @@ void TankController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fi
     SoundRun = Run;
     SoundFire = Fire;
 }
+
+void TankController::SetTextureMissile (Texture* tex) { textureForMissile = tex; }
+
+void TankController::Destroy () { this->~TankController (); }

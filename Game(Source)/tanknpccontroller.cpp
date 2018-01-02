@@ -91,3 +91,5 @@ void TankNPCController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio*
     SoundRun = Run;
     SoundFire = Fire;
 }
+
+void TankNPCController::Destroy () { this->~TankNPCController (); }

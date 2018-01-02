@@ -9,43 +9,73 @@ namespace LumenAusf
     void GameObject::UpdateAll ()
     {
         for (auto a : objects)
-            if (a->enabled)
+            if (a != nullptr && a->enabled)
                 for (auto b : a->components)
-                    if (b->getEnabled ())
+                    if (b != nullptr && b->getEnabled ())
                         b->Update ();
     }
 
     void GameObject::AwakeAll ()
     {
+        objects.reserve (512);
         for (auto a : objects)
-            if (a->enabled)
+            if (a != nullptr && a->enabled)
                 for (auto b : a->components)
-                    if (b->getEnabled ())
+                    if (b != nullptr && b->getEnabled ())
                         b->Awake ();
     }
 
     void GameObject::StartAll ()
     {
         for (auto a : objects)
-            if (a->enabled)
+            if (a != nullptr && a->enabled)
                 for (auto b : a->components)
-                    if (b->getEnabled ())
+                    if (b != nullptr && b->getEnabled ())
                         b->Start ();
     }
 
     void GameObject::FixedUpdateAll ()
     {
-        for (unsigned int a = 0; a < objects.size () - 1; a++)
+        try
         {
-            if (objects[a]->GetComponent<Collider> () != nullptr)
-                for (auto b = a + 1; b < objects.size (); b++)
-                {
-                    if (objects[b]->GetComponent<Collider> () != nullptr)
-                        if (Collider::IsColided (objects[a], objects[b]))
-                            std::cerr << objects[a]->name << " ::: " << objects[b]->name << std::endl;
-                }
+            for (unsigned int a = 0; a < objects.size () - 1; a++)
+            {
+                if (objects[a] != nullptr && objects[a]->GetComponent<Collider> () != nullptr)
+                    for (auto b = a + 1; b < objects.size (); b++)
+                    {
+                        if (objects[b] != nullptr && objects[b]->GetComponent<Collider> () != nullptr)
+                            if (objects[a]->tag != objects[b]->tag)
+                                if (Collider::IsColided (objects[a], objects[b]))
+                                    std::cerr << objects[a]->name << " ::: " << objects[b]->name << std::endl;
+                    }
+            }
+        }
+        catch (std::exception ex)
+        {
+            std::cerr << ex.what ();
         }
     }
+
+    //    void GameObject::RenderAll ()
+    //    {
+    //        for (auto go : objects)
+    //        {
+    //            if (go == nullptr)
+    //                return;
+
+    //            auto b = go->GetComponent<LumenAusf::MeshRenderer> ();
+    //            if (b == nullptr || !b->getEnabled ())
+    //                continue;
+
+    //            if (b->triangles.size () == 0)
+    //                continue;
+
+    //            for (unsigned long i = 0; i < b->triangles.size (); i++)
+    //            {
+    //                engine->DrawTriangle (b->triangles.at (i), b->texture, go->transform->GetGlobalMatrix ());
+    //            }
+    //        }
+    //    }
 
     //    mat2x3 Transform::getLocalScale () const { return localScale; }
 
