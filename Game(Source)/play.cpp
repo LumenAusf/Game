@@ -16,6 +16,8 @@ void Play::Run ()
     goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true);
     goTank->SetAspect (windowWidth, windowHeight);
 
+    CreateBlock ("configurations/BlocksData.txt");
+
     //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
     //    goTank2->SetAspect (windowWidth, windowHeight);
 
@@ -36,9 +38,13 @@ void Play::Run ()
 
     LumenAusf::GameObject::AwakeAll ();
     LumenAusf::GameObject::StartAll ();
+    Engine->setTimePrevious (Engine->getTimeFromInit (false));
 
     while (running)
     {
+        if ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 180.f * 1000 < 1)
+            continue;
+
         LumenAusf::GameObject::UpdateAll ();
         LumenAusf::GameObject::FixedUpdateAll ();
         Engine->ReadEvent ();
@@ -51,6 +57,7 @@ void Play::Run ()
         //        RenderGameObject (goTank2->go);
 
         Engine->SwapBuffers ();
+        Engine->setTimePrevious (Engine->getTimeFromInit (false));
     }
     Engine->DestroyTexture (AtlasTank);
     Engine->DestroyTexture (textureGrass);
@@ -178,9 +185,85 @@ void Play::RenderAll ()
             continue;
 
         auto b = ob->GetComponent<LumenAusf::MeshRenderer> ();
-        if (ob == nullptr || !ob->enabled)
+        if (b == nullptr || !b->getEnabled ())
             continue;
 
         RenderGameObject (ob);
     }
+}
+
+struct BlockData
+{
+    int trianglesCount;
+    std::vector<LumenAusf::tri2> triangles;
+    LumenAusf::vec2 pos;
+    int atlasWAll;
+    int atlasHAll;
+    int atlasStart;
+    int atlasEnd;
+    float atlasOffsetX;
+    float atlasOffsetY;
+    float scale;
+};
+std::istream& operator>> (std::istream& is, BlockData& t)
+{
+    is >> t.trianglesCount;
+    for (auto i = 0; i < t.trianglesCount; i++)
+    {
+        LumenAusf::tri2 triangle;
+        is >> triangle;
+        t.triangles.push_back (triangle);
+    }
+    is >> t.pos;
+    is >> t.atlasWAll;
+    is >> t.atlasHAll;
+    is >> t.atlasStart;
+    is >> t.atlasEnd;
+    is >> t.atlasOffsetX;
+    is >> t.atlasOffsetY;
+    is >> t.scale;
+    return is;
+}
+
+void Play::CreateBlock (std::string configBlocks)
+{
+    static int num = 0;
+    auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
+    go->tag = "Block";
+
+    std::ifstream fd (configBlocks);
+    if (!fd.is_open ())
+    {
+        go->~GameObject ();
+        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        return;
+    }
+
+    auto td = BlockData ();
+    fd >> td;
+    fd.close ();
+    go->transform->SetPosition (td.pos);
+    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+
+    auto a = new LumenAusf::mat2x3 ();
+    a->col0.x = 1;
+    a->col0.y = 0.f;
+    a->col1.x = 0.f;
+    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+
+    go->transform->setAspect (*a);
+
+    go->AddComponent<LumenAusf::Collider> ();
+
+    auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
+    mr->offsetX = td.atlasOffsetX;
+    mr->offsetY = td.atlasOffsetY;
+    mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->texture = AtlasTank;
+    mr->atlas = new LumenAusf::Atlas (mr);
+
+    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+    //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
+    //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
 }

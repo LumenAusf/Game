@@ -29,7 +29,7 @@ class TankController : public LumenAusf::Component
     void SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fire);
     void SetTextureMissile (LumenAusf::Texture* tex);
 
-    float Speed = 0.000045f;
+    float Speed = .125f;
     int MissileCount;
     Arrows Direction = Arrows::Up;
     Audio* SoundStartEngine;

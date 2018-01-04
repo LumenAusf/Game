@@ -5,6 +5,7 @@ namespace LumenAusf
     EngineCore::EngineCore () { std::clog << "Create Engine" << std::endl; }
 
     Glfunc* Glfunc::ptr = nullptr;
+    float EngineCore::timePrevious = 0.f;
 
     EngineCore::~EngineCore ()
     {
@@ -267,12 +268,18 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    float EngineCore::getTimeFromInit ()
+    float EngineCore::getTimeFromInit (bool toSec)
     {
         std::uint32_t ms_from_library_initialization = SDL_GetTicks ();
         float seconds = ms_from_library_initialization * 0.001f;
-        return seconds;
+        return toSec ? seconds : ms_from_library_initialization;
     }
+
+    float EngineCore::getDeltaTime () { return EnCore->getTimeFromInit (false) - getTimePrevious (); }
+
+    float EngineCore::getTimePrevious () { return timePrevious; }
+
+    void EngineCore::setTimePrevious (float value) { timePrevious = value; }
 
     void EngineCore::Init (bool versionCritical, int width, int height, std::string windowName)
     {

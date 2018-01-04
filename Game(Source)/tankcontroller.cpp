@@ -2,7 +2,7 @@
 
 using namespace LumenAusf;
 
-TankController::~TankController () {}
+TankController::~TankController () { std::cerr << "removed \"TankController\" from " + gameObject->name << std::endl; }
 
 void TankController::Awake () {}
 
@@ -52,7 +52,7 @@ void TankController::Fire ()
 {
     playSoundFromMemory (SoundFire, SDL_MIX_MAXVOLUME);
     std::string config = "configurations/MissileData.txt";
-    new Missile (gameObject, config, textureForMissile);
+    new Missile (gameObject, config, textureForMissile, true);
 }
 
 void TankController::Rotate (Arrows dir)
@@ -60,7 +60,7 @@ void TankController::Rotate (Arrows dir)
     if (Direction != dir)
     {
         Direction = dir;
-        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57f * dir));
+        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57079632679f * dir));
     }
 }
 
@@ -70,20 +70,30 @@ void TankController::Move ()
     if (a == nullptr)
         return;
     a->atlas->Next ();
-    playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 2);
+    auto speed = Speed * Engine::getDeltaTime () * 0.001f;
+    playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 5);
+
     switch (Direction)
     {
         case Arrows::Up:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, Speed)));
+            if (!gameObject->CanMove (vec2 (0.f, speed)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
             break;
         case Arrows::Down:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -Speed)));
+            if (!gameObject->CanMove (vec2 (0.f, -speed)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
             break;
         case Arrows::Right:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (Speed, 0.f)));
+            if (!gameObject->CanMove (vec2 (speed, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
             break;
         case Arrows::Left:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-Speed, 0.f)));
+            if (!gameObject->CanMove (vec2 (-speed, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
             break;
     }
 }

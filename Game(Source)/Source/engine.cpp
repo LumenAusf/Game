@@ -39,7 +39,13 @@ namespace LumenAusf
 
     void Engine::DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m) { EngineCore::EnCore->DrawTriangle (t, tex, m); }
 
-    float Engine::getTimeFromInit () { return EngineCore::EnCore->getTimeFromInit (); }
+    float Engine::getTimeFromInit (bool isSec) { return EngineCore::EnCore->getTimeFromInit (isSec); }
+
+    void Engine::setTimePrevious (float sec) { EngineCore::setTimePrevious (sec); }
+
+    float Engine::getTimePrevious () { return EngineCore::getTimePrevious (); }
+
+    float Engine::getDeltaTime () { return EngineCore::getDeltaTime (); }
 
     void Engine::SwapBuffers () { EngineCore::EnCore->SwapBuffers (); }
 

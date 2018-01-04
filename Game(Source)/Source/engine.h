@@ -71,12 +71,16 @@ namespace LumenAusf
         void DrawTriangle (const tri1& t);
         void DrawTriangle (const tri2& t, Texture* tex);
         void DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m);
-        float getTimeFromInit ();
+        float getTimeFromInit (bool isSec = true);
+        void setTimePrevious (float sec);
+        float getTimePrevious ();
+        static float getDeltaTime ();
         void SwapBuffers ();
         void Clear ();
 
         Event EngineEvent = Event ();
         constexpr static const EventSystem EventSys = EventSystem ();
+        //        constexpr static float timePrevious = 0;
     };
 }
 #endif    // ENGINE_H

@@ -46,7 +46,17 @@ namespace LumenAusf
                         if (objects[b] != nullptr && objects[b]->GetComponent<Collider> () != nullptr)
                             if (objects[a]->tag != objects[b]->tag)
                                 if (Collider::IsColided (objects[a], objects[b]))
+                                {
                                     std::cerr << objects[a]->name << " ::: " << objects[b]->name << std::endl;
+                                    if ((objects[a]->tag == "Block" && objects[b]->tag == "Missile") ||
+                                        (objects[b]->tag == "Block" && objects[a]->tag == "Missile"))
+                                    {
+                                        objects[b]->OnDestroy ();
+                                        objects[a]->OnDestroy ();
+                                        objects[b]->~GameObject ();
+                                        objects[a]->~GameObject ();
+                                    }
+                                }
                     }
             }
         }
@@ -54,6 +64,56 @@ namespace LumenAusf
         {
             std::cerr << ex.what ();
         }
+    }
+
+    void GameObject::OnDestroy ()
+    {
+        for (auto a : components)
+            if (a != nullptr)
+                a->onDestroy ();
+    }
+
+    bool GameObject::CanMove (vec2 mover)
+    {
+        auto result = true;
+        try
+        {
+            for (unsigned int a = 0; a < objects.size (); a++)
+            {
+                if (objects[a] != nullptr && objects[a]->GetComponent<Collider> () != nullptr)
+                {
+                    if (objects[a] == this)
+                        continue;
+                    if (objects[a]->tag != tag)
+                        if ((objects[a]->tag == "Block" && tag == "TankUser") || (tag == "Block" && objects[a]->tag == "TankUser") ||
+                            (objects[a]->tag == "Block" && tag == "TankNPC") || (tag == "Block" && objects[a]->tag == "TankNPC") ||
+                            (objects[a]->tag == "TankNPC" && tag == "TankUser") || (tag == "TankNPC" && objects[a]->tag == "TankUser"))
+                        {
+                            auto b = objects[a]->GetComponent<MeshRenderer> ();
+                            auto c = GetComponent<MeshRenderer> ();
+
+                            if (b == nullptr || c == nullptr)
+                                continue;
+
+                            auto d = b->triangles;
+                            auto e = c->triangles;
+
+                            if (e.size () == 0 || d.size () == 0)
+                                continue;
+
+                            auto f = objects[a]->transform->GetGlobalMatrix ();
+                            auto g = transform->GetGlobalMatrix () * mat2x3::move (mover);
+
+                            result = Collider::CanSetSo (d, f, e, g);
+                        }
+                }
+            }
+        }
+        catch (std::exception ex)
+        {
+            std::cerr << ex.what ();
+        }
+        return result;
     }
 
     //    void GameObject::RenderAll ()

@@ -29,11 +29,11 @@ std::istream& operator>> (std::istream& is, MissileData& t);
 class Missile
 {
    public:
-    Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture);
+    Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture, bool isUser);
     void SetAspect (LumenAusf::mat2x3 aspect);
     void SetAspect (float width, float height);
 
-    float speed = 0.0005f;
+    float speed = .5f;
     LumenAusf::GameObject* tank;
     LumenAusf::GameObject* go;
     LumenAusf::MeshRenderer* mr;

@@ -15,6 +15,7 @@ namespace LumenAusf
        public:
         Collider (GameObject* owner);
         static bool IsColided (GameObject* first, GameObject* second);
+        static bool CanSetSo (std::vector<tri2> array_1, mat2x3 first, std::vector<tri2> array_2, mat2x3 second);
 
         virtual ~Collider ();
 

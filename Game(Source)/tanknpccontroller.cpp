@@ -2,7 +2,7 @@
 
 using namespace LumenAusf;
 
-TankNPCController::~TankNPCController () {}
+TankNPCController::~TankNPCController () { std::cerr << "removed \"TankNPCController\" from " + gameObject->name << std::endl; }
 
 void TankNPCController::Awake () { /*std::srand (unsigned(std::time (0)));*/}
 
@@ -66,20 +66,21 @@ void TankNPCController::Move ()
     if (a == nullptr)
         return;
     a->atlas->Next ();
+    auto speed = Speed * Engine::getDeltaTime () * 0.001f;
     playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 2);
     switch (Direction)
     {
         case Arrows::Up:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, Speed)));
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
             break;
         case Arrows::Down:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -Speed)));
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
             break;
         case Arrows::Right:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (Speed, 0.f)));
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
             break;
         case Arrows::Left:
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-Speed, 0.f)));
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
             break;
     }
 }

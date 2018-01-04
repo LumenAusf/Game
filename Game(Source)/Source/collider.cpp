@@ -59,6 +59,14 @@ namespace LumenAusf
         return result;
     }
 
+    bool Collider::CanSetSo (std::vector<tri2> array_1, mat2x3 first, std::vector<tri2> array_2, mat2x3 second)
+    {
+        bool contact = false;
+        for (auto a : array_1)
+            for (auto b : array_2) contact = contact || IsIntersect (a.v, first, b.v, second);
+        return !contact;
+    }
+
     Collider::~Collider () {}
 
     void Collider::Awake () {}

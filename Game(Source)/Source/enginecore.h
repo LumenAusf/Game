@@ -160,7 +160,8 @@ namespace LumenAusf
         void Clear ();
         bool LoadTexture (std::string path);
         void SwapBuffers ();
-        float getTimeFromInit ();
+        float getTimeFromInit (bool toSec = true);
+        static float getDeltaTime ();
 
         SDL_Window* window;
         shader_gl_es20* shader00 = nullptr;
@@ -168,6 +169,9 @@ namespace LumenAusf
         shader_gl_es20* shader02 = nullptr;
         shader_gl_es20* shader03 = nullptr;
         static EngineCore* EnCore;
+        static float timePrevious;
+        static float getTimePrevious ();
+        static void setTimePrevious (float value);
     };
 }
 #endif    // ENGINECORE_H

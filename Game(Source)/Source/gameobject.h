@@ -118,12 +118,14 @@ namespace LumenAusf
             auto a = std::find (objects.cbegin (), objects.cend (), this);
             objects.erase (a);
 
+            OnDestroy ();
+
             for (auto b : components)
             {
                 b->Destroy ();
             }
 
-            std::cerr << "removed " + name << std::endl;
+            std::cerr << "Delete gameObject " + name + " ::: Count of objects: " << objects.size () << std::endl;
         }
 
         template <typename T>
@@ -187,6 +189,8 @@ namespace LumenAusf
         static void StartAll ();
         static void FixedUpdateAll ();
         static void RenderAll ();
+        void OnDestroy ();
+        bool CanMove (vec2 mover);
 
         static std::vector<GameObject*> objects;
     };

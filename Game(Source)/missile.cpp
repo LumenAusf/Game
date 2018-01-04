@@ -1,6 +1,6 @@
 #include "missile.h"
 
-Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture)
+Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture, bool isUser)
 {
     tank = owner;
     go = new LumenAusf::GameObject (nullptr);
@@ -40,7 +40,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     auto d = createAudio (td.pathSoundRun.c_str (), 0, SDL_MIX_MAXVOLUME / 4);
     auto e = createAudio (td.pathSoundFire.c_str (), 0, SDL_MIX_MAXVOLUME);
     mc->SetSounds (d, e);
-    mc->Direction = tank->GetComponent<TankController> ()->Direction;
+    mc->Direction = isUser ? tank->GetComponent<TankController> ()->Direction : tank->GetComponent<TankNPCController> ()->Direction;
     mc->Speed = speed;
 }
 
