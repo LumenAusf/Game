@@ -37,10 +37,12 @@ void TankNPCController::Update ()
         Move ();
     }
 
-    if (EventSystem::Key_Space)
+    if (EventSystem::Key_Space && !previousSpace)
     {
         Fire ();
     }
+
+    previousSpace = EventSystem::Key_Space;
 }
 
 void TankNPCController::onEnable () {}
@@ -49,14 +51,19 @@ void TankNPCController::onDisable () {}
 
 void TankNPCController::onDestroy () {}
 
-void TankNPCController::Fire () { playSoundFromMemory (SoundFire, SDL_MIX_MAXVOLUME); }
+void TankNPCController::Fire ()
+{
+    playSoundFromMemory (SoundFire, SDL_MIX_MAXVOLUME);
+    std::string config = "configurations/MissileData.txt";
+    new Missile (gameObject, config, textureForMissile, false);
+}
 
 void TankNPCController::Rotate (Arrows dir)
 {
     if (Direction != dir)
     {
         Direction = dir;
-        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57f * dir));
+        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57079632679f * dir));
     }
 }
 
@@ -67,19 +74,28 @@ void TankNPCController::Move ()
         return;
     a->atlas->Next ();
     auto speed = Speed * Engine::getDeltaTime () * 0.001f;
-    playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 2);
+    playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 5);
+
     switch (Direction)
     {
         case Arrows::Up:
+            if (!gameObject->CanMove (vec2 (0.f, speed)))
+                break;
             gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
             break;
         case Arrows::Down:
+            if (!gameObject->CanMove (vec2 (0.f, -speed)))
+                break;
             gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
             break;
         case Arrows::Right:
+            if (!gameObject->CanMove (vec2 (speed, 0.f)))
+                break;
             gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
             break;
         case Arrows::Left:
+            if (!gameObject->CanMove (vec2 (-speed, 0.f)))
+                break;
             gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
             break;
     }
@@ -92,5 +108,7 @@ void TankNPCController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio*
     SoundRun = Run;
     SoundFire = Fire;
 }
+
+void TankNPCController::SetTextureMissile (Texture* tex) { textureForMissile = tex; }
 
 void TankNPCController::Destroy () { this->~TankNPCController (); }

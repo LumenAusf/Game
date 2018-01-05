@@ -13,13 +13,14 @@ void Play::Run ()
     if (!LoadTextures ())
         return;
 
-    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true);
+    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
     goTank->SetAspect (windowWidth, windowHeight);
 
     CreateBlocks ("configurations/BlocksData.txt");
+    CreateEagle ("configurations/EagleData.txt");
 
-    //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
-    //    goTank2->SetAspect (windowWidth, windowHeight);
+    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
+    goTank2->SetAspect (windowWidth, windowHeight);
 
     //    goTank3 = new Tank ("configurations/TankNPCData2.txt", AtlasTank, false);
     //    goTank3->SetAspect (windowWidth, windowHeight);
@@ -42,8 +43,10 @@ void Play::Run ()
 
     while (running)
     {
-        if ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 180.f * 1000 < 1)
+        if ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f < 1.f / 180.f)
             continue;
+
+        //        std::cerr << 1 / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f) << std::endl;
 
         LumenAusf::GameObject::UpdateAll ();
         LumenAusf::GameObject::FixedUpdateAll ();
@@ -149,7 +152,7 @@ bool Play::LoadTextures ()
         return false;
     }
 
-    AtlasTank = Engine->CreateTexture ("textures/TankAtlas.png");
+    AtlasTank = Engine->CreateTexture ("textures/TankAtlasTest.png");
     if (nullptr == AtlasTank)
     {
         std::cerr << "Can`t Load Atlas Texture TANK" << std::endl;
@@ -218,7 +221,7 @@ std::istream& operator>> (std::istream& is, BlockData& t)
     is >> t.count;
     t.positions.reserve (512);
 
-    for (auto j = 0; j < t.count; j++)
+    for (size_t j = 0; j < t.count; j++)
     {
         LumenAusf::vec2 pos;
         is >> pos;
@@ -273,7 +276,82 @@ void Play::CreateBlocks (std::string configBlocks)
         mr->texture = AtlasTank;
         mr->atlas = new LumenAusf::Atlas (mr);
         mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
-        //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
-        //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
     }
+}
+
+struct EagleData
+{
+    int trianglesCount;
+    std::vector<LumenAusf::tri2> triangles;
+    LumenAusf::vec2 pos;
+    int atlasWAll;
+    int atlasHAll;
+    int atlasStart;
+    int atlasEnd;
+    float atlasOffsetX;
+    float atlasOffsetY;
+    float scale;
+};
+std::istream& operator>> (std::istream& is, EagleData& t)
+{
+    is >> t.trianglesCount;
+    for (auto i = 0; i < t.trianglesCount; i++)
+    {
+        LumenAusf::tri2 triangle;
+        is >> triangle;
+        t.triangles.push_back (triangle);
+    }
+
+    is >> t.pos;
+    is >> t.atlasWAll;
+    is >> t.atlasHAll;
+    is >> t.atlasStart;
+    is >> t.atlasEnd;
+    is >> t.atlasOffsetX;
+    is >> t.atlasOffsetY;
+    is >> t.scale;
+    return is;
+}
+
+void Play::CreateEagle (std::string configBlocks)
+{
+    std::ifstream fd (configBlocks);
+    if (!fd.is_open ())
+    {
+        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        return;
+    }
+
+    auto td = EagleData ();
+    fd >> td;
+    fd.close ();
+
+    auto go = new LumenAusf::GameObject ("Eagle");
+    go->tag = "Block";
+    go->transform->SetPosition (td.pos);
+    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+
+    auto a = new LumenAusf::mat2x3 ();
+    a->col0.x = 1;
+    a->col0.y = 0.f;
+    a->col1.x = 0.f;
+    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    go->transform->setAspect (*a);
+
+    go->AddComponent<LumenAusf::Collider> ();
+
+    auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
+    mr->offsetX = td.atlasOffsetX;
+    mr->offsetY = td.atlasOffsetY;
+    mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->texture = AtlasTank;
+    mr->atlas = new LumenAusf::Atlas (mr);
+    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+
+    auto df = go->AddComponent<GameOverController> ();
+    df->SetAnchor (&running);
+
+    //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
+    //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
 }

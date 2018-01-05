@@ -47,9 +47,16 @@ namespace LumenAusf
                             if (objects[a]->tag != objects[b]->tag)
                                 if (Collider::IsColided (objects[a], objects[b]))
                                 {
-                                    std::cerr << objects[a]->name << " ::: " << objects[b]->name << std::endl;
+                                    std::cerr << objects[a]->name << " ::: " << objects[b]->name << " ||||| " << objects[a]->tag
+                                              << " ::: " << objects[b]->tag << std::endl;
                                     if ((objects[a]->tag == "Block" && objects[b]->tag == "Missile") ||
-                                        (objects[b]->tag == "Block" && objects[a]->tag == "Missile"))
+                                        (objects[b]->tag == "Block" && objects[a]->tag == "Missile") ||
+                                        (objects[a]->tag == "Block" && objects[b]->tag == "MissileNPC") ||
+                                        (objects[b]->tag == "Block" && objects[a]->tag == "MissileNPC") ||
+                                        (objects[a]->tag == "TankNPC" && objects[b]->tag == "Missile") ||
+                                        (objects[a]->tag == "Missile" && objects[b]->tag == "TankNPC") ||
+                                        (objects[b]->tag == "TankUser" && objects[a]->tag == "MissileNPC") ||
+                                        (objects[b]->tag == "MissileNPC" && objects[a]->tag == "TankUser"))
                                     {
                                         objects[b]->OnDestroy ();
                                         objects[a]->OnDestroy ();
@@ -80,32 +87,24 @@ namespace LumenAusf
         {
             for (unsigned int a = 0; a < objects.size (); a++)
             {
-                if (objects[a] != nullptr && objects[a]->GetComponent<Collider> () != nullptr)
+                if (objects[a] != nullptr && objects[a] != this && objects[a]->GetComponent<Collider> () != nullptr)
                 {
-                    if (objects[a] == this)
-                        continue;
-                    if (objects[a]->tag != tag)
-                        if ((objects[a]->tag == "Block" && tag == "TankUser") || (tag == "Block" && objects[a]->tag == "TankUser") ||
-                            (objects[a]->tag == "Block" && tag == "TankNPC") || (tag == "Block" && objects[a]->tag == "TankNPC") ||
-                            (objects[a]->tag == "TankNPC" && tag == "TankUser") || (tag == "TankNPC" && objects[a]->tag == "TankUser"))
-                        {
-                            auto b = objects[a]->GetComponent<MeshRenderer> ();
-                            auto c = GetComponent<MeshRenderer> ();
+                    if ((objects[a]->tag == "Block" && tag == "TankUser") || (objects[a]->tag == "Block" && tag == "TankNPC") ||
+                        (objects[a]->tag == "TankNPC" && tag == "TankUser") || (tag == "TankNPC" && objects[a]->tag == "TankUser"))
+                    {
+                        MeshRenderer* b = objects[a]->GetComponent<MeshRenderer> ();
+                        MeshRenderer* c = GetComponent<MeshRenderer> ();
 
-                            if (b == nullptr || c == nullptr)
-                                continue;
-
-                            auto d = b->triangles;
-                            auto e = c->triangles;
-
-                            if (e.size () == 0 || d.size () == 0)
-                                continue;
-
-                            auto f = objects[a]->transform->GetGlobalMatrix ();
-                            auto g = transform->GetGlobalMatrix () * mat2x3::move (mover);
-
-                            result = Collider::CanSetSo (d, f, e, g);
-                        }
+                        if (b == nullptr || c == nullptr)
+                            continue;
+                        std::vector<tri2> d = b->triangles;
+                        std::vector<tri2> e = c->triangles;
+                        if (e.size () == 0 || d.size () == 0)
+                            continue;
+                        mat2x3 f = objects[a]->transform->GetGlobalMatrix ();
+                        mat2x3 g = transform->GetGlobalMatrix () * mat2x3::move (mover);
+                        result = result && Collider::CanSetSo (d, f, e, g);
+                    }
                 }
             }
         }

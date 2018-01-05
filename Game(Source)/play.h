@@ -8,6 +8,7 @@
 
 #include "Source/collider.h"
 #include "Source/engine.h"
+#include "gameovercontroller.h"
 #include "missile.h"
 #include "src/audio.h"
 #include "tank.h"
@@ -41,6 +42,7 @@ class Play
     void RenderGameObject (LumenAusf::GameObject* go /*, bool needNext = true*/);
     void RenderAll ();
     void CreateBlocks (std::string configBlocks);
+    void CreateEagle (std::string configBlocks);
     LumenAusf::GameObject* LoadGameObject (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount);
     //    Tank*
     //    CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX, float

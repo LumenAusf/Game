@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="GameIsOn"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="engine">
+				<Option output="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information/libengine.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 engine"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="engine/fast">
+				<Option output="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information/libengine.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 engine/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="game">
+				<Option output="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information/game" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 game"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="game/fast">
+				<Option output="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information/game" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release with Debug Information"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 game/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lumenausf/Wargaming/Game/build-Game(Build)-Desktop_Qt_5_10_0_GCC_64bit-Release\ with\ Debug\ Information/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/EventBase.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/EventBase.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/atlas.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/collider.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/collider.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/color.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/color.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/engine.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/engine.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/enginecore.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/enginecore.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/eventsystem.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/eventsystem.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/gameobject.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/gameobject.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/matrix.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/matrix.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/meshrenderer.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/meshrenderer.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/picopng.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/picopng.hxx">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/shader.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/shader.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/texture.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/texture.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/texturefinal.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/texturefinal.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/transform.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/triangle.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/triangle.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/vec2.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/vec2.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/vertex.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/Source/vertex.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/main.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/missile.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/missile.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/missilecontroller.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/missilecontroller.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/play.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/play.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/src/audio.c">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/src/audio.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tank.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tank.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tankcontroller.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tankcontroller.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tanknpccontroller.cpp">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Source)/tanknpccontroller.h">
+			<Option target="game"/>
+		</Unit>
+		<Unit filename="/home/lumenausf/Wargaming/Game/Game(Build)/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

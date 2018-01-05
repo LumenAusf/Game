@@ -5,7 +5,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     tank = owner;
     go = new LumenAusf::GameObject (nullptr);
     go->name = tank->name + " Missile";
-    go->tag = "Missile";
+    go->tag = isUser ? "Missile" : "MissileNPC";
 
     std::ifstream fd (configPath);
     if (!fd.is_open ())
@@ -44,16 +44,20 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     switch (mc->Direction)
     {
         case Arrows::Up:
-            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, 0.25f)));
+            go->transform->setLocalPosition (go->transform->getLocalPosition () *
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, tank->transform->getLocalScale ().col0.x / 2)));
             break;
         case Arrows::Down:
-            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -0.25f)));
+            go->transform->setLocalPosition (go->transform->getLocalPosition () *
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -tank->transform->getLocalScale ().col0.x / 2)));
             break;
         case Arrows::Right:
-            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.25f, 0.f)));
+            go->transform->setLocalPosition (go->transform->getLocalPosition () *
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (tank->transform->getLocalScale ().col0.x / 2, 0.f)));
             break;
         case Arrows::Left:
-            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (-0.25f, 0.f)));
+            go->transform->setLocalPosition (go->transform->getLocalPosition () *
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (-tank->transform->getLocalScale ().col0.x / 2, 0.f)));
             break;
     }
     mc->Speed = speed;

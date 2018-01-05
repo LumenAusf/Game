@@ -2,10 +2,10 @@
 
 int Tank::num = 0;
 
-Tank::Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser)
+Tank::Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser, bool* running)
 {
     if (isUser)
-        CreateUserTank (configPath, texture);
+        CreateUserTank (configPath, texture, running);
     else
         CreateNPCTank (configPath, texture);
 }
@@ -23,7 +23,7 @@ void Tank::SetAspect (float width, float height)
     go->transform->setAspect (*a);
 }
 
-void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture)
+void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, bool* running)
 {
     go = new LumenAusf::GameObject (nullptr);
     go->name = "UserTank";
@@ -61,6 +61,9 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture)
     auto e = createAudio (td.pathSoundFire.c_str (), 0, SDL_MIX_MAXVOLUME);
     tc->SetSounds (b, c, d, e);
     tc->SetTextureMissile (texture);
+
+    auto goc = go->AddComponent<GameOverController> ();
+    goc->SetAnchor (running);
 }
 
 void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
@@ -101,6 +104,7 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
     auto d = createAudio (td.pathSoundRun.c_str (), 0, SDL_MIX_MAXVOLUME / 2);
     auto e = createAudio (td.pathSoundFire.c_str (), 0, SDL_MIX_MAXVOLUME);
     tnc->SetSounds (b, c, d, e);
+    tnc->SetTextureMissile (texture);
 }
 
 std::istream& operator>> (std::istream& is, TankData& t)

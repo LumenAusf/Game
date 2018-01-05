@@ -9,6 +9,7 @@
 
 class Missile;
 class TankController;
+class TankNPCController;
 
 struct TankData
 {
@@ -33,7 +34,7 @@ std::istream& operator>> (std::istream& is, TankData& t);
 class Tank
 {
    public:
-    Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser);
+    Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser, bool* running);
     void SetAspect (LumenAusf::mat2x3 aspect);
     void SetAspect (float width, float height);
 
@@ -45,7 +46,7 @@ class Tank
     TankNPCController* tnc;
 
    private:
-    void CreateUserTank (std::string configPath, LumenAusf::Texture* texture);
+    void CreateUserTank (std::string configPath, LumenAusf::Texture* texture, bool* running);
     void CreateNPCTank (std::string configPath, LumenAusf::Texture* texture);
 };
 

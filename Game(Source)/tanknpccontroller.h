@@ -5,6 +5,7 @@
 
 #include <ctime>
 #include "Source/engine.h"
+#include "missile.h"
 #include "src/audio.h"
 
 class TankNPCController : public LumenAusf::Component
@@ -26,14 +27,18 @@ class TankNPCController : public LumenAusf::Component
     void Rotate (Arrows dir);
     void Move ();
     void SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fire);
+    void SetTextureMissile (LumenAusf::Texture* tex);
 
-    float Speed = 0.000045f;
+    float Speed = .125f;
     int MissileCount;
-    Arrows Direction;
+    Arrows Direction = Arrows::Up;
     Audio* SoundStartEngine;
     Audio* SoundEngine;
     Audio* SoundRun;
     Audio* SoundFire;
+    LumenAusf::Texture* textureForMissile = nullptr;
+
+    bool previousSpace = false;
 
     // Component interface
    public:

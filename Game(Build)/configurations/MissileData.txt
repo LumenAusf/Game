@@ -10,7 +10,7 @@
 
 8 4 21 21 0 0
 
-0.1
+0.05
 
 sounds/MissileRun.wav
 sounds/MissileFire.wav
