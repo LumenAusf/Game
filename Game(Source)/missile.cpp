@@ -11,7 +11,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     if (!fd.is_open ())
     {
         go->~GameObject ();
-        std::cerr << "Can`t open : " + configPath << std::endl;
+        std::cerr << "Can`t open config file: " + configPath << std::endl;
         return;
     }
 
@@ -41,6 +41,21 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     auto e = createAudio (td.pathSoundFire.c_str (), 0, SDL_MIX_MAXVOLUME);
     mc->SetSounds (d, e);
     mc->Direction = isUser ? tank->GetComponent<TankController> ()->Direction : tank->GetComponent<TankNPCController> ()->Direction;
+    switch (mc->Direction)
+    {
+        case Arrows::Up:
+            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, 0.25f)));
+            break;
+        case Arrows::Down:
+            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -0.25f)));
+            break;
+        case Arrows::Right:
+            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (0.25f, 0.f)));
+            break;
+        case Arrows::Left:
+            go->transform->setLocalPosition (go->transform->getLocalPosition () * LumenAusf::mat2x3::move (LumenAusf::vec2 (-0.25f, 0.f)));
+            break;
+    }
     mc->Speed = speed;
 }
 

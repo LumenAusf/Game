@@ -16,7 +16,7 @@ void Play::Run ()
     goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true);
     goTank->SetAspect (windowWidth, windowHeight);
 
-    CreateBlock ("configurations/BlocksData.txt");
+    CreateBlocks ("configurations/BlocksData.txt");
 
     //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false);
     //    goTank2->SetAspect (windowWidth, windowHeight);
@@ -149,7 +149,7 @@ bool Play::LoadTextures ()
         return false;
     }
 
-    AtlasTank = Engine->CreateTexture ("textures/TankAtlasTest.png");
+    AtlasTank = Engine->CreateTexture ("textures/TankAtlas.png");
     if (nullptr == AtlasTank)
     {
         std::cerr << "Can`t Load Atlas Texture TANK" << std::endl;
@@ -196,7 +196,8 @@ struct BlockData
 {
     int trianglesCount;
     std::vector<LumenAusf::tri2> triangles;
-    LumenAusf::vec2 pos;
+    size_t count;
+    std::vector<LumenAusf::vec2> positions;
     int atlasWAll;
     int atlasHAll;
     int atlasStart;
@@ -214,7 +215,15 @@ std::istream& operator>> (std::istream& is, BlockData& t)
         is >> triangle;
         t.triangles.push_back (triangle);
     }
-    is >> t.pos;
+    is >> t.count;
+    t.positions.reserve (512);
+
+    for (auto j = 0; j < t.count; j++)
+    {
+        LumenAusf::vec2 pos;
+        is >> pos;
+        t.positions.push_back (pos);
+    }
     is >> t.atlasWAll;
     is >> t.atlasHAll;
     is >> t.atlasStart;
@@ -225,16 +234,13 @@ std::istream& operator>> (std::istream& is, BlockData& t)
     return is;
 }
 
-void Play::CreateBlock (std::string configBlocks)
+void Play::CreateBlocks (std::string configBlocks)
 {
-    static int num = 0;
-    auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
-    go->tag = "Block";
+    int num = 0;
 
     std::ifstream fd (configBlocks);
     if (!fd.is_open ())
     {
-        go->~GameObject ();
         std::cerr << "Can`t open : " + configBlocks << std::endl;
         return;
     }
@@ -242,28 +248,32 @@ void Play::CreateBlock (std::string configBlocks)
     auto td = BlockData ();
     fd >> td;
     fd.close ();
-    go->transform->SetPosition (td.pos);
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
 
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    for (size_t number = 0; number < td.count; number++)
+    {
+        auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
+        go->tag = "Block";
+        go->transform->SetPosition (td.positions.at (number));
+        go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
 
-    go->transform->setAspect (*a);
+        auto a = new LumenAusf::mat2x3 ();
+        a->col0.x = 1;
+        a->col0.y = 0.f;
+        a->col1.x = 0.f;
+        a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+        go->transform->setAspect (*a);
 
-    go->AddComponent<LumenAusf::Collider> ();
+        go->AddComponent<LumenAusf::Collider> ();
 
-    auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
-    mr->offsetX = td.atlasOffsetX;
-    mr->offsetY = td.atlasOffsetY;
-    mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    mr->triangles = mr->trianglesOriginals = td.triangles;
-    mr->texture = AtlasTank;
-    mr->atlas = new LumenAusf::Atlas (mr);
-
-    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
-    //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
-    //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
+        auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
+        mr->offsetX = td.atlasOffsetX;
+        mr->offsetY = td.atlasOffsetY;
+        mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+        mr->triangles = mr->trianglesOriginals = td.triangles;
+        mr->texture = AtlasTank;
+        mr->atlas = new LumenAusf::Atlas (mr);
+        mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+        //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
+        //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
+    }
 }
