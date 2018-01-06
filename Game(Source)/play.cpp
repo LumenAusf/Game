@@ -6,6 +6,8 @@ void Play::Run ()
     running = true;
     Engine->Init (false, windowWidth, windowHeight);
 
+    std::srand (unsigned(std::time (0)));
+
     initAudio ();
     Audio* music = createAudio ("music/Believer.wav", 1, SDL_MIX_MAXVOLUME / 10);
     playSoundFromMemory (music, SDL_MIX_MAXVOLUME / 3);
@@ -16,7 +18,7 @@ void Play::Run ()
     goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
     goTank->SetAspect (windowWidth, windowHeight);
 
-    CreateBlocks ("configurations/BlocksData.txt");
+    CreateBlocks ("configurations/BlocksData.txt", "configurations/MapData.txt");
     CreateEagle ("configurations/EagleData.txt");
 
     goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
@@ -45,8 +47,9 @@ void Play::Run ()
     {
         if ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f < 1.f / 180.f)
             continue;
+        auto a = Engine->getTimeFromInit (false);
 
-        //        std::cerr << 1 / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f) << std::endl;
+        std::cerr << 1.f / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f) << std::endl;
 
         LumenAusf::GameObject::UpdateAll ();
         LumenAusf::GameObject::FixedUpdateAll ();
@@ -60,7 +63,7 @@ void Play::Run ()
         //        RenderGameObject (goTank2->go);
 
         Engine->SwapBuffers ();
-        Engine->setTimePrevious (Engine->getTimeFromInit (false));
+        Engine->setTimePrevious (a);
     }
     Engine->DestroyTexture (AtlasTank);
     Engine->DestroyTexture (textureGrass);
@@ -152,7 +155,7 @@ bool Play::LoadTextures ()
         return false;
     }
 
-    AtlasTank = Engine->CreateTexture ("textures/TankAtlasTest.png");
+    AtlasTank = Engine->CreateTexture ("textures/TankAtlas.png");
     if (nullptr == AtlasTank)
     {
         std::cerr << "Can`t Load Atlas Texture TANK" << std::endl;
@@ -184,7 +187,7 @@ void Play::RenderAll ()
 {
     for (auto ob : LumenAusf::GameObject::objects)
     {
-        if (!ob->enabled)
+        if (ob == nullptr || !ob->enabled)
             continue;
 
         auto b = ob->GetComponent<LumenAusf::MeshRenderer> ();
@@ -199,8 +202,6 @@ struct BlockData
 {
     int trianglesCount;
     std::vector<LumenAusf::tri2> triangles;
-    size_t count;
-    std::vector<LumenAusf::vec2> positions;
     int atlasWAll;
     int atlasHAll;
     int atlasStart;
@@ -218,15 +219,15 @@ std::istream& operator>> (std::istream& is, BlockData& t)
         is >> triangle;
         t.triangles.push_back (triangle);
     }
-    is >> t.count;
-    t.positions.reserve (512);
+    //    is >> t.count;
+    //    t.positions.reserve (512);
 
-    for (size_t j = 0; j < t.count; j++)
-    {
-        LumenAusf::vec2 pos;
-        is >> pos;
-        t.positions.push_back (pos);
-    }
+    //    for (size_t j = 0; j < t.count; j++)
+    //    {
+    //        LumenAusf::vec2 pos;
+    //        is >> pos;
+    //        t.positions.push_back (pos);
+    //    }
     is >> t.atlasWAll;
     is >> t.atlasHAll;
     is >> t.atlasStart;
@@ -237,26 +238,44 @@ std::istream& operator>> (std::istream& is, BlockData& t)
     return is;
 }
 
-void Play::CreateBlocks (std::string configBlocks)
+void Play::CreateBlocks (std::string configBlocks, std::string configMap)
 {
     int num = 0;
 
-    std::ifstream fd (configBlocks);
-    if (!fd.is_open ())
+    std::ifstream bd (configBlocks);
+    if (!bd.is_open ())
     {
         std::cerr << "Can`t open : " + configBlocks << std::endl;
         return;
     }
 
     auto td = BlockData ();
-    fd >> td;
-    fd.close ();
+    bd >> td;
+    bd.close ();
 
-    for (size_t number = 0; number < td.count; number++)
+    std::ifstream md (configMap);
+    if (!md.is_open ())
     {
+        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        return;
+    }
+
+    std::vector<int> map;
+    for (int i = 0; i < 6; i++)
+        for (int j = 0; j < 8; j++)
+        {
+            int k;
+            md >> k;
+            map.push_back (k);
+        }
+
+    for (size_t number = 0; number < 48; number++)
+    {
+        if (map[number] == 0)
+            continue;
         auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
         go->tag = "Block";
-        go->transform->SetPosition (td.positions.at (number));
+        go->transform->SetPosition (LumenAusf::vec2 (-0.875f + ((number % 8) * 0.25f), 0.625f - ((number / 8) * 0.25f)));
         go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
 
         auto a = new LumenAusf::mat2x3 ();
@@ -313,12 +332,12 @@ std::istream& operator>> (std::istream& is, EagleData& t)
     return is;
 }
 
-void Play::CreateEagle (std::string configBlocks)
+void Play::CreateEagle (std::string configEagle)
 {
-    std::ifstream fd (configBlocks);
+    std::ifstream fd (configEagle);
     if (!fd.is_open ())
     {
-        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        std::cerr << "Can`t open : " + configEagle << std::endl;
         return;
     }
 

@@ -41,8 +41,8 @@ class Play
     //    Tank* InitTank (int AtlasStart, int AtlasEnd, float offsetX = 0.f, float offsetY = 0.f);
     void RenderGameObject (LumenAusf::GameObject* go /*, bool needNext = true*/);
     void RenderAll ();
-    void CreateBlocks (std::string configBlocks);
-    void CreateEagle (std::string configBlocks);
+    void CreateBlocks (std::string configBlocks, std::string configMap);
+    void CreateEagle (std::string configEagle);
     LumenAusf::GameObject* LoadGameObject (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount);
     //    Tank*
     //    CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX, float

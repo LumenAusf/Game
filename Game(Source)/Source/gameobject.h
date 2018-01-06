@@ -4,6 +4,7 @@
 #define GAMEOBJECT_H
 
 #include <algorithm>
+#include <list>
 #include <string>
 #include <vector>
 #include "matrix.h"
@@ -97,36 +98,9 @@ namespace LumenAusf
         std::string name = "GameObject";
         std::string tag = "";
 
-        GameObject (std::string name = "")
-        {
-            transform = new Transform ();
-            transform->parent = nullptr;
-            objects.push_back (this);
-            this->name = name != "" ? name : this->name;
-        }
-        GameObject (Transform* parent, std::string name = "")
-        {
-            transform = new Transform ();
-            transform->parent = parent;
-            if (parent != nullptr)
-                parent->children.push_back (transform);
-            objects.push_back (this);
-            this->name = name != "" ? name : this->name;
-        }
-        ~GameObject ()
-        {
-            auto a = std::find (objects.cbegin (), objects.cend (), this);
-            objects.erase (a);
-
-            OnDestroy ();
-
-            for (auto b : components)
-            {
-                b->Destroy ();
-            }
-
-            std::cerr << "Delete gameObject " + name + " ::: Count of objects: " << objects.size () << std::endl;
-        }
+        GameObject (std::string name = "");
+        GameObject (Transform* parent, std::string name = "");
+        ~GameObject ();
 
         template <typename T>
         typename std::enable_if<std::is_base_of<Component, T>::value, T*>::type AddComponent ()

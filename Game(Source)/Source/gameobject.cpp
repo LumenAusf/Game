@@ -6,13 +6,65 @@ namespace LumenAusf
 {
     std::vector<GameObject*> GameObject::objects = std::vector<GameObject*> ();
 
+    GameObject::GameObject (std::string name)
+    {
+        transform = new Transform ();
+        transform->parent = nullptr;
+        objects.push_back (this);
+        this->name = name != "" ? name : this->name;
+    }
+
+    GameObject::GameObject (Transform* parent, std::string name)
+    {
+        transform = new Transform ();
+        transform->parent = parent;
+        if (parent != nullptr)
+            parent->children.push_back (transform);
+        objects.push_back (this);
+        this->name = name != "" ? name : this->name;
+    }
+
+    GameObject::~GameObject ()
+    {
+        auto a = std::find (objects.begin (), objects.end (), this);
+        (*a) = nullptr;
+
+        OnDestroy ();
+
+        for (auto b : components)
+        {
+            b->Destroy ();
+        }
+
+        std::cerr << "Delete gameObject " + name + " ::: Count of objects: " << objects.size () << std::endl;
+    }
+
     void GameObject::UpdateAll ()
     {
+        std::cerr << objects.size () << " ::: " << objects.capacity ();
         for (auto a : objects)
-            if (a != nullptr && a->enabled)
+        {
+            if (a == nullptr || !a->enabled)
+                continue;
+            if (a->enabled)
                 for (auto b : a->components)
-                    if (b != nullptr && b->getEnabled ())
+                {
+                    if (a != nullptr && b != nullptr && b->getEnabled ())
                         b->Update ();
+                    if (a == nullptr)
+                        break;
+                }
+        }
+
+        for (auto a = objects.end () - 1; a != objects.begin (); a--)
+        {
+            if ((*a) == nullptr)
+            {
+                objects.erase (a);
+            }
+        }
+        if ((*objects.begin ()) == nullptr)
+            objects.erase (objects.begin ());
     }
 
     void GameObject::AwakeAll ()
@@ -62,6 +114,7 @@ namespace LumenAusf
                                         objects[a]->OnDestroy ();
                                         objects[b]->~GameObject ();
                                         objects[a]->~GameObject ();
+                                        break;
                                     }
                                 }
                     }

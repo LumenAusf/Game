@@ -10,39 +10,106 @@ void TankNPCController::Start () { playSoundFromMemory (SoundStartEngine, SDL_MI
 
 void TankNPCController::Update ()
 {
-    //    int random_variable = std::rand ();
-    //    std::cerr << std::to_string (random_variable) << std::endl;
+    //    std::srand (unsigned(std::time (0)));
+    //    float random_variable = std::rand () * 1.f / RAND_MAX * 1.f;
+    //    int change = (int)((std::rand () * 1.f / (RAND_MAX * 1.f / 100))) % 100;
+    //    std::cerr << std::endl << std::to_string (change) << std::endl;
 
-    if (EventSystem::Key_Down)
+    GameObject* gogo = nullptr;
+    for (auto gop : GameObject::objects)
+    {
+        if (gop->GetComponent<TankController> () != nullptr)
+        {
+            gogo = gop;
+            break;
+        }
+    }
+
+    if (gogo == nullptr)
+        return;
+
+    if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x > 0.001f)
+    {
+        Rotate (Arrows::Left);
+        Move ();
+    }
+    else if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x < -0.001f)
+    {
+        Rotate (Arrows::Right);
+        Move ();
+    }
+    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y > 0.001f)
+    {
+        Rotate (Arrows::Down);
+        Move ();
+    }
+    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y < -0.001f)
     {
         Rotate (Arrows::Up);
         Move ();
     }
 
-    if (EventSystem::Key_Up)
-    {
-        Rotate (Arrows::Down);
-        Move ();
-    }
+    //    if (change > 2)
+    //    {
+    //        Move ();
+    //        return;
+    //    }
 
-    if (EventSystem::Key_Left)
-    {
-        Rotate (Arrows::Left);
-        Move ();
-    }
+    //    if (random_variable > 0.7f)
+    //    {
+    //        Rotate (Arrows::Down);
+    //        Move ();
+    //    }
+    //    else if (random_variable > 0.5f)
+    //    {
+    //        Rotate (Arrows::Left);
+    //        Move ();
+    //    }
+    //    else if (random_variable > 0.25f)
+    //    {
+    //        Rotate (Arrows::Up);
+    //        Move ();
+    //    }
+    //    else
+    //    {
+    //        Rotate (Arrows::Right);
+    //        Move ();
+    //    }
 
-    if (EventSystem::Key_Right)
-    {
-        Rotate (Arrows::Right);
-        Move ();
-    }
-
-    if (EventSystem::Key_Space && !previousSpace)
-    {
+    float random_variable = std::rand () * 1.f / RAND_MAX * 1.f;
+    if (random_variable > .99f)
         Fire ();
-    }
 
-    previousSpace = EventSystem::Key_Space;
+    //    if (EventSystem::Key_Down)
+    //    {
+    //        Rotate (Arrows::Up);
+    //        Move ();
+    //    }
+
+    //    if (EventSystem::Key_Up)
+    //    {
+    //        Rotate (Arrows::Down);
+    //        Move ();
+    //    }
+
+    //    if (EventSystem::Key_Left)
+    //    {
+    //        Rotate (Arrows::Left);
+    //        Move ();
+    //    }
+
+    //    if (EventSystem::Key_Right)
+    //    {
+    //        Rotate (Arrows::Right);
+    //        Move ();
+    //    }
+
+    //    if (EventSystem::Key_Space && !previousSpace)
+    //    {
+    //        Fire ();
+    //    }
+
+    //    previousSpace = EventSystem::Key_Space;
 }
 
 void TankNPCController::onEnable () {}
