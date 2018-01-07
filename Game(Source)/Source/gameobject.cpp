@@ -41,19 +41,18 @@ namespace LumenAusf
 
     void GameObject::UpdateAll ()
     {
-        std::cerr << objects.size () << " ::: " << objects.capacity ();
         for (auto a : objects)
         {
             if (a == nullptr || !a->enabled)
                 continue;
-            if (a->enabled)
-                for (auto b : a->components)
-                {
-                    if (a != nullptr && b != nullptr && b->getEnabled ())
-                        b->Update ();
-                    if (a == nullptr)
-                        break;
-                }
+
+            for (auto b : a->components)
+            {
+                if (a != nullptr && b != nullptr && b->getEnabled ())
+                    b->Update ();
+                if (a == nullptr)
+                    break;
+            }
         }
 
         for (auto a = objects.end () - 1; a != objects.begin (); a--)
@@ -96,27 +95,26 @@ namespace LumenAusf
                     for (auto b = a + 1; b < objects.size (); b++)
                     {
                         if (objects[b] != nullptr && objects[b]->GetComponent<Collider> () != nullptr)
-                            if (objects[a]->tag != objects[b]->tag)
-                                if (Collider::IsColided (objects[a], objects[b]))
+                            if (Collider::IsColided (objects[a], objects[b]))
+                            {
+                                if ((objects[a]->tag == "Block" && objects[b]->tag == "Missile") ||
+                                    (objects[b]->tag == "Block" && objects[a]->tag == "Missile") ||
+                                    (objects[a]->tag == "Block" && objects[b]->tag == "MissileNPC") ||
+                                    (objects[b]->tag == "Block" && objects[a]->tag == "MissileNPC") ||
+                                    (objects[a]->tag == "TankNPC" && objects[b]->tag == "Missile") ||
+                                    (objects[a]->tag == "Missile" && objects[b]->tag == "TankNPC") ||
+                                    (objects[b]->tag == "TankUser" && objects[a]->tag == "MissileNPC") ||
+                                    (objects[b]->tag == "MissileNPC" && objects[a]->tag == "TankUser"))
                                 {
                                     std::cerr << objects[a]->name << " ::: " << objects[b]->name << " ||||| " << objects[a]->tag
                                               << " ::: " << objects[b]->tag << std::endl;
-                                    if ((objects[a]->tag == "Block" && objects[b]->tag == "Missile") ||
-                                        (objects[b]->tag == "Block" && objects[a]->tag == "Missile") ||
-                                        (objects[a]->tag == "Block" && objects[b]->tag == "MissileNPC") ||
-                                        (objects[b]->tag == "Block" && objects[a]->tag == "MissileNPC") ||
-                                        (objects[a]->tag == "TankNPC" && objects[b]->tag == "Missile") ||
-                                        (objects[a]->tag == "Missile" && objects[b]->tag == "TankNPC") ||
-                                        (objects[b]->tag == "TankUser" && objects[a]->tag == "MissileNPC") ||
-                                        (objects[b]->tag == "MissileNPC" && objects[a]->tag == "TankUser"))
-                                    {
-                                        objects[b]->OnDestroy ();
-                                        objects[a]->OnDestroy ();
-                                        objects[b]->~GameObject ();
-                                        objects[a]->~GameObject ();
-                                        break;
-                                    }
+                                    objects[b]->OnDestroy ();
+                                    objects[a]->OnDestroy ();
+                                    objects[b]->~GameObject ();
+                                    objects[a]->~GameObject ();
+                                    break;
                                 }
+                            }
                     }
             }
         }

@@ -34,6 +34,13 @@ namespace LumenAusf
 
     tri2::tri2 () : v{v2 (), v2 (), v2 ()} {}
 
+    //    tri2::tri2(const tri2&newT)
+    //    {
+    //        v[0] = newT.v[0];
+    //        v[1] = newT.v[1];
+    //        v[2] = newT.v[2];
+    //    }
+
     tri0 Lerp (const tri0& tl, const tri0& tr, const float a)
     {
         tri0 r;

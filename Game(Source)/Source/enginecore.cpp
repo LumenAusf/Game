@@ -277,6 +277,27 @@ namespace LumenAusf
 
     float EngineCore::getDeltaTime () { return EnCore->getTimeFromInit (false) - getTimePrevious (); }
 
+    std::vector<tri2> EngineCore::CreateQuadtc ()
+    {
+        std::vector<tri2> result;
+        std::stringstream ss;
+        tri2 triangle1, triangle2;
+
+        ss << "-1 1       0.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 1        1.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 -1       1.0 0.0      1.0 1.0 1.0 1.0 "
+
+           << "-1 1       0.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 -1       1.0 0.0      1.0 1.0 1.0 1.0 "
+           << "-1 -1      0.0 0.0      1.0 1.0 1.0 1.0 ";
+        ss >> triangle1 >> triangle2;
+
+        result.push_back (triangle1);
+        result.push_back (triangle2);
+
+        return result;
+    }
+
     float EngineCore::getTimePrevious () { return timePrevious; }
 
     void EngineCore::setTimePrevious (float value) { timePrevious = value; }

@@ -77,6 +77,7 @@ namespace LumenAusf
         static float getDeltaTime ();
         void SwapBuffers ();
         void Clear ();
+        std::vector<tri2> CreateQuadtc ();
 
         Event EngineEvent = Event ();
         constexpr static const EventSystem EventSys = EventSystem ();

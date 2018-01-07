@@ -25,6 +25,7 @@ namespace LumenAusf
     struct tri2
     {
         tri2 ();
+        //        tri2(tri2 const &newT);
         v2 v[3];
     };
 

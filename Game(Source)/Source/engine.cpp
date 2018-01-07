@@ -50,4 +50,6 @@ namespace LumenAusf
     void Engine::SwapBuffers () { EngineCore::EnCore->SwapBuffers (); }
 
     void Engine::Clear () { EngineCore::EnCore->Clear (); }
+
+    std::vector<tri2> Engine::CreateQuadtc () { return EngineCore::EnCore->CreateQuadtc (); }
 }

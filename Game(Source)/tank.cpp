@@ -48,7 +48,7 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, 
     mr->offsetX = td.atlasOffsetX;
     mr->offsetY = td.atlasOffsetY;
     mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->triangles = mr->trianglesOriginals = Play::getEngine ()->CreateQuadtc ();
     mr->texture = texture;
     mr->atlas = new LumenAusf::Atlas (mr);
 
@@ -92,7 +92,7 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
     mr->offsetX = td.atlasOffsetX;
     mr->offsetY = td.atlasOffsetY;
     mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->triangles = mr->trianglesOriginals = Play::getEngine ()->CreateQuadtc ();
     mr->texture = texture;
     mr->atlas = new LumenAusf::Atlas (mr);
 
@@ -109,13 +109,6 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
 
 std::istream& operator>> (std::istream& is, TankData& t)
 {
-    is >> t.trianglesCount;
-    for (auto i = 0; i < t.trianglesCount; i++)
-    {
-        LumenAusf::tri2 triangle;
-        is >> triangle;
-        t.triangles.push_back (triangle);
-    }
     is >> t.pos;
     is >> t.atlasWAll;
     is >> t.atlasHAll;

@@ -19,15 +19,17 @@ class Play
 {
    public:
     float speed = 0.00045f;
-    int windowHeight = 480;
-    int windowWidth = 640;
+    int windowHeight = 540;
+    int windowWidth = 960;
 
     void Run ();
     void EventGetted (LumenAusf::EventItem item);
 
+    static LumenAusf::Engine* getEngine ();
+
    private:
     bool running;
-    LumenAusf::Engine* Engine;
+    static LumenAusf::Engine* Engine;
     LumenAusf::Texture* textureGrass;
     LumenAusf::Texture* AtlasTank;
     Tank* goTank;

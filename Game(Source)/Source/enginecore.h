@@ -162,6 +162,7 @@ namespace LumenAusf
         void SwapBuffers ();
         float getTimeFromInit (bool toSec = true);
         static float getDeltaTime ();
+        std::vector<tri2> CreateQuadtc ();
 
         SDL_Window* window;
         shader_gl_es20* shader00 = nullptr;

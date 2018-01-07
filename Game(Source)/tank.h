@@ -13,8 +13,6 @@ class TankNPCController;
 
 struct TankData
 {
-    int trianglesCount;
-    std::vector<LumenAusf::tri2> triangles;
     LumenAusf::vec2 pos;
     int atlasWAll;
     int atlasHAll;

@@ -28,7 +28,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     mr->offsetX = td.atlasOffsetX;
     mr->offsetY = td.atlasOffsetY;
     mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->triangles = mr->trianglesOriginals = Play::getEngine ()->CreateQuadtc ();
     mr->texture = texture;
     mr->atlas = new LumenAusf::Atlas (mr);
 
@@ -45,19 +45,19 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     {
         case Arrows::Up:
             go->transform->setLocalPosition (go->transform->getLocalPosition () *
-                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, tank->transform->getLocalScale ().col0.x / 2)));
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, tank->transform->getLocalScale ().col0.x)));
             break;
         case Arrows::Down:
             go->transform->setLocalPosition (go->transform->getLocalPosition () *
-                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -tank->transform->getLocalScale ().col0.x / 2)));
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (0.f, -tank->transform->getLocalScale ().col0.x)));
             break;
         case Arrows::Right:
             go->transform->setLocalPosition (go->transform->getLocalPosition () *
-                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (tank->transform->getLocalScale ().col0.x / 2, 0.f)));
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (tank->transform->getLocalScale ().col0.x, 0.f)));
             break;
         case Arrows::Left:
             go->transform->setLocalPosition (go->transform->getLocalPosition () *
-                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (-tank->transform->getLocalScale ().col0.x / 2, 0.f)));
+                                             LumenAusf::mat2x3::move (LumenAusf::vec2 (-tank->transform->getLocalScale ().col0.x, 0.f)));
             break;
     }
     mc->Speed = speed;
@@ -65,13 +65,6 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
 
 std::istream& operator>> (std::istream& is, MissileData& t)
 {
-    is >> t.trianglesCount;
-    for (auto i = 0; i < t.trianglesCount; i++)
-    {
-        LumenAusf::tri2 triangle;
-        is >> triangle;
-        t.triangles.push_back (triangle);
-    }
     is >> t.atlasWAll;
     is >> t.atlasHAll;
     is >> t.atlasStart;

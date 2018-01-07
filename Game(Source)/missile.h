@@ -11,8 +11,6 @@ class MissileController;
 
 struct MissileData
 {
-    int trianglesCount;
-    std::vector<LumenAusf::tri2> triangles;
     int atlasWAll;
     int atlasHAll;
     int atlasStart;

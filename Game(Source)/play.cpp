@@ -1,5 +1,7 @@
 #include "play.h"
 
+LumenAusf::Engine* Play::Engine = nullptr;
+
 void Play::Run ()
 {
     Engine = new LumenAusf::Engine ();
@@ -21,8 +23,8 @@ void Play::Run ()
     CreateBlocks ("configurations/BlocksData.txt", "configurations/MapData.txt");
     CreateEagle ("configurations/EagleData.txt");
 
-    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
-    goTank2->SetAspect (windowWidth, windowHeight);
+    //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
+    //    goTank2->SetAspect (windowWidth, windowHeight);
 
     //    goTank3 = new Tank ("configurations/TankNPCData2.txt", AtlasTank, false);
     //    goTank3->SetAspect (windowWidth, windowHeight);
@@ -49,7 +51,7 @@ void Play::Run ()
             continue;
         auto a = Engine->getTimeFromInit (false);
 
-        std::cerr << 1.f / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f) << std::endl;
+        std::cerr << (int)(1.f / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f)) << std::endl;
 
         LumenAusf::GameObject::UpdateAll ();
         LumenAusf::GameObject::FixedUpdateAll ();
@@ -134,6 +136,8 @@ void Play::EventGetted (LumenAusf::EventItem item)
     }
 }
 
+LumenAusf::Engine* Play::getEngine () { return Engine; }
+
 void Play::DrawGrass ()
 {
     std::ifstream fileGrass ("configurations/GrassData.txt");
@@ -155,7 +159,7 @@ bool Play::LoadTextures ()
         return false;
     }
 
-    AtlasTank = Engine->CreateTexture ("textures/TankAtlas.png");
+    AtlasTank = Engine->CreateTexture ("textures/TankAtlasTest.png");
     if (nullptr == AtlasTank)
     {
         std::cerr << "Can`t Load Atlas Texture TANK" << std::endl;
@@ -200,8 +204,6 @@ void Play::RenderAll ()
 
 struct BlockData
 {
-    int trianglesCount;
-    std::vector<LumenAusf::tri2> triangles;
     int atlasWAll;
     int atlasHAll;
     int atlasStart;
@@ -212,13 +214,6 @@ struct BlockData
 };
 std::istream& operator>> (std::istream& is, BlockData& t)
 {
-    is >> t.trianglesCount;
-    for (auto i = 0; i < t.trianglesCount; i++)
-    {
-        LumenAusf::tri2 triangle;
-        is >> triangle;
-        t.triangles.push_back (triangle);
-    }
     //    is >> t.count;
     //    t.positions.reserve (512);
 
@@ -240,6 +235,8 @@ std::istream& operator>> (std::istream& is, BlockData& t)
 
 void Play::CreateBlocks (std::string configBlocks, std::string configMap)
 {
+    // todo: remake to InitScene with blocks,tanks and eagle
+
     int num = 0;
 
     std::ifstream bd (configBlocks);
@@ -275,7 +272,7 @@ void Play::CreateBlocks (std::string configBlocks, std::string configMap)
             continue;
         auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
         go->tag = "Block";
-        go->transform->SetPosition (LumenAusf::vec2 (-0.875f + ((number % 8) * 0.25f), 0.625f - ((number / 8) * 0.25f)));
+        go->transform->SetPosition (LumenAusf::vec2 (-1.f + td.scale + ((number % 8) * td.scale * 2), 0.5f - (number / 8) * td.scale * 2));
         go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
 
         auto a = new LumenAusf::mat2x3 ();
@@ -291,7 +288,7 @@ void Play::CreateBlocks (std::string configBlocks, std::string configMap)
         mr->offsetX = td.atlasOffsetX;
         mr->offsetY = td.atlasOffsetY;
         mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-        mr->triangles = mr->trianglesOriginals = td.triangles;
+        mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
         mr->texture = AtlasTank;
         mr->atlas = new LumenAusf::Atlas (mr);
         mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
@@ -300,8 +297,6 @@ void Play::CreateBlocks (std::string configBlocks, std::string configMap)
 
 struct EagleData
 {
-    int trianglesCount;
-    std::vector<LumenAusf::tri2> triangles;
     LumenAusf::vec2 pos;
     int atlasWAll;
     int atlasHAll;
@@ -313,14 +308,6 @@ struct EagleData
 };
 std::istream& operator>> (std::istream& is, EagleData& t)
 {
-    is >> t.trianglesCount;
-    for (auto i = 0; i < t.trianglesCount; i++)
-    {
-        LumenAusf::tri2 triangle;
-        is >> triangle;
-        t.triangles.push_back (triangle);
-    }
-
     is >> t.pos;
     is >> t.atlasWAll;
     is >> t.atlasHAll;
@@ -363,7 +350,7 @@ void Play::CreateEagle (std::string configEagle)
     mr->offsetX = td.atlasOffsetX;
     mr->offsetY = td.atlasOffsetY;
     mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-    mr->triangles = mr->trianglesOriginals = td.triangles;
+    mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
     mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
