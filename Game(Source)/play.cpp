@@ -5,6 +5,7 @@ LumenAusf::Engine* Play::Engine = nullptr;
 void Play::Run ()
 {
     Engine = new LumenAusf::Engine ();
+    int previousFPS = 0;
     running = true;
     Engine->Init (false, windowWidth, windowHeight);
 
@@ -17,11 +18,13 @@ void Play::Run ()
     if (!LoadTextures ())
         return;
 
-    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
-    goTank->SetAspect (windowWidth, windowHeight);
+    InitScene ("configurations/MapData.txt", "configurations/BlocksData.txt", "configurations/TankUserData.txt", "configurations/TankNPCData.txt",
+               "configurations/EagleData.txt", "configurations/MissileData.txt");
+    //    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
+    //    goTank->SetAspect (windowWidth, windowHeight);
 
-    CreateBlocks ("configurations/BlocksData.txt", "configurations/MapData.txt");
-    CreateEagle ("configurations/EagleData.txt");
+    //    CreateBlocks ("configurations/BlocksData.txt", "configurations/MapData.txt");
+    //    CreateEagle ("configurations/EagleData.txt");
 
     //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
     //    goTank2->SetAspect (windowWidth, windowHeight);
@@ -36,8 +39,6 @@ void Play::Run ()
 
     //            goTank5 = new Tank ("configurations/TankNPCData4.txt", AtlasTank, false);
     //            goTank5->SetAspect (windowWidth, windowHeight);
-    //    goTank2 = InitTank (9, 16, 1.5f);
-    //    goTank2->go->transform->SetPosition (LumenAusf::vec2 (0.f, 0.5f));
 
     Engine->EngineEvent += Delegate (this, &Play::EventGetted);
 
@@ -51,21 +52,25 @@ void Play::Run ()
             continue;
         auto a = Engine->getTimeFromInit (false);
 
-        std::cerr << (int)(1.f / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f)) << std::endl;
+        auto currentFPS = static_cast<int> (1.f / ((Engine->getTimeFromInit (false) - Engine->getTimePrevious ()) / 1000.f));
+
+        if (currentFPS != previousFPS)
+        {
+            std::clog << currentFPS << std::endl;
+            previousFPS = currentFPS;
+        }
+
+        Engine->ReadEvent ();
 
         LumenAusf::GameObject::UpdateAll ();
         LumenAusf::GameObject::FixedUpdateAll ();
-        Engine->ReadEvent ();
+
+        Engine->setTimePrevious (a);
 
         DrawGrass ();
-
         RenderAll ();
 
-        //        RenderGameObject (goTank->go);
-        //        RenderGameObject (goTank2->go);
-
         Engine->SwapBuffers ();
-        Engine->setTimePrevious (a);
     }
     Engine->DestroyTexture (AtlasTank);
     Engine->DestroyTexture (textureGrass);
@@ -202,27 +207,18 @@ void Play::RenderAll ()
     }
 }
 
-struct BlockData
+// struct ObjectConfig
+//{
+//    int atlasWAll;
+//    int atlasHAll;
+//    int atlasStart;
+//    int atlasEnd;
+//    float atlasOffsetX;
+//    float atlasOffsetY;
+//    float scale;
+//};
+std::istream& operator>> (std::istream& is, ObjectConfig& t)
 {
-    int atlasWAll;
-    int atlasHAll;
-    int atlasStart;
-    int atlasEnd;
-    float atlasOffsetX;
-    float atlasOffsetY;
-    float scale;
-};
-std::istream& operator>> (std::istream& is, BlockData& t)
-{
-    //    is >> t.count;
-    //    t.positions.reserve (512);
-
-    //    for (size_t j = 0; j < t.count; j++)
-    //    {
-    //        LumenAusf::vec2 pos;
-    //        is >> pos;
-    //        t.positions.push_back (pos);
-    //    }
     is >> t.atlasWAll;
     is >> t.atlasHAll;
     is >> t.atlasStart;
@@ -233,27 +229,26 @@ std::istream& operator>> (std::istream& is, BlockData& t)
     return is;
 }
 
-void Play::CreateBlocks (std::string configBlocks, std::string configMap)
+// void CreateBlock (ObjectConfig data, int number);
+// void CreateEagle (ObjectConfig data, int number);
+// void CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser);
+
+void Play::InitScene (std::string configMap, std::string configBlocks, std::string configTank, std::string configNpcTank, std::string configEagle,
+                      std::string configMissile)
 {
-    // todo: remake to InitScene with blocks,tanks and eagle
+    auto blockData = ObjectConfig ();
+    auto missileData = ObjectConfig ();
+    auto tankData = ObjectConfig ();
+    auto tankNPCData = ObjectConfig ();
+    auto eagleData = ObjectConfig ();
+    std::vector<std::string> audioTank;
+    std::vector<std::string> audioMissile;
 
-    int num = 0;
-
-    std::ifstream bd (configBlocks);
-    if (!bd.is_open ())
-    {
-        std::cerr << "Can`t open : " + configBlocks << std::endl;
-        return;
-    }
-
-    auto td = BlockData ();
-    bd >> td;
-    bd.close ();
-
+    // Read map
     std::ifstream md (configMap);
     if (!md.is_open ())
     {
-        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        std::cerr << "Can`t open : " + configMap << std::endl;
         return;
     }
 
@@ -266,76 +261,106 @@ void Play::CreateBlocks (std::string configBlocks, std::string configMap)
             map.push_back (k);
         }
 
-    for (size_t number = 0; number < 48; number++)
+    // Load configurations
+    // -Block
+    std::ifstream File (configBlocks);
+    if (!File.is_open ())
     {
-        if (map[number] == 0)
-            continue;
-        auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
-        go->tag = "Block";
-        go->transform->SetPosition (LumenAusf::vec2 (-1.f + td.scale + ((number % 8) * td.scale * 2), 0.5f - (number / 8) * td.scale * 2));
-        go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
-
-        auto a = new LumenAusf::mat2x3 ();
-        a->col0.x = 1;
-        a->col0.y = 0.f;
-        a->col1.x = 0.f;
-        a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-        go->transform->setAspect (*a);
-
-        go->AddComponent<LumenAusf::Collider> ();
-
-        auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
-        mr->offsetX = td.atlasOffsetX;
-        mr->offsetY = td.atlasOffsetY;
-        mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-        mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
-        mr->texture = AtlasTank;
-        mr->atlas = new LumenAusf::Atlas (mr);
-        mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+        std::cerr << "Can`t open : " + configBlocks << std::endl;
+        return;
     }
-}
 
-struct EagleData
-{
-    LumenAusf::vec2 pos;
-    int atlasWAll;
-    int atlasHAll;
-    int atlasStart;
-    int atlasEnd;
-    float atlasOffsetX;
-    float atlasOffsetY;
-    float scale;
-};
-std::istream& operator>> (std::istream& is, EagleData& t)
-{
-    is >> t.pos;
-    is >> t.atlasWAll;
-    is >> t.atlasHAll;
-    is >> t.atlasStart;
-    is >> t.atlasEnd;
-    is >> t.atlasOffsetX;
-    is >> t.atlasOffsetY;
-    is >> t.scale;
-    return is;
-}
+    File >> blockData;
+    File.close ();
 
-void Play::CreateEagle (std::string configEagle)
-{
-    std::ifstream fd (configEagle);
-    if (!fd.is_open ())
+    // -Eagle
+    File.open (configEagle);
+    if (!File.is_open ())
     {
         std::cerr << "Can`t open : " + configEagle << std::endl;
         return;
     }
 
-    auto td = EagleData ();
-    fd >> td;
-    fd.close ();
+    File >> eagleData;
+    File.close ();
 
-    auto go = new LumenAusf::GameObject ("Eagle");
+    // -Tank
+    File.open (configTank);
+    if (!File.is_open ())
+    {
+        std::cerr << "Can`t open : " + configTank << std::endl;
+        return;
+    }
+
+    std::string audioPathTankStart, audioPathTankAwake, audioPathTankRun, audioPathTankFire;
+    File >> tankData >> audioPathTankStart >> audioPathTankAwake >> audioPathTankRun >> audioPathTankFire;
+
+    audioTank.push_back (audioPathTankStart);
+    audioTank.push_back (audioPathTankAwake);
+    audioTank.push_back (audioPathTankRun);
+    audioTank.push_back (audioPathTankFire);
+
+    File.close ();
+
+    // -NPCTank
+    File.open (configNpcTank);
+    if (!File.is_open ())
+    {
+        std::cerr << "Can`t open : " + configNpcTank << std::endl;
+        return;
+    }
+
+    File >> tankNPCData;
+
+    File.close ();
+
+    // -Missile
+    File.open (configMissile);
+    if (!File.is_open ())
+    {
+        std::cerr << "Can`t open : " + configMissile << std::endl;
+        return;
+    }
+
+    std::string audioPathMissileRun, audioPathMissileFire;
+    File >> missileData >> audioPathMissileRun >> audioPathMissileFire;
+
+    audioMissile.push_back (audioPathMissileRun);
+    audioMissile.push_back (audioPathMissileFire);
+
+    File.close ();
+
+    // End of loading
+
+    /*Creating objects
+     * 0 - None
+     * 1 - Block
+     * 2 - Eagle
+     * 3 - User
+     * 4 - NPC
+     */
+    for (size_t number = 0; number < 48; number++)
+    {
+        if (map[number] == 0)
+            continue;
+        if (map[number] == 1)
+            CreateBlock (blockData, static_cast<int> (number));
+        if (map[number] == 2)
+            CreateEagle (eagleData, static_cast<int> (number));
+        if (map[number] == 3)
+            CreateTank (tankData, static_cast<int> (number), audioTank, audioMissile, true);
+        if (map[number] == 4)
+            CreateTank (tankNPCData, static_cast<int> (number), audioTank, audioMissile, false);
+    }
+}
+
+void Play::CreateBlock (ObjectConfig data, int number)
+{
+    static int num;
+    auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
     go->tag = "Block";
-    go->transform->SetPosition (td.pos);
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
 
     auto a = new LumenAusf::mat2x3 ();
     a->col0.x = 1;
@@ -347,13 +372,205 @@ void Play::CreateEagle (std::string configEagle)
     go->AddComponent<LumenAusf::Collider> ();
 
     auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
-    mr->offsetX = td.atlasOffsetX;
-    mr->offsetY = td.atlasOffsetY;
+    mr->offsetX = data.atlasOffsetX;
+    mr->offsetY = data.atlasOffsetY;
     mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
     mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
-    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+}
+
+void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser)
+{
+    static int num;
+    auto tank = new LumenAusf::GameObject (nullptr);
+
+    if (isUser)
+    {
+        tank->name = "UserTank";
+        tank->tag = "TankUser";
+    }
+    else
+    {
+        tank->name = "NPCTank " + std::to_string (num++);
+        tank->tag = "TankNPC";
+    }
+
+    tank->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    tank->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
+
+    auto a = new LumenAusf::mat2x3 ();
+    a->col0.x = 1;
+    a->col0.y = 0.f;
+    a->col1.x = 0.f;
+    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    tank->transform->setAspect (*a);
+
+    tank->AddComponent<LumenAusf::Collider> ();
+
+    auto mr = tank->AddComponent<LumenAusf::MeshRenderer> ();
+    mr->offsetX = data.atlasOffsetX;
+    mr->offsetY = data.atlasOffsetY;
+    mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+    mr->triangles = mr->trianglesOriginals = Play::getEngine ()->CreateQuadtc ();
+    mr->texture = AtlasTank;
+    mr->atlas = new LumenAusf::Atlas (mr);
+
+    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+
+    auto b = createAudio (audioTank[0].c_str (), 0, SDL_MIX_MAXVOLUME / 2);
+    auto c = createAudio (audioTank[1].c_str (), 1, SDL_MIX_MAXVOLUME / 2);
+    auto d = createAudio (audioTank[2].c_str (), 0, SDL_MIX_MAXVOLUME / 2);
+    auto e = createAudio (audioTank[3].c_str (), 0, SDL_MIX_MAXVOLUME);
+
+    if (isUser)
+    {
+        tank->AddComponent<GameOverController> ();
+        auto tnc = tank->AddComponent<TankController> ();
+        tnc->SetSounds (b, c, d, e);
+        tnc->SetTextureMissile (AtlasTank);
+    }
+    else
+    {
+        auto tnc = tank->AddComponent<TankNPCController> ();
+        tnc->SetSounds (b, c, d, e);
+        tnc->SetTextureMissile (AtlasTank);
+    }
+}
+
+// struct BlockData
+//{
+//    int atlasWAll;
+//    int atlasHAll;
+//    int atlasStart;
+//    int atlasEnd;
+//    float atlasOffsetX;
+//    float atlasOffsetY;
+//    float scale;
+//};
+// std::istream& operator>> (std::istream& is, BlockData& t)
+//{
+//    is >> t.atlasWAll;
+//    is >> t.atlasHAll;
+//    is >> t.atlasStart;
+//    is >> t.atlasEnd;
+//    is >> t.atlasOffsetX;
+//    is >> t.atlasOffsetY;
+//    is >> t.scale;
+//    return is;
+//}
+
+// void Play::CreateBlocks (std::string configBlocks, std::string configMap)
+//{
+//    // todo: remake to InitScene with blocks,tanks and eagle
+
+//    int num = 0;
+
+//    std::ifstream bd (configBlocks);
+//    if (!bd.is_open ())
+//    {
+//        std::cerr << "Can`t open : " + configBlocks << std::endl;
+//        return;
+//    }
+
+//    auto td = BlockData ();
+//    bd >> td;
+//    bd.close ();
+
+//    std::ifstream md (configMap);
+//    if (!md.is_open ())
+//    {
+//        std::cerr << "Can`t open : " + configBlocks << std::endl;
+//        return;
+//    }
+
+//    std::vector<int> map;
+//    for (int i = 0; i < 6; i++)
+//        for (int j = 0; j < 8; j++)
+//        {
+//            int k;
+//            md >> k;
+//            map.push_back (k);
+//        }
+
+//    for (size_t number = 0; number < 48; number++)
+//    {
+//        if (map[number] == 0)
+//            continue;
+//        auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
+//        go->tag = "Block";
+//        go->transform->SetPosition (LumenAusf::vec2 (-1.f + td.scale + ((number % 8) * td.scale * 2), 0.5f - (number / 8) * td.scale * 2));
+//        go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+
+//        auto a = new LumenAusf::mat2x3 ();
+//        a->col0.x = 1;
+//        a->col0.y = 0.f;
+//        a->col1.x = 0.f;
+//        a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+//        go->transform->setAspect (*a);
+
+//        go->AddComponent<LumenAusf::Collider> ();
+
+//        auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
+//        mr->offsetX = td.atlasOffsetX;
+//        mr->offsetY = td.atlasOffsetY;
+//        mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+//        mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
+//        mr->texture = AtlasTank;
+//        mr->atlas = new LumenAusf::Atlas (mr);
+//        mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+//    }
+//}
+
+// struct EagleData
+//{
+//    LumenAusf::vec2 pos;
+//    int atlasWAll;
+//    int atlasHAll;
+//    int atlasStart;
+//    int atlasEnd;
+//    float atlasOffsetX;
+//    float atlasOffsetY;
+//    float scale;
+//};
+// std::istream& operator>> (std::istream& is, EagleData& t)
+//{
+//    is >> t.pos;
+//    is >> t.atlasWAll;
+//    is >> t.atlasHAll;
+//    is >> t.atlasStart;
+//    is >> t.atlasEnd;
+//    is >> t.atlasOffsetX;
+//    is >> t.atlasOffsetY;
+//    is >> t.scale;
+//    return is;
+//}
+
+void Play::CreateEagle (ObjectConfig data, int number)
+{
+    auto go = new LumenAusf::GameObject ("Eagle");
+    go->tag = "Block";
+    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
+
+    auto a = new LumenAusf::mat2x3 ();
+    a->col0.x = 1;
+    a->col0.y = 0.f;
+    a->col1.x = 0.f;
+    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    go->transform->setAspect (*a);
+
+    go->AddComponent<LumenAusf::Collider> ();
+
+    auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
+    mr->offsetX = data.atlasOffsetX;
+    mr->offsetY = data.atlasOffsetY;
+    mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
+    mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
+    mr->texture = AtlasTank;
+    mr->atlas = new LumenAusf::Atlas (mr);
+    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
 
     auto df = go->AddComponent<GameOverController> ();
     df->SetAnchor (&running);

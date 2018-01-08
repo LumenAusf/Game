@@ -137,6 +137,8 @@ namespace LumenAusf
 
             for (unsigned int i = 0; i < components.size (); i++)
             {
+                if (components.size () < i)
+                    continue;
                 temp = dynamic_cast<T*> (components.at (i));
                 if (temp != nullptr)
                     break;

@@ -18,6 +18,8 @@ void TankNPCController::Update ()
     GameObject* gogo = nullptr;
     for (auto gop : GameObject::objects)
     {
+        if (gop == nullptr)
+            continue;
         if (gop->GetComponent<TankController> () != nullptr)
         {
             gogo = gop;

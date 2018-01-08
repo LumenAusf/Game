@@ -1,8 +1,6 @@
-0 -0.5
-
 8 4 1 8 0 0
 
-0.0619
+0.0620
 
 sounds/EngineStart.wav
 sounds/EngineAwake.wav
