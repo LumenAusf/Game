@@ -147,12 +147,12 @@ void Play::DrawGrass ()
 {
     std::ifstream fileGrass ("configurations/GrassData.txt");
     assert (!!fileGrass);
-    LumenAusf::tri2 tr1Grass;
-    LumenAusf::tri2 tr2Grass;
+    LumenAusf::trianglePTC tr1Grass;
+    LumenAusf::trianglePTC tr2Grass;
     fileGrass >> tr1Grass >> tr2Grass;
 
-    Engine->DrawTriangle (tr1Grass, textureGrass, LumenAusf::mat2x3 ());
-    Engine->DrawTriangle (tr2Grass, textureGrass, LumenAusf::mat2x3 ());
+    Engine->DrawTriangle (tr1Grass, textureGrass, glm::mat4 ());
+    Engine->DrawTriangle (tr2Grass, textureGrass, glm::mat4 ());
 }
 
 bool Play::LoadTextures ()
@@ -359,15 +359,15 @@ void Play::CreateBlock (ObjectConfig data, int number)
     static int num;
     auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
     go->tag = "Block";
-    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
+    go->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f));
+    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (data.scale)));
 
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-    go->transform->setAspect (*a);
+    //    auto a = new LumenAusf::mat2x3 ();
+    //    a->col0.x = 1;
+    //    a->col0.y = 0.f;
+    //    a->col1.x = 0.f;
+    //    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    //    go->transform->setAspect (*a);
 
     go->AddComponent<LumenAusf::Collider> ();
 
@@ -378,7 +378,7 @@ void Play::CreateBlock (ObjectConfig data, int number)
     mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
-    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+    mr->SetAtlas (glm::vec2 (data.atlasWAll, data.atlasHAll), glm::vec2 (data.atlasStart, data.atlasEnd));
 }
 
 void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser)
@@ -397,15 +397,15 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
         tank->tag = "TankNPC";
     }
 
-    tank->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
-    tank->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
+    tank->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f));
+    tank->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (data.scale)));
 
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-    tank->transform->setAspect (*a);
+    //    auto a = new LumenAusf::mat2x3 ();
+    //    a->col0.x = 1;
+    //    a->col0.y = 0.f;
+    //    a->col1.x = 0.f;
+    //    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    //    tank->transform->setAspect (*a);
 
     tank->AddComponent<LumenAusf::Collider> ();
 
@@ -417,7 +417,7 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
 
-    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+    mr->SetAtlas (glm::vec2 (data.atlasWAll, data.atlasHAll), glm::vec2 (data.atlasStart, data.atlasEnd));
 
     auto b = createAudio (audioTank[0].c_str (), 0, SDL_MIX_MAXVOLUME / 2);
     auto c = createAudio (audioTank[1].c_str (), 1, SDL_MIX_MAXVOLUME / 2);
@@ -551,15 +551,15 @@ void Play::CreateEagle (ObjectConfig data, int number)
 {
     auto go = new LumenAusf::GameObject ("Eagle");
     go->tag = "Block";
-    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
+    go->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f));
+    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (data.scale)));
 
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-    go->transform->setAspect (*a);
+    //    auto a = new LumenAusf::mat2x3 ();
+    //    a->col0.x = 1;
+    //    a->col0.y = 0.f;
+    //    a->col1.x = 0.f;
+    //    a->col1.y = static_cast<float> (windowWidth) / windowHeight;
+    //    go->transform->setAspect (*a);
 
     go->AddComponent<LumenAusf::Collider> ();
 
@@ -570,7 +570,7 @@ void Play::CreateEagle (ObjectConfig data, int number)
     mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
-    mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+    mr->SetAtlas (glm::vec2 (data.atlasWAll, data.atlasHAll), glm::vec2 (data.atlasStart, data.atlasEnd));
 
     auto df = go->AddComponent<GameOverController> ();
     df->SetAnchor (&running);

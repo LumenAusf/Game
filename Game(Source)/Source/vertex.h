@@ -4,37 +4,39 @@
 #define VERTEX_H
 
 #include "color.h"
-#include "vec2.h"
+//#include "vec2.h"
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
 namespace LumenAusf
 {
     /// vertex with position only
-    struct v0
+    struct vertexP
     {
-        vec2 pos;
+        glm::vec3 pos;
     };
 
     /// vertex with position and texture coordinate
-    struct v1
+    struct vertexPC
     {
-        vec2 pos;
+        glm::vec3 pos;
         Color c;
     };
 
     /// vertex position + color + texture coordinate
-    struct v2
+    struct vertexPTC
     {
-        vec2 pos;
-        vec2 uv;
+        glm::vec3 pos;
+        glm::vec2 uv;
         Color c;
     };
 
-    std::istream& operator>> (std::istream& is, v0& v);
+    std::istream& operator>> (std::istream& is, vertexP& v);
 
-    std::istream& operator>> (std::istream& is, v1& v);
+    std::istream& operator>> (std::istream& is, vertexPC& v);
 
-    std::istream& operator>> (std::istream& is, v2& v);
+    std::istream& operator>> (std::istream& is, vertexPTC& v);
 
-    v0 Lerp (const LumenAusf::v0& vl, const LumenAusf::v0& vr, const float a);
+    //    v0 Lerp (const LumenAusf::v0& vl, const LumenAusf::v0& vr, const float a);
 }
 #endif    // VERTEX_H

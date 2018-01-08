@@ -4,6 +4,8 @@
 #define GAMEOBJECT_H
 
 #include <algorithm>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <list>
 #include <string>
 #include <vector>
@@ -29,39 +31,35 @@ namespace LumenAusf
         Transform* parent = nullptr;
         std::vector<Transform*> children;
 
-        mat2x3 GetGlobalMatrix () { return getGlobalScale () * getGlobalRotation () * getGlobalPosition () * aspect; }
-        mat2x3 GetLocalMatrix () { return getLocalScale () * getLocalRotation () * getLocalPosition () * aspect; }
-        void SetPosition (vec2 pos) { setLocalPosition (mat2x3 () * mat2x3::move (pos)); }
+        glm::mat4 GetGlobalMatrix () { return getGlobalPosition () * getGlobalRotation () * getGlobalScale (); }
+        glm::mat4 GetLocalMatrix () { return getLocalPosition () * getLocalRotation () * getLocalScale (); }
+        void SetPosition (glm::vec3 pos) { position = glm::translate (glm::mat4 (), pos); }
 
-        mat2x3 getLocalScale () const;
-        void setLocalScale (const mat2x3& value);
+        glm::mat4 getLocalScale () const;
+        void setLocalScale (const glm::mat4& value);
 
-        mat2x3 getLocalRotation () const;
-        void setLocalRotation (const mat2x3& value);
+        glm::mat4 getLocalRotation () const;
+        void setLocalRotation (const glm::mat4& value);
 
-        mat2x3 getLocalPosition () const;
-        void setLocalPosition (const mat2x3& value);
+        glm::mat4 getLocalPosition () const;
+        void setLocalPosition (const glm::mat4& value);
 
-        mat2x3 getGlobalScale () const;
+        glm::mat4 getGlobalScale () const;
         //        void setGlobalScale (const mat2x3& value);
 
-        mat2x3 getGlobalRotation () const;
+        glm::mat4 getGlobalRotation () const;
         //        void setGlobalRotation (const mat2x3& value);
 
-        mat2x3 getGlobalPosition () const;
+        glm::mat4 getGlobalPosition () const;
         //        void setGlobalPosition (const mat2x3& value);
 
-        mat2x3 getAspect () const;
-        void setAspect (const mat2x3& value);
+        glm::mat4 getAspect () const;
+        void setAspect (const glm::mat4& value);
 
        private:
-        mat2x3 localScale;
-        mat2x3 localRotation;
-        mat2x3 localPosition;
-        mat2x3 globalScale;
-        mat2x3 globalRotation;
-        mat2x3 globalPosition;
-        mat2x3 aspect;
+        glm::mat4 position;
+        glm::mat4 rotation;
+        glm::mat4 scale;
     };
 
     class Component
@@ -166,7 +164,7 @@ namespace LumenAusf
         static void FixedUpdateAll ();
         static void RenderAll ();
         void OnDestroy ();
-        bool CanMove (vec2 mover);
+        bool CanMove (glm::vec3 pos);
 
         static std::vector<GameObject*> objects;
     };

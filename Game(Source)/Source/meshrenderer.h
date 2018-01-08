@@ -19,11 +19,11 @@ namespace LumenAusf
         Atlas (MeshRenderer* mesh);
         Texture* texture;
         MeshRenderer* mesh;
-        vec2 elementCountXY, usefromTo;
+        glm::vec2 elementCountXY, usefromTo;
         int startId, finishId;
         int sizeAtlasItem;
         int currentAtlasItem;
-        void SetAtlas (Texture* texture, vec2 elementCountXY, vec2 UsefromTo);
+        void SetAtlas (Texture* texture, glm::vec2 elementCountXY, glm::vec2 UsefromTo);
         void Next ();
     };
 
@@ -40,16 +40,16 @@ namespace LumenAusf
         Atlas* atlas = nullptr;
         virtual ~MeshRenderer ();
         Texture* texture = nullptr;
-        std::vector<tri2> triangles;
-        std::vector<tri2> trianglesOriginals;
+        std::vector<trianglePTC> triangles;
+        std::vector<trianglePTC> trianglesOriginals;
         float offsetX = 0.f;
         float offsetY = 0.f;
 
         MeshRenderer (GameObject* owner) : Component (owner) {}
         //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture);
         //        MeshRenderer (TypeOfMesh typeMesh, std::vector<tri2> triangles, Texture* texture, float offsetx, float offsety);
-        void SetAtlas (vec2 elementCountXY, vec2 UsefromTo);
-        void ResizeUV (vec2 LeftRight, vec2 UpDown);
+        void SetAtlas (glm::vec2 elementCountXY, glm::vec2 UsefromTo);
+        void ResizeUV (glm::vec2 LeftRight, glm::vec2 UpDown);
         void Awake ();
         void Start ();
         void Update ();

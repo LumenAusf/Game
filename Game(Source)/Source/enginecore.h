@@ -37,18 +37,21 @@ namespace LumenAusf
             glUniform4fv
                 ;
                 PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
-                PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
-                PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
-                PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
+                PFNGLUNIFORMMATRIX4FVPROC
+                    glUniformMatrix4fv
+                        ;
+                        PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
+                        PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
+                        PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
 
-                static Glfunc* Get ()
-                {
-                    if (ptr == nullptr)
-                        ptr = new Glfunc ();
-                    return ptr;
-                }
+                        static Glfunc* Get ()
+                        {
+                            if (ptr == nullptr)
+                                ptr = new Glfunc ();
+                            return ptr;
+                        }
 
-                static Glfunc* ptr;
+                        static Glfunc* ptr;
     };
 }
 
@@ -153,16 +156,16 @@ namespace LumenAusf
         Texture* CreateTexture (std::string_view path, int hCount = 1, int wCount = 1);
         void DestroyTexture (Texture* t);
         //        bool DrawTriangle (const triangle& t);
-        void DrawTriangle (const tri0& t, const Color& c);
-        void DrawTriangle (const tri1& t);
-        void DrawTriangle (const tri2& t, Texture* tex);
-        void DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m);
+        void DrawTriangle (const triangleP& t, const Color& c);
+        void DrawTriangle (const trianglePC& t);
+        void DrawTriangle (const trianglePTC& t, Texture* tex);
+        void DrawTriangle (const trianglePTC& t, Texture* tex, const glm::mat4& m);
         void Clear ();
         bool LoadTexture (std::string path);
         void SwapBuffers ();
         float getTimeFromInit (bool toSec = true);
         static float getDeltaTime ();
-        std::vector<tri2> CreateQuadtc ();
+        std::vector<trianglePTC> CreateQuadtc ();
 
         SDL_Window* window;
         shader_gl_es20* shader00 = nullptr;

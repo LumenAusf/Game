@@ -67,17 +67,17 @@ namespace LumenAusf
         void Finish ();
         Texture* CreateTexture (std::string_view path, int hCount = 1, int wCount = 1);
         void DestroyTexture (Texture* t);
-        void DrawTriangle (const tri0& t, const Color& c);
-        void DrawTriangle (const tri1& t);
-        void DrawTriangle (const tri2& t, Texture* tex);
-        void DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m);
+        void DrawTriangle (const triangleP& t, const Color& c);
+        void DrawTriangle (const trianglePC& t);
+        void DrawTriangle (const trianglePTC& t, Texture* tex);
+        void DrawTriangle (const trianglePTC& t, Texture* tex, const glm::mat4& m);
         float getTimeFromInit (bool isSec = true);
         void setTimePrevious (float sec);
         float getTimePrevious ();
         static float getDeltaTime ();
         void SwapBuffers ();
         void Clear ();
-        std::vector<tri2> CreateQuadtc ();
+        std::vector<trianglePTC> CreateQuadtc ();
 
         Event EngineEvent = Event ();
         constexpr static const EventSystem EventSys = EventSystem ();

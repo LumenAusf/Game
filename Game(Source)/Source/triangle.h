@@ -8,33 +8,32 @@
 namespace LumenAusf
 {
     /// triangle with positions
-    struct tri0
+    struct triangleP
     {
-        tri0 ();
-        v0 v[3];
+        triangleP ();
+        vertexP v[3];
     };
 
     /// triangle with positions and color
-    struct tri1
+    struct trianglePC
     {
-        tri1 ();
-        v1 v[3];
+        trianglePC ();
+        vertexPC v[3];
     };
 
     /// triangle with positions color and texture coordinate
-    struct tri2
+    struct trianglePTC
     {
-        tri2 ();
-        //        tri2(tri2 const &newT);
-        v2 v[3];
+        trianglePTC ();
+        vertexPTC v[3];
     };
 
-    std::istream& operator>> (std::istream& is, tri0& t);
+    std::istream& operator>> (std::istream& is, triangleP& t);
 
-    std::istream& operator>> (std::istream& is, tri1& t);
+    std::istream& operator>> (std::istream& is, trianglePC& t);
 
-    std::istream& operator>> (std::istream& is, tri2& t);
+    std::istream& operator>> (std::istream& is, trianglePTC& t);
 
-    tri0 Lerp (const tri0& tl, const tri0& tr, const float a);
+    //    tri0 Lerp (const tri0& tl, const tri0& tr, const float a);
 }
 #endif    // TRIANGLE_H

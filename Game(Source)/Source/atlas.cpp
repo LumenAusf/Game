@@ -4,7 +4,7 @@ namespace LumenAusf
 {
     Atlas::Atlas (MeshRenderer* mesh) { this->mesh = mesh; }
 
-    void Atlas::SetAtlas (LumenAusf::Texture* texture, LumenAusf::vec2 elementCountXY, LumenAusf::vec2 UsefromTo)
+    void Atlas::SetAtlas (LumenAusf::Texture* texture, glm::vec2 elementCountXY, glm::vec2 UsefromTo)
     {
         this->texture = texture;
         this->elementCountXY = elementCountXY;

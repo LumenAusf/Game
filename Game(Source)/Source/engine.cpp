@@ -31,13 +31,13 @@ namespace LumenAusf
 
     void Engine::DestroyTexture (Texture* t) { EngineCore::EnCore->DestroyTexture (t); }
 
-    void Engine::DrawTriangle (const tri0& t, const Color& c) { EngineCore::EnCore->DrawTriangle (t, c); }
+    void Engine::DrawTriangle (const LumenAusf::triangleP&t, const Color& c) { EngineCore::EnCore->DrawTriangle (t, c); }
 
-    void Engine::DrawTriangle (const tri1& t) { EngineCore::EnCore->DrawTriangle (t); }
+    void Engine::DrawTriangle (const LumenAusf::trianglePC&t) { EngineCore::EnCore->DrawTriangle (t); }
 
-    void Engine::DrawTriangle (const tri2& t, Texture* tex) { EngineCore::EnCore->DrawTriangle (t, tex); }
+    void Engine::DrawTriangle (const LumenAusf::trianglePTC&t, Texture* tex) { EngineCore::EnCore->DrawTriangle (t, tex); }
 
-    void Engine::DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m) { EngineCore::EnCore->DrawTriangle (t, tex, m); }
+    void Engine::DrawTriangle (const LumenAusf::trianglePTC&t, Texture* tex, const glm::mat4&m) { EngineCore::EnCore->DrawTriangle (t, tex, m); }
 
     float Engine::getTimeFromInit (bool isSec) { return EngineCore::EnCore->getTimeFromInit (isSec); }
 
@@ -51,5 +51,5 @@ namespace LumenAusf
 
     void Engine::Clear () { EngineCore::EnCore->Clear (); }
 
-    std::vector<tri2> Engine::CreateQuadtc () { return EngineCore::EnCore->CreateQuadtc (); }
+    std::vector<LumenAusf::trianglePTC> Engine::CreateQuadtc() { return EngineCore::EnCore->CreateQuadtc (); }
 }

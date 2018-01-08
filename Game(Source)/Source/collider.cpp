@@ -2,37 +2,38 @@
 
 namespace LumenAusf
 {
-    static bool IsIntersect (v2* array_1, mat2x3 first, v2* array_2, mat2x3 second)
+    static bool IsIntersect (vertexPTC* array_1, glm::mat4 first, vertexPTC* array_2, glm::mat4 second)
     {
-#define vectP_z(v, a, b) (((v).x - (a).x) * ((v).y - (b).y) - ((v).y - (a).y) * ((v).x - (b).x))
-        int i, j, next_i, next_j;
-        for (int i = 0; i < 3; i++)
-        {
-            next_i = i == 3 - 1 ? 0 : i + 1;
-            for (j = 0; j < 3; j++)
-            {
-                next_j = j == 3 - 1 ? 0 : j + 1;
-                if (vectP_z (array_1[next_i].pos * first, array_1[i].pos * first, array_2[j].pos * second) *
-                            vectP_z (array_1[next_i].pos * first, array_1[i].pos * first, array_2[next_j].pos * second) <
-                        0 &&
-                    vectP_z (array_2[next_j].pos * second, array_2[j].pos * second, array_1[i].pos * first) *
-                            vectP_z (array_2[next_j].pos * second, array_2[j].pos * second, array_1[next_i].pos * first) <
-                        0)
-                    return true;
-            }
-        }
-        bool a = vectP_z (array_2[0].pos * second, array_2[3 - 1].pos * second, array_1[0].pos * first) < 0;
-        for (j = 1; j < 3; j++)
-            if (a != vectP_z (array_2[j].pos * second, array_2[j - 1].pos * second, array_1[0].pos * first) < 0)
-                break;
-        if (j == 3)
-            return true;
+        //#define vectP_z(v, a, b) (((v).x - (a).x) * ((v).y - (b).y) - ((v).y - (a).y) * ((v).x - (b).x))
+        //        int i, j, next_i, next_j;
+        //        for (int i = 0; i < 3; i++)
+        //        {
+        //            next_i = i == 3 - 1 ? 0 : i + 1;
+        //            for (j = 0; j < 3; j++)
+        //            {
+        //                next_j = j == 3 - 1 ? 0 : j + 1;
+        //                if (vectP_z (array_1[next_i].pos * first, array_1[i].pos * first, array_2[j].pos * second) *
+        //                            vectP_z (array_1[next_i].pos * first, array_1[i].pos * first, array_2[next_j].pos * second) <
+        //                        0 &&
+        //                    vectP_z (array_2[next_j].pos * second, array_2[j].pos * second, array_1[i].pos * first) *
+        //                            vectP_z (array_2[next_j].pos * second, array_2[j].pos * second, array_1[next_i].pos * first) <
+        //                        0)
+        //                    return true;
+        //            }
+        //        }
+        //        bool a = vectP_z (array_2[0].pos * second, array_2[3 - 1].pos * second, array_1[0].pos * first) < 0;
+        //        for (j = 1; j < 3; j++)
+        //            if (a != vectP_z (array_2[j].pos * second, array_2[j - 1].pos * second, array_1[0].pos * first) < 0)
+        //                break;
+        //        if (j == 3)
+        //            return true;
 
-        a = vectP_z (array_1[0].pos * first, array_1[3 - 1].pos * first, array_2[0].pos * second) < 0;
-        for (i = 1; i < 3; i++)
-            if (a != vectP_z (array_1[i].pos * first, array_1[i - 1].pos * first, array_2[0].pos * second) < 0)
-                break;
-        return i == 3;
+        //        a = vectP_z (array_1[0].pos * first, array_1[3 - 1].pos * first, array_2[0].pos * second) < 0;
+        //        for (i = 1; i < 3; i++)
+        //            if (a != vectP_z (array_1[i].pos * first, array_1[i - 1].pos * first, array_2[0].pos * second) < 0)
+        //                break;
+        //        return i == 3;
+        return false;
     }
 
     Collider::Collider (GameObject* owner) : Component (owner) {}
@@ -59,7 +60,7 @@ namespace LumenAusf
         return result;
     }
 
-    bool Collider::CanSetSo (std::vector<tri2> array_1, mat2x3 first, std::vector<tri2> array_2, mat2x3 second)
+    bool Collider::CanSetSo (std::vector<trianglePTC> array_1, glm::mat4 first, std::vector<trianglePTC> array_2, glm::mat4 second)
     {
         bool contact = false;
         for (auto a : array_1)

@@ -2,7 +2,7 @@
 
 namespace LumenAusf
 {
-    std::istream& operator>> (std::istream& is, tri0& t)
+    std::istream& operator>> (std::istream& is, triangleP& t)
     {
         is >> t.v[0];
         is >> t.v[1];
@@ -10,7 +10,7 @@ namespace LumenAusf
         return is;
     }
 
-    std::istream& operator>> (std::istream& is, tri1& t)
+    std::istream& operator>> (std::istream& is, trianglePC& t)
     {
         is >> t.v[0];
         is >> t.v[1];
@@ -18,7 +18,7 @@ namespace LumenAusf
         return is;
     }
 
-    std::istream& operator>> (std::istream& is, tri2& t)
+    std::istream& operator>> (std::istream& is, trianglePTC& t)
     {
         is >> t.v[0];
         is >> t.v[1];
@@ -28,11 +28,11 @@ namespace LumenAusf
 
     // todo: transfer to .cpp
 
-    tri0::tri0 () : v{v0 (), v0 (), v0 ()} {}
+    triangleP::triangleP () : v{vertexP (), vertexP (), vertexP ()} {}
 
-    tri1::tri1 () : v{v1 (), v1 (), v1 ()} {}
+    trianglePC::trianglePC () : v{vertexPC (), vertexPC (), vertexPC ()} {}
 
-    tri2::tri2 () : v{v2 (), v2 (), v2 ()} {}
+    trianglePTC::trianglePTC () : v{vertexPTC (), vertexPTC (), vertexPTC ()} {}
 
     //    tri2::tri2(const tri2&newT)
     //    {
@@ -41,12 +41,12 @@ namespace LumenAusf
     //        v[2] = newT.v[2];
     //    }
 
-    tri0 Lerp (const tri0& tl, const tri0& tr, const float a)
-    {
-        tri0 r;
-        r.v[0] = Lerp (tl.v[0], tr.v[0], a);
-        r.v[1] = Lerp (tl.v[1], tr.v[1], a);
-        r.v[2] = Lerp (tl.v[2], tr.v[2], a);
-        return r;
-    }
+    //    triangleP Lerp (const triangleP& tl, const triangleP& tr, const float a)
+    //    {
+    //        triangleP r;
+    //        r.v[0] = Lerp (tl.v[0], tr.v[0], a);
+    //        r.v[1] = Lerp (tl.v[1], tr.v[1], a);
+    //        r.v[2] = Lerp (tl.v[2], tr.v[2], a);
+    //        return r;
+    //    }
 }

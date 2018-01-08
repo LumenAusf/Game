@@ -30,26 +30,26 @@ void TankNPCController::Update ()
     if (gogo == nullptr)
         return;
 
-    if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x > 0.001f)
-    {
-        Rotate (Arrows::Left);
-        Move ();
-    }
-    else if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x < -0.001f)
-    {
-        Rotate (Arrows::Right);
-        Move ();
-    }
-    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y > 0.001f)
-    {
-        Rotate (Arrows::Down);
-        Move ();
-    }
-    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y < -0.001f)
-    {
-        Rotate (Arrows::Up);
-        Move ();
-    }
+    //    if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x > 0.001f)
+    //    {
+    //        Rotate (Arrows::Left);
+    //        Move ();
+    //    }
+    //    else if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x < -0.001f)
+    //    {
+    //        Rotate (Arrows::Right);
+    //        Move ();
+    //    }
+    //    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y > 0.001f)
+    //    {
+    //        Rotate (Arrows::Down);
+    //        Move ();
+    //    }
+    //    else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y < -0.001f)
+    //    {
+    //        Rotate (Arrows::Up);
+    //        Move ();
+    //    }
 
     //    if (change > 2)
     //    {
@@ -132,7 +132,7 @@ void TankNPCController::Rotate (Arrows dir)
     if (Direction != dir)
     {
         Direction = dir;
-        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57079632679f * dir));
+        //        gameObject->transform->setLocalRotation (mat2x3::rotation (1.57079632679f * dir));
     }
 }
 
@@ -145,29 +145,29 @@ void TankNPCController::Move ()
     auto speed = Speed * Engine::getDeltaTime () * 0.001f;
     playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 5);
 
-    switch (Direction)
-    {
-        case Arrows::Up:
-            if (!gameObject->CanMove (vec2 (0.f, speed)))
-                break;
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
-            break;
-        case Arrows::Down:
-            if (!gameObject->CanMove (vec2 (0.f, -speed)))
-                break;
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
-            break;
-        case Arrows::Right:
-            if (!gameObject->CanMove (vec2 (speed, 0.f)))
-                break;
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
-            break;
-        case Arrows::Left:
-            if (!gameObject->CanMove (vec2 (-speed, 0.f)))
-                break;
-            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
-            break;
-    }
+    //    switch (Direction)
+    //    {
+    //        case Arrows::Up:
+    //            if (!gameObject->CanMove (vec2 (0.f, speed)))
+    //                break;
+    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
+    //            break;
+    //        case Arrows::Down:
+    //            if (!gameObject->CanMove (vec2 (0.f, -speed)))
+    //                break;
+    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
+    //            break;
+    //        case Arrows::Right:
+    //            if (!gameObject->CanMove (vec2 (speed, 0.f)))
+    //                break;
+    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
+    //            break;
+    //        case Arrows::Left:
+    //            if (!gameObject->CanMove (vec2 (-speed, 0.f)))
+    //                break;
+    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
+    //            break;
+    //    }
 }
 
 void TankNPCController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fire)

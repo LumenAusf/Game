@@ -105,12 +105,12 @@ namespace LumenAusf
 
     void EngineCore::DestroyTexture (Texture* t) { t->~Texture (); }
 
-    void EngineCore::DrawTriangle (const tri0& t, const Color& c)
+    void EngineCore::DrawTriangle (const triangleP& t, const Color& c)
     {
         shader00->use ();
         shader00->set_uniform ("u_color", c);
         // vertex coordinates
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (v0), &t.v[0].pos.x);
+        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (vertexP), &t.v[0].pos.x);
         GL_ERROR_CHECK ();
         Glfunc::Get ()->glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
@@ -119,7 +119,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void EngineCore::DrawTriangle (const tri1& t)
+    void EngineCore::DrawTriangle (const trianglePC& t)
     {
         shader01->use ();
         // positions
@@ -140,7 +140,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void EngineCore::DrawTriangle (const tri2& t, Texture* tex)
+    void EngineCore::DrawTriangle (const trianglePTC& t, Texture* tex)
     {
         shader02->use ();
         texture_gl_es20* texture = static_cast<texture_gl_es20*> (tex);
@@ -172,7 +172,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void EngineCore::DrawTriangle (const tri2& t, Texture* tex, const mat2x3& m)
+    void EngineCore::DrawTriangle (const trianglePTC& t, Texture* tex, const glm::mat4& m)
     {
         shader03->use ();
         texture_gl_es20* texture = static_cast<texture_gl_es20*> (tex);
@@ -277,19 +277,19 @@ namespace LumenAusf
 
     float EngineCore::getDeltaTime () { return EnCore->getTimeFromInit (false) - getTimePrevious (); }
 
-    std::vector<tri2> EngineCore::CreateQuadtc ()
+    std::vector<trianglePTC> EngineCore::CreateQuadtc ()
     {
-        std::vector<tri2> result;
+        std::vector<trianglePTC> result;
         std::stringstream ss;
-        tri2 triangle1, triangle2;
+        trianglePTC triangle1, triangle2;
 
-        ss << "-1 1       0.0 1.0      1.0 1.0 1.0 1.0 "
-           << "1 1        1.0 1.0      1.0 1.0 1.0 1.0 "
-           << "1 -1       1.0 0.0      1.0 1.0 1.0 1.0 "
+        ss << "-1 1 0      0.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 1 0       1.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 -1 0      1.0 0.0      1.0 1.0 1.0 1.0 "
 
-           << "-1 1       0.0 1.0      1.0 1.0 1.0 1.0 "
-           << "1 -1       1.0 0.0      1.0 1.0 1.0 1.0 "
-           << "-1 -1      0.0 0.0      1.0 1.0 1.0 1.0 ";
+           << "-1 1 0      0.0 1.0      1.0 1.0 1.0 1.0 "
+           << "1 -1  0     1.0 0.0      1.0 1.0 1.0 1.0 "
+           << "-1 -1 0     0.0 0.0      1.0 1.0 1.0 1.0 ";
         ss >> triangle1 >> triangle2;
 
         result.push_back (triangle1);
@@ -372,6 +372,7 @@ namespace LumenAusf
             load_gl_func ("glActiveTexture", Glfunc::Get ()->glActiveTexture_);
             load_gl_func ("glUniform4fv", Glfunc::Get ()->glUniform4fv);
             load_gl_func ("glUniformMatrix3fv", Glfunc::Get ()->glUniformMatrix3fv);
+            load_gl_func ("glUniformMatrix4fv", Glfunc::Get ()->glUniformMatrix4fv);
         }
         catch (std::exception& ex)
         {
@@ -450,8 +451,8 @@ namespace LumenAusf
 
         shader03 = new shader_gl_es20 (
             R"(
-                    uniform mat3 u_matrix;
-                    attribute vec2 a_position;
+                    uniform mat4 u_matrix;
+                    attribute vec3 a_position;
                     attribute vec2 a_tex_coord;
                     attribute vec4 a_color;
                     varying vec4 v_color;
@@ -460,8 +461,8 @@ namespace LumenAusf
                     {
                     v_tex_coord = a_tex_coord;
                     v_color = a_color;
-                    vec3 pos = vec3(a_position, 1.0) * u_matrix;
-                    gl_Position = vec4(pos, 1.0);
+                    vec4 pos = vec4(a_position, 1.0) * u_matrix;
+                    gl_Position = pos;
                     }
                     )",
             R"(

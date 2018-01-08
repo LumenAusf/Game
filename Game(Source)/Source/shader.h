@@ -3,10 +3,11 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
-#include "texturefinal.h"
-#include "matrix.h"
 #include "color.h"
+#include "matrix.h"
+#include "texturefinal.h"
 
 namespace LumenAusf
 {
@@ -19,7 +20,7 @@ namespace LumenAusf
         void use () const;
         void set_uniform (std::string_view uniform_name, texture_gl_es20* texture);
         void set_uniform (std::string_view uniform_name, const Color& c);
-        void set_uniform (std::string_view uniform_name, const mat2x3& m);
+        void set_uniform (std::string_view uniform_name, const glm::mat4& m);
 
        private:
         GLuint compile_shader (GLenum shader_type, std::string_view src);

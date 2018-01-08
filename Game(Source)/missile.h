@@ -28,8 +28,8 @@ class Missile
 {
    public:
     Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAusf::Texture* texture, bool isUser);
-    void SetAspect (LumenAusf::mat2x3 aspect);
-    void SetAspect (float width, float height);
+    //    void SetAspect (LumenAusf::mat2x3 aspect);
+    //    void SetAspect (float width, float height);
 
     float speed = .5f;
     LumenAusf::GameObject* tank;

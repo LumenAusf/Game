@@ -4,14 +4,14 @@ namespace LumenAusf
 {
     MeshRenderer::~MeshRenderer () {}
 
-    void MeshRenderer::SetAtlas (vec2 elementCountXY, vec2 UsefromTo)
+    void MeshRenderer::SetAtlas (glm::vec2 elementCountXY, glm::vec2 UsefromTo)
     {
         if (atlas == nullptr)
             return;
         atlas->SetAtlas (texture, elementCountXY, UsefromTo);
     }
 
-    void MeshRenderer::ResizeUV (vec2 LeftRight, vec2 UpDown)
+    void MeshRenderer::ResizeUV (glm::vec2 LeftRight, glm::vec2 UpDown)
     {
         for (size_t a = 0; a < triangles.size (); a++)
         {

@@ -59,7 +59,7 @@ namespace LumenAusf
         GL_ERROR_CHECK ();
     }
 
-    void shader_gl_es20::set_uniform (std::string_view uniform_name, const mat2x3& m)
+    void shader_gl_es20::set_uniform (std::string_view uniform_name, const glm::mat4& m)
     {
         const int location = Glfunc::Get ()->glGetUniformLocation (program_id, uniform_name.data ());
         GL_ERROR_CHECK ();
@@ -70,11 +70,9 @@ namespace LumenAusf
         }
         // OpenGL wants matrix in column major order
         // clang-format off
-        float values[9] = { m.col0.x,  m.col0.y, m.delta.x,
-                            m.col1.x, m.col1.y, m.delta.y,
-                            0.f,      0.f,       1.f };
+
         // clang-format on
-        Glfunc::Get ()->glUniformMatrix3fv (location, 1, GL_FALSE, &values[0]);
+        Glfunc::Get ()->glUniformMatrix4fv (location, 1, GL_FALSE, glm::value_ptr (m));
         GL_ERROR_CHECK ();
     }
 

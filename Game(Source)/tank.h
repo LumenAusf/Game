@@ -13,7 +13,7 @@ class TankNPCController;
 
 struct TankData
 {
-    LumenAusf::vec2 pos;
+    glm::vec2 pos;
     int atlasWAll;
     int atlasHAll;
     int atlasStart;
@@ -33,8 +33,8 @@ class Tank
 {
    public:
     Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser, bool* running);
-    void SetAspect (LumenAusf::mat2x3 aspect);
-    void SetAspect (float width, float height);
+    //    void SetAspect (LumenAusf::mat2x3 aspect);
+    //    void SetAspect (float width, float height);
 
     static int num;
     LumenAusf::GameObject* go;

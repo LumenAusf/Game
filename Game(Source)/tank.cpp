@@ -10,18 +10,18 @@ Tank::Tank (std::string configPath, LumenAusf::Texture* texture, bool isUser, bo
         CreateNPCTank (configPath, texture);
 }
 
-void Tank::SetAspect (LumenAusf::mat2x3 aspect) { go->transform->setAspect (aspect); }
+// void Tank::SetAspect (LumenAusf::mat2x3 aspect) { go->transform->setAspect (aspect); }
 
-void Tank::SetAspect (float width, float height)
-{
-    auto a = new LumenAusf::mat2x3 ();
-    a->col0.x = 1;
-    a->col0.y = 0.f;
-    a->col1.x = 0.f;
-    a->col1.y = static_cast<float> (width) / height;
+// void Tank::SetAspect (float width, float height)
+//{
+//    auto a = new LumenAusf::mat2x3 ();
+//    a->col0.x = 1;
+//    a->col0.y = 0.f;
+//    a->col1.x = 0.f;
+//    a->col1.y = static_cast<float> (width) / height;
 
-    go->transform->setAspect (*a);
-}
+//    go->transform->setAspect (*a);
+//}
 
 void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, bool* running)
 {
@@ -39,8 +39,8 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, 
     auto td = TankData ();
     fd >> td;
 
-    go->transform->SetPosition (td.pos);
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+    go->transform->SetPosition (glm::vec3 (td.pos, 0.f));
+    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (td.scale)));
 
     collider = go->AddComponent<LumenAusf::Collider> ();
 
@@ -52,7 +52,7 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, 
     mr->texture = texture;
     mr->atlas = new LumenAusf::Atlas (mr);
 
-    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+    mr->SetAtlas (glm::vec2 (td.atlasWAll, td.atlasHAll), glm::vec2 (td.atlasStart, td.atlasEnd));
 
     tc = go->AddComponent<TankController> ();
     auto b = createAudio (td.pathSoundStart.c_str (), 0, SDL_MIX_MAXVOLUME / 2);
@@ -83,8 +83,8 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
     auto td = TankData ();
     fd >> td;
 
-    go->transform->SetPosition (td.pos);
-    go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
+    go->transform->SetPosition (glm::vec3 (td.pos, 0.f));
+    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (td.scale)));
 
     collider = go->AddComponent<LumenAusf::Collider> ();
 
@@ -96,7 +96,7 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
     mr->texture = texture;
     mr->atlas = new LumenAusf::Atlas (mr);
 
-    mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
+    mr->SetAtlas (glm::vec2 (td.atlasWAll, td.atlasHAll), glm::vec2 (td.atlasStart, td.atlasEnd));
 
     tnc = go->AddComponent<TankNPCController> ();
     auto b = createAudio (td.pathSoundStart.c_str (), 0, SDL_MIX_MAXVOLUME / 2);
@@ -109,7 +109,8 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
 
 std::istream& operator>> (std::istream& is, TankData& t)
 {
-    is >> t.pos;
+    is >> t.pos.x;
+    is >> t.pos.y;
     is >> t.atlasWAll;
     is >> t.atlasHAll;
     is >> t.atlasStart;

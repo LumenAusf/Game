@@ -2,24 +2,21 @@
 
 namespace LumenAusf
 {
-    mat2x3 Transform::getLocalScale () const { return localScale; }
-    void Transform::setLocalScale (const mat2x3& value) { localScale = value; }
+    glm::mat4 Transform::getLocalScale () const { return scale; }
+    void Transform::setLocalScale (const glm::mat4& value) { scale = value; }
 
-    mat2x3 Transform::getLocalRotation () const { return localRotation; }
-    void Transform::setLocalRotation (const mat2x3& value) { localRotation = value; }
+    glm::mat4 Transform::getLocalRotation () const { return rotation; }
+    void Transform::setLocalRotation (const glm::mat4& value) { rotation = value; }
 
-    mat2x3 Transform::getLocalPosition () const { return localPosition; }
-    void Transform::setLocalPosition (const mat2x3& value) { localPosition = value; }
+    glm::mat4 Transform::getLocalPosition () const { return position; }
+    void Transform::setLocalPosition (const glm::mat4& value) { position = value; }
 
-    mat2x3 Transform::getGlobalScale () const { return parent != nullptr ? localScale * parent->getGlobalScale () : localScale; }
+    glm::mat4 Transform::getGlobalScale () const { return parent != nullptr ? scale * parent->getGlobalScale () : scale; }
     //    void Transform::setGlobalScale (const mat2x3& value) {}
 
-    mat2x3 Transform::getGlobalRotation () const { return parent != nullptr ? localRotation * parent->getGlobalRotation () : localRotation; }
+    glm::mat4 Transform::getGlobalRotation () const { return parent != nullptr ? rotation * parent->getGlobalRotation () : rotation; }
     //    void Transform::setGlobalRotation (const mat2x3& value) {}
 
-    mat2x3 Transform::getGlobalPosition () const { return parent != nullptr ? localPosition * parent->getGlobalPosition () : localPosition; }
+    glm::mat4 Transform::getGlobalPosition () const { return parent != nullptr ? position * parent->getGlobalPosition () : position; }
     //    void Transform::setGlobalPosition (const mat2x3& value) {}
-
-    mat2x3 Transform::getAspect () const { return aspect; }
-    void Transform::setAspect (const mat2x3& value) { aspect = value; }
 }

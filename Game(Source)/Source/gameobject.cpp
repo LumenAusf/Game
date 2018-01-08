@@ -131,7 +131,7 @@ namespace LumenAusf
                 a->onDestroy ();
     }
 
-    bool GameObject::CanMove (vec2 mover)
+    bool GameObject::CanMove (glm::vec3 pos)
     {
         auto result = true;
         try
@@ -148,12 +148,12 @@ namespace LumenAusf
 
                         if (b == nullptr || c == nullptr)
                             continue;
-                        std::vector<tri2> d = b->triangles;
-                        std::vector<tri2> e = c->triangles;
+                        std::vector<trianglePTC> d = b->triangles;
+                        std::vector<trianglePTC> e = c->triangles;
                         if (e.size () == 0 || d.size () == 0)
                             continue;
-                        mat2x3 f = objects[a]->transform->GetGlobalMatrix ();
-                        mat2x3 g = transform->GetGlobalMatrix () * mat2x3::move (mover);
+                        glm::mat4 f = objects[a]->transform->GetGlobalMatrix ();
+                        glm::mat4 g = glm::translate (transform->GetGlobalMatrix (), pos);
                         result = result && Collider::CanSetSo (d, f, e, g);
                     }
                 }
