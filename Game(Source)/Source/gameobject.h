@@ -15,9 +15,9 @@
 enum Arrows
 {
     Up,
-    Right,
+    Left,
     Down,
-    Left
+    Right,
 };
 
 namespace LumenAusf
@@ -53,8 +53,8 @@ namespace LumenAusf
         glm::vec3 getGlobalPosition () const;
         //        void setGlobalPosition (const mat2x3& value);
 
-        glm::mat4 getAspect () const;
-        void setAspect (const glm::mat4& value);
+        float getAspect () const;
+        void setAspect (const float& value);
 
        private:
         glm::mat4 position = glm::mat4 ();
@@ -66,6 +66,7 @@ namespace LumenAusf
         glm::vec3 positionvec;
         glm::vec3 rotationvec;
         glm::vec3 scalevec;
+        float aspect = 1;
     };
 
     class Component

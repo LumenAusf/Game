@@ -65,6 +65,7 @@ class Play
     void CreateBlock (ObjectConfig data, int number);
     void CreateEagle (ObjectConfig data, int number);
     void CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser);
+    float getAspect () { return static_cast<float> (windowWidth) / windowHeight; }
     //    Tank*
     //    CreateTank (std::string TrianglesPath, LumenAusf::Texture* texture, int TrianglesCount, int AtlasStart, int AtlasEnd, float offsetX, float
     //    offsetY);

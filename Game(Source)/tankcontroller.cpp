@@ -60,7 +60,7 @@ void TankController::Rotate (Arrows dir)
     if (Direction != dir)
     {
         Direction = dir;
-        gameObject->transform->setLocalRotation (glm::vec3 (0.0f, 0.0f, 1.57079632679f * dir));
+        gameObject->transform->setLocalRotation (glm::vec3 (0.0f, 0.0f, 90.f * dir));
     }
 }
 
@@ -73,29 +73,31 @@ void TankController::Move ()
     auto speed = Speed * Engine::getDeltaTime () * 0.001f;
     playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 5);
 
-    //    switch (Direction)
-    //    {
-    //        case Arrows::Up:
-    //            if (!gameObject->CanMove (glm::vec3 (0.f, speed,0.f)))
-    //                break;
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (glm::vec3 (0.f, speed)));
-    //            break;
-    //        case Arrows::Down:
-    //            if (!gameObject->CanMove (glm::vec3 (0.f, -speed)))
-    //                break;
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (glm::vec3 (0.f, -speed)));
-    //            break;
-    //        case Arrows::Right:
-    //            if (!gameObject->CanMove (glm::vec3 (speed, 0.f)))
-    //                break;
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (glm::vec3 (speed, 0.f)));
-    //            break;
-    //        case Arrows::Left:
-    //            if (!gameObject->CanMove (glm::vec3 (-speed, 0.f)))
-    //                break;
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (glm::vec3 (-speed, 0.f)));
-    //            break;
-    //    }
+    switch (Direction)
+    {
+        case Arrows::Up:
+            if (!gameObject->CanMove (glm::vec3 (0.f, speed, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () + glm::vec3 (0.f, speed, 0.f));
+            break;
+        case Arrows::Down:
+            if (!gameObject->CanMove (glm::vec3 (0.f, -speed, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () + glm::vec3 (0.f, -speed, 0.f));
+            break;
+        case Arrows::Right:
+            if (!gameObject->CanMove (glm::vec3 (speed, 0.f, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () +
+                                                     glm::vec3 (speed / gameObject->transform->getAspect (), 0.f, 0.f));
+            break;
+        case Arrows::Left:
+            if (!gameObject->CanMove (glm::vec3 (-speed, 0.f, 0.f)))
+                break;
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () +
+                                                     glm::vec3 (-speed / gameObject->transform->getAspect (), 0.f, 0.f));
+            break;
+    }
 }
 
 void TankController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fire)

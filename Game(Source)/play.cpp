@@ -18,7 +18,7 @@ void Play::Run ()
     if (!LoadTextures ())
         return;
 
-    InitScene ("configurations/MapData2.txt", "configurations/BlocksData.txt", "configurations/TankUserData.txt", "configurations/TankNPCData.txt",
+    InitScene ("configurations/MapData.txt", "configurations/BlocksData.txt", "configurations/TankUserData.txt", "configurations/TankNPCData.txt",
                "configurations/EagleData.txt", "configurations/MissileData.txt");
     //    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
     //    goTank->SetAspect (windowWidth, windowHeight);
@@ -90,49 +90,49 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     running = false;
                     break;
 
-                case LumenAusf::KEY_CODE::DOWN:
-                    //                    std::clog << "DOWN" << std::endl;
-                    //                                    goTank->Rotate (Arrows::Down);
-                    //                                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::DOWN:
+                //                    //                    std::clog << "DOWN" << std::endl;
+                //                    //                                    goTank->Rotate (Arrows::Down);
+                //                    //                                    goTank->Move ();
 
-                    //                                    goTank2->Rotate (Arrows::Up);
-                    //                                    goTank2->Move ();
-                    got->transform->positionvec.y -= 0.2f;
-                    std::cerr << got->transform->positionvec.y << std::endl;
-                    break;
+                //                    //                                    goTank2->Rotate (Arrows::Up);
+                //                    //                                    goTank2->Move ();
+                //                    got->transform->positionvec.y -= 0.2f;
+                //                    std::cerr << got->transform->positionvec.y << std::endl;
+                //                    break;
 
-                case LumenAusf::KEY_CODE::RIGHT:
-                    //                    std::clog << "RIGHT" << std::endl;
-                    //                    goTank->Rotate (Arrows::Right);
-                    //                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::RIGHT:
+                //                    //                    std::clog << "RIGHT" << std::endl;
+                //                    //                    goTank->Rotate (Arrows::Right);
+                //                    //                    goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Right);
-                    //                    goTank2->Move ();
-                    got->transform->positionvec.x += 0.2f;
-                    std::cerr << got->transform->positionvec.x << std::endl;
-                    break;
+                //                    //                    goTank2->Rotate (Arrows::Right);
+                //                    //                    goTank2->Move ();
+                //                    got->transform->positionvec.x += 0.2f;
+                //                    std::cerr << got->transform->positionvec.x << std::endl;
+                //                    break;
 
-                case LumenAusf::KEY_CODE::UP:
-                    //                                    std::clog << "UP" << std::endl;
-                    //                                    goTank->Rotate (Arrows::Up);
-                    //                                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::UP:
+                //                    //                                    std::clog << "UP" << std::endl;
+                //                    //                                    goTank->Rotate (Arrows::Up);
+                //                    //                                    goTank->Move ();
 
-                    //                                    goTank2->Rotate (Arrows::Down);
-                    //                                    goTank2->Move ();
-                    got->transform->positionvec.y += 0.2f;
-                    std::cerr << got->transform->positionvec.y << std::endl;
-                    break;
+                //                    //                                    goTank2->Rotate (Arrows::Down);
+                //                    //                                    goTank2->Move ();
+                //                    got->transform->positionvec.y += 0.2f;
+                //                    std::cerr << got->transform->positionvec.y << std::endl;
+                //                    break;
 
-                case LumenAusf::KEY_CODE::LEFT:
-                    //                    std::clog << "LEFT" << std::endl;
-                    //                    goTank->Rotate (Arrows::Left);
-                    //                    goTank->Move ();
+                //                case LumenAusf::KEY_CODE::LEFT:
+                //                    //                    std::clog << "LEFT" << std::endl;
+                //                    //                    goTank->Rotate (Arrows::Left);
+                //                    //                    goTank->Move ();
 
-                    //                    goTank2->Rotate (Arrows::Left);
-                    //                    goTank2->Move ();
-                    got->transform->positionvec.x -= 0.2f;
-                    std::cerr << got->transform->positionvec.x << std::endl;
-                    break;
+                //                    //                    goTank2->Rotate (Arrows::Left);
+                //                    //                    goTank2->Move ();
+                //                    got->transform->positionvec.x -= 0.2f;
+                //                    std::cerr << got->transform->positionvec.x << std::endl;
+                //                    break;
 
                 //                case LumenAusf::KEY_CODE::SPACE:
                 //                    goTank->Fire ();
@@ -369,9 +369,11 @@ void Play::CreateBlock (ObjectConfig data, int number)
     static int num;
     auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
     go->tag = "Block";
-    go->transform->SetPosition (
-        /*glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f)*/ glm::vec3 (0.f, 0.f, 0.f));
+    go->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2),
+                                           1 - data.scale * getAspect () - (number / 8) * data.scale * 2 * getAspect (), 0.f));
     go->transform->setLocalScale (glm::vec3 (data.scale, data.scale, 1.f));
+
+    go->transform->setAspect (getAspect ());
 
     //    auto a = new LumenAusf::mat2x3 ();
     //    a->col0.x = 1;
@@ -409,8 +411,11 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
         tank->tag = "TankNPC";
     }
 
-    tank->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f));
-    tank->transform->setLocalScale (glm::vec3 (data.scale));
+    tank->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2),
+                                             1 - data.scale * getAspect () - (number / 8) * data.scale * 2 * getAspect (), 0.f));
+    tank->transform->setLocalScale (glm::vec3 (data.scale, data.scale, 1.f));
+
+    tank->transform->setAspect (getAspect ());
 
     //    auto a = new LumenAusf::mat2x3 ();
     //    a->col0.x = 1;
@@ -563,8 +568,11 @@ void Play::CreateEagle (ObjectConfig data, int number)
 {
     auto go = new LumenAusf::GameObject ("Eagle");
     go->tag = "Block";
-    go->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2, 0.f));
-    go->transform->setLocalScale (glm::vec3 (data.scale));
+    go->transform->SetPosition (glm::vec3 (-1.f + data.scale + ((number % 8) * data.scale * 2),
+                                           1 - data.scale * getAspect () - (number / 8) * data.scale * 2 * getAspect (), 0.f));
+    go->transform->setLocalScale (glm::vec3 (data.scale, data.scale, 1.f));
+
+    go->transform->setAspect (getAspect ());
 
     //    auto a = new LumenAusf::mat2x3 ();
     //    a->col0.x = 1;

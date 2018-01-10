@@ -15,21 +15,23 @@ void MissileController::Update ()
         return;
     auto speed = Speed * Engine::getDeltaTime () * 0.001f;
     playSoundFromMemory (SoundRun, SDL_MIX_MAXVOLUME / 18);
-    //    switch (Direction)
-    //    {
-    //        case Arrows::Up:
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, speed)));
-    //            break;
-    //        case Arrows::Down:
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (0.f, -speed)));
-    //            break;
-    //        case Arrows::Right:
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (speed, 0.f)));
-    //            break;
-    //        case Arrows::Left:
-    //            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () * mat2x3::move (vec2 (-speed, 0.f)));
-    //            break;
-    //    }
+    switch (Direction)
+    {
+        case Arrows::Up:
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () += glm::vec3 (0.f, speed, 0.f));
+            break;
+        case Arrows::Down:
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () += glm::vec3 (0.f, -speed, 0.f));
+            break;
+        case Arrows::Right:
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () +=
+                                                     glm::vec3 (speed / gameObject->transform->getAspect (), 0.f, 0.f));
+            break;
+        case Arrows::Left:
+            gameObject->transform->setLocalPosition (gameObject->transform->getLocalPosition () +=
+                                                     glm::vec3 (-speed / gameObject->transform->getAspect (), 0.f, 0.f));
+            break;
+    }
     //    if (gameObject->transform->getGlobalPosition (). .delta.x < -1 || gameObject->transform->getGlobalPosition ().delta.x > 1 ||
     //        gameObject->transform->getGlobalPosition ().delta.y < -1 || gameObject->transform->getGlobalPosition ().delta.y > 1)
     //        gameObject->~GameObject ();
