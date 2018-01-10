@@ -166,6 +166,12 @@ namespace LumenAusf
         return result;
     }
 
+    //    glm::mat4 Transform::GetGlobalMatrix() { return getGlobalPosition () * getGlobalRotation () * getGlobalScale (); }
+
+    //    glm::mat4 Transform::GetLocalMatrix() { return getLocalPosition () * getLocalRotation () * getLocalScale (); }
+
+    //    void Transform::SetPosition(glm::vec3 pos) { position = glm::translate (glm::mat4 (1.f), pos); }
+
     //    void GameObject::RenderAll ()
     //    {
     //        for (auto go : objects)

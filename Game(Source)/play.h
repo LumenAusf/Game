@@ -50,7 +50,7 @@ class Play
     //    Tank* goTank3;
     //    Tank* goTank4;
     //    Tank* goTank5;
-    //    LumenAusf::GameObject * tankUser;
+    LumenAusf::GameObject* got;
 
     void DrawGrass ();
     bool LoadTextures ();

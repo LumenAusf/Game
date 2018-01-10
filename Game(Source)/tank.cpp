@@ -40,7 +40,7 @@ void Tank::CreateUserTank (std::string configPath, LumenAusf::Texture* texture, 
     fd >> td;
 
     go->transform->SetPosition (glm::vec3 (td.pos, 0.f));
-    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (td.scale)));
+    go->transform->setLocalScale (glm::vec3 (td.scale));
 
     collider = go->AddComponent<LumenAusf::Collider> ();
 
@@ -84,7 +84,7 @@ void Tank::CreateNPCTank (std::string configPath, LumenAusf::Texture* texture)
     fd >> td;
 
     go->transform->SetPosition (glm::vec3 (td.pos, 0.f));
-    go->transform->setLocalScale (glm::scale (glm::mat4 (1.f), glm::vec3 (td.scale)));
+    go->transform->setLocalScale (glm::vec3 (td.scale));
 
     collider = go->AddComponent<LumenAusf::Collider> ();
 

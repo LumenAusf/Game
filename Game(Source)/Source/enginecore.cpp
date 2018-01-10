@@ -180,7 +180,7 @@ namespace LumenAusf
         shader03->set_uniform ("s_texture", texture);
         shader03->set_uniform ("u_matrix", m);
         // positions
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
+        Glfunc::Get ()->glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
         GL_ERROR_CHECK ();
         Glfunc::Get ()->glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
@@ -461,7 +461,7 @@ namespace LumenAusf
                     {
                     v_tex_coord = a_tex_coord;
                     v_color = a_color;
-                    vec4 pos = vec4(a_position, 1.0) * u_matrix;
+                    vec4 pos =  u_matrix * vec4(a_position, 1.0);
                     gl_Position = pos;
                     }
                     )",

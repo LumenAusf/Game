@@ -31,35 +31,41 @@ namespace LumenAusf
         Transform* parent = nullptr;
         std::vector<Transform*> children;
 
-        glm::mat4 GetGlobalMatrix () { return getGlobalPosition () * getGlobalRotation () * getGlobalScale (); }
-        glm::mat4 GetLocalMatrix () { return getLocalPosition () * getLocalRotation () * getLocalScale (); }
-        void SetPosition (glm::vec3 pos) { position = glm::translate (glm::mat4 (), pos); }
+        glm::mat4 GetGlobalMatrix ();
+        glm::mat4 GetLocalMatrix ();
+        void SetPosition (glm::vec3 pos);
 
-        glm::mat4 getLocalScale () const;
-        void setLocalScale (const glm::mat4& value);
+        glm::vec3 getLocalScale () const;
+        void setLocalScale (const glm::vec3& value);
 
-        glm::mat4 getLocalRotation () const;
-        void setLocalRotation (const glm::mat4& value);
+        glm::vec3 getLocalRotation () const;
+        void setLocalRotation (const glm::vec3& value);
 
-        glm::mat4 getLocalPosition () const;
-        void setLocalPosition (const glm::mat4& value);
+        glm::vec3 getLocalPosition () const;
+        void setLocalPosition (const glm::vec3& value);
 
-        glm::mat4 getGlobalScale () const;
+        glm::vec3 getGlobalScale () const;
         //        void setGlobalScale (const mat2x3& value);
 
-        glm::mat4 getGlobalRotation () const;
+        glm::vec3 getGlobalRotation () const;
         //        void setGlobalRotation (const mat2x3& value);
 
-        glm::mat4 getGlobalPosition () const;
+        glm::vec3 getGlobalPosition () const;
         //        void setGlobalPosition (const mat2x3& value);
 
         glm::mat4 getAspect () const;
         void setAspect (const glm::mat4& value);
 
        private:
-        glm::mat4 position;
-        glm::mat4 rotation;
-        glm::mat4 scale;
+        glm::mat4 position = glm::mat4 ();
+        glm::mat4 rotation = glm::mat4 ();
+        glm::mat4 scale = glm::mat4 ();
+        glm::mat4 matrix;
+
+       public:
+        glm::vec3 positionvec;
+        glm::vec3 rotationvec;
+        glm::vec3 scalevec;
     };
 
     class Component

@@ -60,7 +60,7 @@ void TankController::Rotate (Arrows dir)
     if (Direction != dir)
     {
         Direction = dir;
-        gameObject->transform->setLocalRotation (glm::rotate (glm::mat4 (), 1.57079632679f * dir, glm::vec3 (0.0f, 0.0f, 1.0f)));
+        gameObject->transform->setLocalRotation (glm::vec3 (0.0f, 0.0f, 1.57079632679f * dir));
     }
 }
 

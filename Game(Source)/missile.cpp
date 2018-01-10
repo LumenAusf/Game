@@ -19,7 +19,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     fd >> td;
     fd.close ();
     go->transform->setLocalPosition (tank->transform->getGlobalPosition ());
-    go->transform->setLocalScale (glm::scale (glm::mat4 (1.0f), glm::vec3 (td.scale)));
+    go->transform->setLocalScale (glm::vec3 (td.scale));
     //    go->transform->setAspect (owner->transform->getAspect ());
 
     collider = go->AddComponent<LumenAusf::Collider> ();
