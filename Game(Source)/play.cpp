@@ -253,8 +253,8 @@ void Play::InitScene (std::string configMap, std::string configBlocks, std::stri
     }
 
     std::vector<int> map;
-    for (int i = 0; i < 6; i++)
-        for (int j = 0; j < 8; j++)
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
         {
             int k;
             md >> k;
@@ -339,7 +339,7 @@ void Play::InitScene (std::string configMap, std::string configBlocks, std::stri
      * 3 - User
      * 4 - NPC
      */
-    for (size_t number = 0; number < 48; number++)
+    for (size_t number = 0; number < 81; number++)
     {
         if (map[number] == 0)
             continue;
@@ -359,7 +359,7 @@ void Play::CreateBlock (ObjectConfig data, int number)
     static int num;
     auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
     go->tag = "Block";
-    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 9) * data.scale * 2), 0.5f - (number / 9) * data.scale * 2));
     go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
 
     auto a = new LumenAusf::mat2x3 ();
@@ -397,7 +397,7 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
         tank->tag = "TankNPC";
     }
 
-    tank->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    tank->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 9) * data.scale * 2), 0.5f - (number / 9) * data.scale * 2));
     tank->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
 
     auto a = new LumenAusf::mat2x3 ();
@@ -551,7 +551,7 @@ void Play::CreateEagle (ObjectConfig data, int number)
 {
     auto go = new LumenAusf::GameObject ("Eagle");
     go->tag = "Block";
-    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 8) * data.scale * 2), 0.5f - (number / 8) * data.scale * 2));
+    go->transform->SetPosition (LumenAusf::vec2 (-1.f + data.scale + ((number % 9) * data.scale * 2), 0.5f - (number / 9) * data.scale * 2));
     go->transform->setLocalScale (LumenAusf::mat2x3::scale (data.scale));
 
     auto a = new LumenAusf::mat2x3 ();
