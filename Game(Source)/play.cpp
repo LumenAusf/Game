@@ -20,25 +20,6 @@ void Play::Run ()
 
     InitScene ("configurations/MapData.txt", "configurations/BlocksData.txt", "configurations/TankUserData.txt", "configurations/TankNPCData.txt",
                "configurations/EagleData.txt", "configurations/MissileData.txt");
-    //    goTank = new Tank ("configurations/TankUserData.txt", AtlasTank, true, &running);
-    //    goTank->SetAspect (windowWidth, windowHeight);
-
-    //    CreateBlocks ("configurations/BlocksData.txt", "configurations/MapData.txt");
-    //    CreateEagle ("configurations/EagleData.txt");
-
-    //    goTank2 = new Tank ("configurations/TankNPCData.txt", AtlasTank, false, nullptr);
-    //    goTank2->SetAspect (windowWidth, windowHeight);
-
-    //    goTank3 = new Tank ("configurations/TankNPCData2.txt", AtlasTank, false);
-    //    goTank3->SetAspect (windowWidth, windowHeight);
-
-    //    goTank4
-    //        = new Tank ("configurations/TankNPCData3.txt", AtlasTank, false);
-    //        goTank4
-    //            ->SetAspect (windowWidth, windowHeight);
-
-    //            goTank5 = new Tank ("configurations/TankNPCData4.txt", AtlasTank, false);
-    //            goTank5->SetAspect (windowWidth, windowHeight);
 
     Engine->EngineEvent += Delegate (this, &Play::EventGetted);
 
@@ -88,46 +69,6 @@ void Play::EventGetted (LumenAusf::EventItem item)
                     running = false;
                     break;
 
-                //                case LumenAusf::KEY_CODE::DOWN:
-                //                    std::clog << "DOWN" << std::endl;
-                //                    goTank->Rotate (Arrows::Down);
-                //                    goTank->Move ();
-
-                //                    goTank2->Rotate (Arrows::Up);
-                //                    goTank2->Move ();
-                //                    break;
-
-                //                case LumenAusf::KEY_CODE::RIGHT:
-                //                    std::clog << "RIGHT" << std::endl;
-                //                    goTank->Rotate (Arrows::Right);
-                //                    goTank->Move ();
-
-                //                    goTank2->Rotate (Arrows::Right);
-                //                    goTank2->Move ();
-                //                    break;
-
-                //                case LumenAusf::KEY_CODE::UP:
-                //                    std::clog << "UP" << std::endl;
-                //                    goTank->Rotate (Arrows::Up);
-                //                    goTank->Move ();
-
-                //                    goTank2->Rotate (Arrows::Down);
-                //                    goTank2->Move ();
-                //                    break;
-
-                //                case LumenAusf::KEY_CODE::LEFT:
-                //                    std::clog << "LEFT" << std::endl;
-                //                    goTank->Rotate (Arrows::Left);
-                //                    goTank->Move ();
-
-                //                    goTank2->Rotate (Arrows::Left);
-                //                    goTank2->Move ();
-                //                    break;
-
-                //                case LumenAusf::KEY_CODE::SPACE:
-                //                    goTank->Fire ();
-                //                    playSound ("sounds/TankFire.wav", SDL_MIX_MAXVOLUME);
-                //                    break;
                 default:
                     break;
             }
@@ -207,16 +148,6 @@ void Play::RenderAll ()
     }
 }
 
-// struct ObjectConfig
-//{
-//    int atlasWAll;
-//    int atlasHAll;
-//    int atlasStart;
-//    int atlasEnd;
-//    float atlasOffsetX;
-//    float atlasOffsetY;
-//    float scale;
-//};
 std::istream& operator>> (std::istream& is, ObjectConfig& t)
 {
     is >> t.atlasWAll;
@@ -228,10 +159,6 @@ std::istream& operator>> (std::istream& is, ObjectConfig& t)
     is >> t.scale;
     return is;
 }
-
-// void CreateBlock (ObjectConfig data, int number);
-// void CreateEagle (ObjectConfig data, int number);
-// void CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser);
 
 void Play::InitScene (std::string configMap, std::string configBlocks, std::string configTank, std::string configNpcTank, std::string configEagle,
                       std::string configMissile)
@@ -379,6 +306,10 @@ void Play::CreateBlock (ObjectConfig data, int number)
     mr->texture = AtlasTank;
     mr->atlas = new LumenAusf::Atlas (mr);
     mr->SetAtlas (LumenAusf::vec2 (data.atlasWAll, data.atlasHAll), LumenAusf::vec2 (data.atlasStart, data.atlasEnd));
+
+    auto bc = go->AddComponent<BlockController> ();
+    bc->num = number;
+    Map::Instance ()->field[number / 9][number % 9] = bc;
 }
 
 void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> audioTank, std::vector<std::string> audioMissile, bool isUser)
@@ -439,114 +370,6 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
     }
 }
 
-// struct BlockData
-//{
-//    int atlasWAll;
-//    int atlasHAll;
-//    int atlasStart;
-//    int atlasEnd;
-//    float atlasOffsetX;
-//    float atlasOffsetY;
-//    float scale;
-//};
-// std::istream& operator>> (std::istream& is, BlockData& t)
-//{
-//    is >> t.atlasWAll;
-//    is >> t.atlasHAll;
-//    is >> t.atlasStart;
-//    is >> t.atlasEnd;
-//    is >> t.atlasOffsetX;
-//    is >> t.atlasOffsetY;
-//    is >> t.scale;
-//    return is;
-//}
-
-// void Play::CreateBlocks (std::string configBlocks, std::string configMap)
-//{
-//    // todo: remake to InitScene with blocks,tanks and eagle
-
-//    int num = 0;
-
-//    std::ifstream bd (configBlocks);
-//    if (!bd.is_open ())
-//    {
-//        std::cerr << "Can`t open : " + configBlocks << std::endl;
-//        return;
-//    }
-
-//    auto td = BlockData ();
-//    bd >> td;
-//    bd.close ();
-
-//    std::ifstream md (configMap);
-//    if (!md.is_open ())
-//    {
-//        std::cerr << "Can`t open : " + configBlocks << std::endl;
-//        return;
-//    }
-
-//    std::vector<int> map;
-//    for (int i = 0; i < 6; i++)
-//        for (int j = 0; j < 8; j++)
-//        {
-//            int k;
-//            md >> k;
-//            map.push_back (k);
-//        }
-
-//    for (size_t number = 0; number < 48; number++)
-//    {
-//        if (map[number] == 0)
-//            continue;
-//        auto go = new LumenAusf::GameObject ("Block " + std::to_string (num++));
-//        go->tag = "Block";
-//        go->transform->SetPosition (LumenAusf::vec2 (-1.f + td.scale + ((number % 8) * td.scale * 2), 0.5f - (number / 8) * td.scale * 2));
-//        go->transform->setLocalScale (LumenAusf::mat2x3::scale (td.scale));
-
-//        auto a = new LumenAusf::mat2x3 ();
-//        a->col0.x = 1;
-//        a->col0.y = 0.f;
-//        a->col1.x = 0.f;
-//        a->col1.y = static_cast<float> (windowWidth) / windowHeight;
-//        go->transform->setAspect (*a);
-
-//        go->AddComponent<LumenAusf::Collider> ();
-
-//        auto mr = go->AddComponent<LumenAusf::MeshRenderer> ();
-//        mr->offsetX = td.atlasOffsetX;
-//        mr->offsetY = td.atlasOffsetY;
-//        mr->meshType = LumenAusf::TypeOfMesh::Dynamic;
-//        mr->triangles = mr->trianglesOriginals = Engine->CreateQuadtc ();
-//        mr->texture = AtlasTank;
-//        mr->atlas = new LumenAusf::Atlas (mr);
-//        mr->SetAtlas (LumenAusf::vec2 (td.atlasWAll, td.atlasHAll), LumenAusf::vec2 (td.atlasStart, td.atlasEnd));
-//    }
-//}
-
-// struct EagleData
-//{
-//    LumenAusf::vec2 pos;
-//    int atlasWAll;
-//    int atlasHAll;
-//    int atlasStart;
-//    int atlasEnd;
-//    float atlasOffsetX;
-//    float atlasOffsetY;
-//    float scale;
-//};
-// std::istream& operator>> (std::istream& is, EagleData& t)
-//{
-//    is >> t.pos;
-//    is >> t.atlasWAll;
-//    is >> t.atlasHAll;
-//    is >> t.atlasStart;
-//    is >> t.atlasEnd;
-//    is >> t.atlasOffsetX;
-//    is >> t.atlasOffsetY;
-//    is >> t.scale;
-//    return is;
-//}
-
 void Play::CreateEagle (ObjectConfig data, int number)
 {
     auto go = new LumenAusf::GameObject ("Eagle");
@@ -574,7 +397,4 @@ void Play::CreateEagle (ObjectConfig data, int number)
 
     auto df = go->AddComponent<GameOverController> ();
     df->SetAnchor (&running);
-
-    //    mr->ResizeUV (LumenAusf::vec2 (1.f / (td.atlasWAll * 2.5f), 1.f / (td.atlasWAll * 2.5f)),
-    //                  LumenAusf::vec2 (1.f / (td.atlasHAll * 2.5f), 1.f / (td.atlasHAll * 2.5f)));
 }

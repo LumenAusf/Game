@@ -8,7 +8,9 @@
 
 #include "Source/collider.h"
 #include "Source/engine.h"
+#include "blockcontroller.h"
 #include "gameovercontroller.h"
+#include "map.h"
 #include "missile.h"
 #include "src/audio.h"
 #include "tank.h"

@@ -30,25 +30,83 @@ void TankNPCController::Update ()
     if (gogo == nullptr)
         return;
 
+    bool fl = true;
+    auto speed = Speed * Engine::getDeltaTime () * 0.001f;
+
     if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x > 0.001f)
     {
-        Rotate (Arrows::Left);
-        Move ();
+        if (!gameObject->CanMove (vec2 (-speed, 0.f)))
+            fl = false;
+
+        else
+        {
+            Rotate (Arrows::Left);
+            Move ();
+        }
     }
     else if (gameObject->transform->getGlobalPosition ().delta.x - gogo->transform->getGlobalPosition ().delta.x < -0.001f)
     {
-        Rotate (Arrows::Right);
-        Move ();
+        if (!gameObject->CanMove (vec2 (speed, 0.f)))
+            fl = false;
+
+        else
+        {
+            Rotate (Arrows::Right);
+            Move ();
+        }
     }
     else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y > 0.001f)
     {
-        Rotate (Arrows::Down);
-        Move ();
+        if (!gameObject->CanMove (vec2 (0.f, -speed)))
+            fl = false;
+
+        else
+        {
+            Rotate (Arrows::Down);
+            Move ();
+        }
     }
     else if (gameObject->transform->getGlobalPosition ().delta.y - gogo->transform->getGlobalPosition ().delta.y < -0.001f)
     {
-        Rotate (Arrows::Up);
-        Move ();
+        if (!gameObject->CanMove (vec2 (0.f, speed)))
+            fl = false;
+
+        else
+        {
+            Rotate (Arrows::Up);
+            Move ();
+        }
+    }
+
+    if (!fl)
+    {
+        auto near = Map::Instance ()->NearestPoint (
+            LumenAusf::vec2 (gameObject->transform->getGlobalPosition ().delta.x, gameObject->transform->getGlobalPosition ().delta.y));
+
+        if (gameObject->transform->getGlobalPosition ().delta.x - near.x > 0.001f)
+        {
+            Rotate (Arrows::Left);
+            Move ();
+        }
+        else if (gameObject->transform->getGlobalPosition ().delta.x - near.x < -0.001f)
+        {
+            Rotate (Arrows::Right);
+            Move ();
+        }
+        else if (gameObject->transform->getGlobalPosition ().delta.y - near.y > 0.001f)
+        {
+            Rotate (Arrows::Down);
+            Move ();
+        }
+        else if (gameObject->transform->getGlobalPosition ().delta.y - near.y < -0.001f)
+        {
+            Rotate (Arrows::Up);
+            Move ();
+        }
+        else
+        {
+            Fire ();
+        }
     }
 
     //    if (change > 2)

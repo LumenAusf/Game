@@ -95,7 +95,9 @@ namespace LumenAusf
                     for (auto b = a + 1; b < objects.size (); b++)
                     {
                         if (objects[b] != nullptr && objects[b]->GetComponent<Collider> () != nullptr)
-                            if (Collider::IsColided (objects[a], objects[b]))
+                            if (objects[a]->tag == "Block" && objects[b]->tag == "Block")
+                                continue;
+                            else if (Collider::IsColided (objects[a], objects[b]))
                             {
                                 if ((objects[a]->tag == "Block" && objects[b]->tag == "Missile") ||
                                     (objects[b]->tag == "Block" && objects[a]->tag == "Missile") ||
