@@ -37,9 +37,9 @@ namespace LumenAusf
         height = static_cast<uint32_t> (h);
 
         std::vector<unsigned char> revertimage;
-        for (ulong i = h - 1; i < h; i--)
+        for (unsigned long i = h - 1; i < h; i--)
         {
-            for (ulong j = 0; j < w * 4; j++)
+            for (unsigned long j = 0; j < w * 4; j++)
             {
                 revertimage.push_back (image.at (i * w * 4 + j));
             }
