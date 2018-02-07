@@ -4,7 +4,7 @@ namespace LumenAusf
 {
     EngineCore::EngineCore () { std::clog << "Create Engine" << std::endl; }
 
-//    Glfunc* Glfunc::ptr = nullptr;
+    //    Glfunc* Glfunc::ptr = nullptr;
     float EngineCore::timePrevious = 0.f;
 
     EngineCore::~EngineCore ()
@@ -75,6 +75,32 @@ namespace LumenAusf
                             event->keyCode = KEY_CODE::SPACE;
                             engine->EngineEvent (event);
                             engine->EventSys.Key_Space = true;
+                            break;
+                        case SDLK_KP_ENTER:
+                            event->keyCode = KEY_CODE::ENTERKP;
+                            engine->EngineEvent (event);
+                            engine->EventSys.Key_EnterKP = true;
+                            break;
+                        case SDLK_a:
+                            event->keyCode = KEY_CODE::A;
+                            engine->EngineEvent (event);
+                            engine->EventSys.Key_A = true;
+                            break;
+                        case SDLK_w:
+                            event->keyCode = KEY_CODE::W;
+                            engine->EngineEvent (event);
+                            engine->EventSys.Key_W = true;
+                            break;
+                        case SDLK_s:
+                            event->keyCode = KEY_CODE::S;
+                            engine->EngineEvent (event);
+                            engine->EventSys.Key_S = true;
+                            break;
+                        case SDLK_d:
+                            event->keyCode = KEY_CODE::D;
+                            engine->EngineEvent (event);
+                            engine->EventSys.Key_D = true;
+                            break;
                     }
                     break;
                 case SDL_KEYUP:
@@ -94,6 +120,22 @@ namespace LumenAusf
                             break;
                         case SDLK_SPACE:
                             engine->EventSys.Key_Space = false;
+                            break;
+                        case SDLK_KP_ENTER:
+                            engine->EventSys.Key_EnterKP = false;
+                            break;
+                        case SDLK_a:
+                            engine->EventSys.Key_A = false;
+                            break;
+                        case SDLK_w:
+                            engine->EventSys.Key_W = false;
+                            break;
+                        case SDLK_s:
+                            engine->EventSys.Key_S = false;
+                            break;
+                        case SDLK_d:
+                            engine->EventSys.Key_D = false;
+                            break;
                     }
             }
         }
@@ -348,37 +390,37 @@ namespace LumenAusf
     }
     bool EngineCore::InitGl (int width, int height)
     {
-        glewInit();
-//        try
-//        {
-//            load_gl_func ("glCreateShader", Glfunc::Get ()->glCreateShader);
-//            load_gl_func ("glShaderSource", Glfunc::Get ()->glShaderSource);
-//            load_gl_func ("glCompileShader", Glfunc::Get ()->glCompileShader);
-//            load_gl_func ("glGetShaderiv", Glfunc::Get ()->glGetShaderiv);
-//            load_gl_func ("glGetShaderInfoLog", Glfunc::Get ()->glGetShaderInfoLog);
-//            load_gl_func ("glDeleteShader", Glfunc::Get ()->glDeleteShader);
-//            load_gl_func ("glCreateProgram", Glfunc::Get ()->glCreateProgram);
-//            load_gl_func ("glAttachShader", Glfunc::Get ()->glAttachShader);
-//            load_gl_func ("glBindAttribLocation", Glfunc::Get ()->glBindAttribLocation);
-//            load_gl_func ("glLinkProgram", Glfunc::Get ()->glLinkProgram);
-//            load_gl_func ("glGetProgramiv", Glfunc::Get ()->glGetProgramiv);
-//            load_gl_func ("glGetProgramInfoLog", Glfunc::Get ()->glGetProgramInfoLog);
-//            load_gl_func ("glDeleteProgram", Glfunc::Get ()->glDeleteProgram);
-//            load_gl_func ("glUseProgram", Glfunc::Get ()->glUseProgram);
-//            load_gl_func ("glVertexAttribPointer", Glfunc::Get ()->glVertexAttribPointer);
-//            load_gl_func ("glEnableVertexAttribArray", Glfunc::Get ()->glEnableVertexAttribArray);
-//            load_gl_func ("glDisableVertexAttribArray", Glfunc::Get ()->glDisableVertexAttribArray);
-//            load_gl_func ("glGetUniformLocation", Glfunc::Get ()->glGetUniformLocation);
-//            load_gl_func ("glUniform1i", Glfunc::Get ()->glUniform1i);
-//            load_gl_func ("glActiveTexture", Glfunc::Get ()->glActiveTexture_);
-//            load_gl_func ("glUniform4fv", Glfunc::Get ()->glUniform4fv);
-//            load_gl_func ("glUniformMatrix3fv", Glfunc::Get ()->glUniformMatrix3fv);
-//        }
-//        catch (std::exception& ex)
-//        {
-//            std::cerr << ex.what ();
-//            return false;
-//        }
+        glewInit ();
+        //        try
+        //        {
+        //            load_gl_func ("glCreateShader", Glfunc::Get ()->glCreateShader);
+        //            load_gl_func ("glShaderSource", Glfunc::Get ()->glShaderSource);
+        //            load_gl_func ("glCompileShader", Glfunc::Get ()->glCompileShader);
+        //            load_gl_func ("glGetShaderiv", Glfunc::Get ()->glGetShaderiv);
+        //            load_gl_func ("glGetShaderInfoLog", Glfunc::Get ()->glGetShaderInfoLog);
+        //            load_gl_func ("glDeleteShader", Glfunc::Get ()->glDeleteShader);
+        //            load_gl_func ("glCreateProgram", Glfunc::Get ()->glCreateProgram);
+        //            load_gl_func ("glAttachShader", Glfunc::Get ()->glAttachShader);
+        //            load_gl_func ("glBindAttribLocation", Glfunc::Get ()->glBindAttribLocation);
+        //            load_gl_func ("glLinkProgram", Glfunc::Get ()->glLinkProgram);
+        //            load_gl_func ("glGetProgramiv", Glfunc::Get ()->glGetProgramiv);
+        //            load_gl_func ("glGetProgramInfoLog", Glfunc::Get ()->glGetProgramInfoLog);
+        //            load_gl_func ("glDeleteProgram", Glfunc::Get ()->glDeleteProgram);
+        //            load_gl_func ("glUseProgram", Glfunc::Get ()->glUseProgram);
+        //            load_gl_func ("glVertexAttribPointer", Glfunc::Get ()->glVertexAttribPointer);
+        //            load_gl_func ("glEnableVertexAttribArray", Glfunc::Get ()->glEnableVertexAttribArray);
+        //            load_gl_func ("glDisableVertexAttribArray", Glfunc::Get ()->glDisableVertexAttribArray);
+        //            load_gl_func ("glGetUniformLocation", Glfunc::Get ()->glGetUniformLocation);
+        //            load_gl_func ("glUniform1i", Glfunc::Get ()->glUniform1i);
+        //            load_gl_func ("glActiveTexture", Glfunc::Get ()->glActiveTexture_);
+        //            load_gl_func ("glUniform4fv", Glfunc::Get ()->glUniform4fv);
+        //            load_gl_func ("glUniformMatrix3fv", Glfunc::Get ()->glUniformMatrix3fv);
+        //        }
+        //        catch (std::exception& ex)
+        //        {
+        //            std::cerr << ex.what ();
+        //            return false;
+        //        }
 
         shader00 = new shader_gl_es20 (R"(
                                        attribute vec2 a_position;

@@ -5,7 +5,7 @@ Missile::Missile (LumenAusf::GameObject* owner, std::string configPath, LumenAus
     tank = owner;
     go = new LumenAusf::GameObject (nullptr);
     go->name = tank->name + " Missile";
-    go->tag = isUser ? "Missile" : "MissileNPC";
+    go->tag = owner->GetComponent<TankController> ()->Mode == 0 ? "Missile" : "MissileNPC";
 
     std::ifstream fd (configPath);
     if (!fd.is_open ())

@@ -31,6 +31,7 @@ class TankController : public LumenAusf::Component
 
     float Speed = .125f;
     int MissileCount;
+    int Mode = 0;
     Arrows Direction = Arrows::Up;
     Audio* SoundStartEngine;
     Audio* SoundEngine;
@@ -39,10 +40,12 @@ class TankController : public LumenAusf::Component
     LumenAusf::Texture* textureForMissile = nullptr;
 
     bool previousSpace = false;
+    bool previousEnter = false;
 
     // Component interface
    public:
     void Destroy ();
+    void setMode (int value);
 };
 
 #endif    // TANKCONTROLLER_H

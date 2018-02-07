@@ -277,7 +277,7 @@ void Play::InitScene (std::string configMap, std::string configBlocks, std::stri
         if (map[number] == 3)
             CreateTank (tankData, static_cast<int> (number), audioTank, audioMissile, true);
         if (map[number] == 4)
-            CreateTank (tankNPCData, static_cast<int> (number), audioTank, audioMissile, false);
+            CreateTank (tankData, static_cast<int> (number), audioTank, audioMissile, false);
     }
 }
 
@@ -324,7 +324,7 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
     }
     else
     {
-        tank->name = "NPCTank " + std::to_string (num++);
+        tank->name = "UserTank " + std::to_string (num++);
         tank->tag = "TankNPC";
     }
 
@@ -355,18 +355,18 @@ void Play::CreateTank (ObjectConfig data, int number, std::vector<std::string> a
     auto d = createAudio (audioTank[2].c_str (), 0, SDL_MIX_MAXVOLUME / 2);
     auto e = createAudio (audioTank[3].c_str (), 0, SDL_MIX_MAXVOLUME);
 
+    tank->AddComponent<GameOverController> ();
+    auto tnc = tank->AddComponent<TankController> ();
+    tnc->SetSounds (b, c, d, e);
+    tnc->SetTextureMissile (AtlasTank);
+
     if (isUser)
     {
-        tank->AddComponent<GameOverController> ();
-        auto tnc = tank->AddComponent<TankController> ();
-        tnc->SetSounds (b, c, d, e);
-        tnc->SetTextureMissile (AtlasTank);
+        tnc->setMode (0);
     }
     else
     {
-        auto tnc = tank->AddComponent<TankNPCController> ();
-        tnc->SetSounds (b, c, d, e);
-        tnc->SetTextureMissile (AtlasTank);
+        tnc->setMode (1);
     }
 }
 

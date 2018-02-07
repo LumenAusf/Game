@@ -44,7 +44,12 @@ namespace LumenAusf
         DOWN,
         UP,
         ESCAPE,
-        SPACE
+        SPACE,
+        W,
+        A,
+        S,
+        D,
+        ENTERKP
     };
 
     class EventItem

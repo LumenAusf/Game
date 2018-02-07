@@ -10,36 +10,71 @@ void TankController::Start () { playSoundFromMemory (SoundStartEngine, SDL_MIX_M
 
 void TankController::Update ()
 {
-    if (EventSystem::Key_Down)
+    if (Mode == 0)
     {
-        Rotate (Arrows::Down);
-        Move ();
-    }
+        if (EventSystem::Key_Down)
+        {
+            Rotate (Arrows::Down);
+            Move ();
+        }
 
-    if (EventSystem::Key_Up)
-    {
-        Rotate (Arrows::Up);
-        Move ();
-    }
+        if (EventSystem::Key_Up)
+        {
+            Rotate (Arrows::Up);
+            Move ();
+        }
 
-    if (EventSystem::Key_Left)
-    {
-        Rotate (Arrows::Left);
-        Move ();
-    }
+        if (EventSystem::Key_Left)
+        {
+            Rotate (Arrows::Left);
+            Move ();
+        }
 
-    if (EventSystem::Key_Right)
-    {
-        Rotate (Arrows::Right);
-        Move ();
-    }
+        if (EventSystem::Key_Right)
+        {
+            Rotate (Arrows::Right);
+            Move ();
+        }
 
-    if (EventSystem::Key_Space && !previousSpace)
+        if (EventSystem::Key_Space && !previousSpace)
+        {
+            Fire ();
+        }
+    }
+    else if (Mode == 1)
     {
-        Fire ();
+        if (EventSystem::Key_S)
+        {
+            Rotate (Arrows::Down);
+            Move ();
+        }
+
+        if (EventSystem::Key_W)
+        {
+            Rotate (Arrows::Up);
+            Move ();
+        }
+
+        if (EventSystem::Key_A)
+        {
+            Rotate (Arrows::Left);
+            Move ();
+        }
+
+        if (EventSystem::Key_D)
+        {
+            Rotate (Arrows::Right);
+            Move ();
+        }
+
+        if (EventSystem::Key_EnterKP && !previousEnter)
+        {
+            Fire ();
+        }
     }
 
     previousSpace = EventSystem::Key_Space;
+    previousEnter = EventSystem::Key_EnterKP;
 }
 
 void TankController::onEnable () {}
@@ -107,5 +142,7 @@ void TankController::SetSounds (Audio* Start, Audio* Stay, Audio* Run, Audio* Fi
 }
 
 void TankController::SetTextureMissile (Texture* tex) { textureForMissile = tex; }
+
+void TankController::setMode (int value) { Mode = value; }
 
 void TankController::Destroy () { this->~TankController (); }

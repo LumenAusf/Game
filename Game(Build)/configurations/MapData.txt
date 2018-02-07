@@ -13,5 +13,5 @@
 
 1 - block
 2 - eagle
-3 - user
-4 - npc
+3 - user UpDownLeftRightSpace
+4 - user2 WASDEnter(numpad)
