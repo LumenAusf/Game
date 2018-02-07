@@ -4,6 +4,7 @@
 #define SHADER_H
 
 #include <vector>
+#include <GL/glew.h>
 #include "texturefinal.h"
 #include "matrix.h"
 #include "color.h"

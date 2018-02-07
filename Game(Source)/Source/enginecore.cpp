@@ -4,7 +4,7 @@ namespace LumenAusf
 {
     EngineCore::EngineCore () { std::clog << "Create Engine" << std::endl; }
 
-    Glfunc* Glfunc::ptr = nullptr;
+//    Glfunc* Glfunc::ptr = nullptr;
     float EngineCore::timePrevious = 0.f;
 
     EngineCore::~EngineCore ()
@@ -110,9 +110,9 @@ namespace LumenAusf
         shader00->use ();
         shader00->set_uniform ("u_color", c);
         // vertex coordinates
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (v0), &t.v[0].pos.x);
+        glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (v0), &t.v[0].pos.x);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (0);
+        glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
 
         glDrawArrays (GL_TRIANGLES, 0, 3);
@@ -123,20 +123,20 @@ namespace LumenAusf
     {
         shader01->use ();
         // positions
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
+        glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (0);
+        glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
         // colors
-        Glfunc::Get ()->glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
+        glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (1);
+        glEnableVertexAttribArray (1);
         GL_ERROR_CHECK ();
 
         glDrawArrays (GL_TRIANGLES, 0, 3);
         GL_ERROR_CHECK ();
 
-        Glfunc::Get ()->glDisableVertexAttribArray (1);
+        glDisableVertexAttribArray (1);
         GL_ERROR_CHECK ();
     }
 
@@ -147,28 +147,28 @@ namespace LumenAusf
         texture->bind ();
         shader02->set_uniform ("s_texture", texture);
         // positions
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
+        glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (0);
+        glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
         // colors
-        Glfunc::Get ()->glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
+        glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (1);
+        glEnableVertexAttribArray (1);
         GL_ERROR_CHECK ();
 
         // texture coordinates
-        Glfunc::Get ()->glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].uv);
+        glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].uv);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (2);
+        glEnableVertexAttribArray (2);
         GL_ERROR_CHECK ();
 
         glDrawArrays (GL_TRIANGLES, 0, 3);
         GL_ERROR_CHECK ();
 
-        Glfunc::Get ()->glDisableVertexAttribArray (1);
+        glDisableVertexAttribArray (1);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glDisableVertexAttribArray (2);
+        glDisableVertexAttribArray (2);
         GL_ERROR_CHECK ();
     }
 
@@ -180,28 +180,28 @@ namespace LumenAusf
         shader03->set_uniform ("s_texture", texture);
         shader03->set_uniform ("u_matrix", m);
         // positions
-        Glfunc::Get ()->glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
+        glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].pos);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (0);
+        glEnableVertexAttribArray (0);
         GL_ERROR_CHECK ();
         // colors
-        Glfunc::Get ()->glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
+        glVertexAttribPointer (1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof (t.v[0]), &t.v[0].c);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (1);
+        glEnableVertexAttribArray (1);
         GL_ERROR_CHECK ();
 
         // texture coordinates
-        Glfunc::Get ()->glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].uv);
+        glVertexAttribPointer (2, 2, GL_FLOAT, GL_FALSE, sizeof (t.v[0]), &t.v[0].uv);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glEnableVertexAttribArray (2);
+        glEnableVertexAttribArray (2);
         GL_ERROR_CHECK ();
 
         glDrawArrays (GL_TRIANGLES, 0, 3);
         GL_ERROR_CHECK ();
 
-        Glfunc::Get ()->glDisableVertexAttribArray (1);
+        glDisableVertexAttribArray (1);
         GL_ERROR_CHECK ();
-        Glfunc::Get ()->glDisableVertexAttribArray (2);
+        glDisableVertexAttribArray (2);
         GL_ERROR_CHECK ();
     }
 
@@ -348,36 +348,37 @@ namespace LumenAusf
     }
     bool EngineCore::InitGl (int width, int height)
     {
-        try
-        {
-            load_gl_func ("glCreateShader", Glfunc::Get ()->glCreateShader);
-            load_gl_func ("glShaderSource", Glfunc::Get ()->glShaderSource);
-            load_gl_func ("glCompileShader", Glfunc::Get ()->glCompileShader);
-            load_gl_func ("glGetShaderiv", Glfunc::Get ()->glGetShaderiv);
-            load_gl_func ("glGetShaderInfoLog", Glfunc::Get ()->glGetShaderInfoLog);
-            load_gl_func ("glDeleteShader", Glfunc::Get ()->glDeleteShader);
-            load_gl_func ("glCreateProgram", Glfunc::Get ()->glCreateProgram);
-            load_gl_func ("glAttachShader", Glfunc::Get ()->glAttachShader);
-            load_gl_func ("glBindAttribLocation", Glfunc::Get ()->glBindAttribLocation);
-            load_gl_func ("glLinkProgram", Glfunc::Get ()->glLinkProgram);
-            load_gl_func ("glGetProgramiv", Glfunc::Get ()->glGetProgramiv);
-            load_gl_func ("glGetProgramInfoLog", Glfunc::Get ()->glGetProgramInfoLog);
-            load_gl_func ("glDeleteProgram", Glfunc::Get ()->glDeleteProgram);
-            load_gl_func ("glUseProgram", Glfunc::Get ()->glUseProgram);
-            load_gl_func ("glVertexAttribPointer", Glfunc::Get ()->glVertexAttribPointer);
-            load_gl_func ("glEnableVertexAttribArray", Glfunc::Get ()->glEnableVertexAttribArray);
-            load_gl_func ("glDisableVertexAttribArray", Glfunc::Get ()->glDisableVertexAttribArray);
-            load_gl_func ("glGetUniformLocation", Glfunc::Get ()->glGetUniformLocation);
-            load_gl_func ("glUniform1i", Glfunc::Get ()->glUniform1i);
-            load_gl_func ("glActiveTexture", Glfunc::Get ()->glActiveTexture_);
-            load_gl_func ("glUniform4fv", Glfunc::Get ()->glUniform4fv);
-            load_gl_func ("glUniformMatrix3fv", Glfunc::Get ()->glUniformMatrix3fv);
-        }
-        catch (std::exception& ex)
-        {
-            std::cerr << ex.what ();
-            return false;
-        }
+        glewInit();
+//        try
+//        {
+//            load_gl_func ("glCreateShader", Glfunc::Get ()->glCreateShader);
+//            load_gl_func ("glShaderSource", Glfunc::Get ()->glShaderSource);
+//            load_gl_func ("glCompileShader", Glfunc::Get ()->glCompileShader);
+//            load_gl_func ("glGetShaderiv", Glfunc::Get ()->glGetShaderiv);
+//            load_gl_func ("glGetShaderInfoLog", Glfunc::Get ()->glGetShaderInfoLog);
+//            load_gl_func ("glDeleteShader", Glfunc::Get ()->glDeleteShader);
+//            load_gl_func ("glCreateProgram", Glfunc::Get ()->glCreateProgram);
+//            load_gl_func ("glAttachShader", Glfunc::Get ()->glAttachShader);
+//            load_gl_func ("glBindAttribLocation", Glfunc::Get ()->glBindAttribLocation);
+//            load_gl_func ("glLinkProgram", Glfunc::Get ()->glLinkProgram);
+//            load_gl_func ("glGetProgramiv", Glfunc::Get ()->glGetProgramiv);
+//            load_gl_func ("glGetProgramInfoLog", Glfunc::Get ()->glGetProgramInfoLog);
+//            load_gl_func ("glDeleteProgram", Glfunc::Get ()->glDeleteProgram);
+//            load_gl_func ("glUseProgram", Glfunc::Get ()->glUseProgram);
+//            load_gl_func ("glVertexAttribPointer", Glfunc::Get ()->glVertexAttribPointer);
+//            load_gl_func ("glEnableVertexAttribArray", Glfunc::Get ()->glEnableVertexAttribArray);
+//            load_gl_func ("glDisableVertexAttribArray", Glfunc::Get ()->glDisableVertexAttribArray);
+//            load_gl_func ("glGetUniformLocation", Glfunc::Get ()->glGetUniformLocation);
+//            load_gl_func ("glUniform1i", Glfunc::Get ()->glUniform1i);
+//            load_gl_func ("glActiveTexture", Glfunc::Get ()->glActiveTexture_);
+//            load_gl_func ("glUniform4fv", Glfunc::Get ()->glUniform4fv);
+//            load_gl_func ("glUniformMatrix3fv", Glfunc::Get ()->glUniformMatrix3fv);
+//        }
+//        catch (std::exception& ex)
+//        {
+//            std::cerr << ex.what ();
+//            return false;
+//        }
 
         shader00 = new shader_gl_es20 (R"(
                                        attribute vec2 a_position;

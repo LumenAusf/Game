@@ -3,9 +3,11 @@
 #ifndef ENGINECORE_H
 #define ENGINECORE_H
 
+#include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_opengl_glext.h>
+
 #include <fstream>
 #include "engine.h"
 #include "picopng.hxx"
@@ -13,43 +15,43 @@
 
 namespace LumenAusf
 {
-    class Glfunc
-    {
-       public:
-        PFNGLCREATESHADERPROC glCreateShader;
-        PFNGLSHADERSOURCEARBPROC glShaderSource;
-        PFNGLCOMPILESHADERARBPROC glCompileShader;
-        PFNGLGETSHADERIVPROC glGetShaderiv;
-        PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
-        PFNGLDELETESHADERPROC glDeleteShader;
-        PFNGLCREATEPROGRAMPROC glCreateProgram;
-        PFNGLATTACHSHADERPROC glAttachShader;
-        PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
-        PFNGLLINKPROGRAMPROC glLinkProgram;
-        PFNGLGETPROGRAMIVPROC glGetProgramiv;
-        PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
-        PFNGLDELETEPROGRAMPROC glDeleteProgram;
-        PFNGLUSEPROGRAMPROC glUseProgram;
-        PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
-        PFNGLUNIFORM1IPROC glUniform1i;
-        PFNGLACTIVETEXTUREPROC glActiveTexture_;
-        PFNGLUNIFORM4FVPROC
-            glUniform4fv
-                ;
-                PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
-                PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
-                PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
-                PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
+//    class Glfunc
+//    {
+//       public:
+//        PFNGLCREATESHADERPROC glCreateShader;
+//        PFNGLSHADERSOURCEARBPROC glShaderSource;
+//        PFNGLCOMPILESHADERARBPROC glCompileShader;
+//        PFNGLGETSHADERIVPROC glGetShaderiv;
+//        PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
+//        PFNGLDELETESHADERPROC glDeleteShader;
+//        PFNGLCREATEPROGRAMPROC glCreateProgram;
+//        PFNGLATTACHSHADERPROC glAttachShader;
+//        PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
+//        PFNGLLINKPROGRAMPROC glLinkProgram;
+//        PFNGLGETPROGRAMIVPROC glGetProgramiv;
+//        PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
+//        PFNGLDELETEPROGRAMPROC glDeleteProgram;
+//        PFNGLUSEPROGRAMPROC glUseProgram;
+//        PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
+//        PFNGLUNIFORM1IPROC glUniform1i;
+//        PFNGLACTIVETEXTUREPROC glActiveTexture_;
+//        PFNGLUNIFORM4FVPROC
+//            glUniform4fv
+//                ;
+//                PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
+//                PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
+//                PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
+//                PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray;
 
-                static Glfunc* Get ()
-                {
-                    if (ptr == nullptr)
-                        ptr = new Glfunc ();
-                    return ptr;
-                }
+//                static Glfunc* Get ()
+//                {
+//                    if (ptr == nullptr)
+//                        ptr = new Glfunc ();
+//                    return ptr;
+//                }
 
-                static Glfunc* ptr;
-    };
+//                static Glfunc* ptr;
+//    };
 }
 
 #define GL_ERROR_CHECK()                                                          \
